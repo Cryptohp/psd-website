@@ -94,7 +94,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-[#e5e5e7]">
+      <div className="border-t border-[#e5e5e7] border-b-2 border-b-[#e82127]">
         <div className="container-psd py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[12px] text-[#999]">
             © {new Date().getFullYear()} Công ty CP Tập Đoàn PSD Group. All rights reserved.
