@@ -127,7 +127,16 @@ export default function AboutPage() {
           alt="PSD Group — Kiến tạo thịnh vượng"
           width={1920}
           height={1080}
-          className="w-full h-auto block"
+          className="w-full h-auto block hidden md:block"
+          priority
+          unoptimized
+        />
+        <Image
+          src="/mobile-hero-ve-psd.png"
+          alt="PSD Group — Kiến tạo thịnh vượng"
+          width={800}
+          height={1000}
+          className="w-full h-auto block md:hidden"
           priority
           unoptimized
         />
