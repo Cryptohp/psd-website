@@ -52,14 +52,14 @@ export default function Footer() {
               </div>
               <div className="flex gap-3">
                 <Phone size={16} className="text-[#e82127] flex-shrink-0" />
-                <a href="tel:0782741534" className="text-[13px] text-[#6e6e74] hover:text-[#e82127] transition-colors">
-                  078.274.1534
+                <a href="tel:09782741534" className="text-[13px] text-[#6e6e74] hover:text-[#e82127] transition-colors">
+                  09782 741 534
                 </a>
               </div>
               <div className="flex gap-3">
                 <Mail size={16} className="text-[#e82127] flex-shrink-0" />
-                <a href="mailto:psdgroup.vn@gmail.com" className="text-[13px] text-[#6e6e74] hover:text-[#e82127] transition-colors">
-                  psdgroup.vn@gmail.com
+                <a href="mailto:psdgroup.hotmail@gmail.com" className="text-[13px] text-[#6e6e74] hover:text-[#e82127] transition-colors">
+                  psdgroup.hotmail@gmail.com
                 </a>
               </div>
               <div className="flex gap-3">

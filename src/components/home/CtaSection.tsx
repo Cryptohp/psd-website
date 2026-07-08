@@ -74,14 +74,14 @@ export default function CtaSection() {
               className="flex items-center gap-2 hover:text-white transition-colors text-[14px]"
             >
               <Phone size={16} />
-              078.274.1534
+              09782 741 534
             </a>
             <span className="w-1 h-1 rounded-full bg-white/30" />
             <a
-              href="mailto:psdgroup.vn@gmail.com"
+              href="mailto:psdgroup.hotmail@gmail.com"
               className="hover:text-white transition-colors text-[14px]"
             >
-              psdgroup.vn@gmail.com
+              psdgroup.hotmail@gmail.com
             </a>
             <span className="w-1 h-1 rounded-full bg-white/30" />
             <span className="text-[14px]">235–237 Khuất Duy Tiến, Hà Nội</span>

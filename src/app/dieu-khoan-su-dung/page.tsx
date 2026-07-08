@@ -32,7 +32,7 @@ export default function DieuKhoanSuDungPage() {
             </section>
             <section>
               <h2 className="text-[20px] font-bold text-[#1a1a1a] mb-3">5. Liên hệ</h2>
-              <p className="text-[15px] leading-relaxed">Mọi thắc mắc về điều khoản sử dụng, vui lòng liên hệ: <a href="mailto:psdgroup.vn@gmail.com" className="text-[#e82127] hover:underline">psdgroup.vn@gmail.com</a></p>
+              <p className="text-[15px] leading-relaxed">Mọi thắc mắc về điều khoản sử dụng, vui lòng liên hệ: <a href="mailto:psdgroup.hotmail@gmail.com" className="text-[#e82127] hover:underline">psdgroup.hotmail@gmail.com</a></p>
             </section>
           </div>
         </div>

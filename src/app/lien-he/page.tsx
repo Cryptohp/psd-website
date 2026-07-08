@@ -36,7 +36,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-[14px] text-[#1a1a1a] mb-1">Điện thoại</div>
-                    <a href="tel:0782741534" className="text-[14px] text-[#6e6e74] hover:text-[#e82127] transition-colors">078.274.1534</a><br />
+                    <a href="tel:09782741534" className="text-[14px] text-[#6e6e74] hover:text-[#e82127] transition-colors">09782 741 534</a><br />
                     <a href="tel:0898558669" className="text-[14px] text-[#6e6e74] hover:text-[#e82127] transition-colors">(+84) 89 8558 669</a>
                   </div>
                 </div>
@@ -46,7 +46,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-[14px] text-[#1a1a1a] mb-1">Email</div>
-                    <a href="mailto:psdgroup.vn@gmail.com" className="text-[14px] text-[#6e6e74] hover:text-[#e82127] transition-colors">psdgroup.vn@gmail.com</a>
+                    <a href="mailto:psdgroup.hotmail@gmail.com" className="text-[14px] text-[#6e6e74] hover:text-[#e82127] transition-colors">psdgroup.hotmail@gmail.com</a>
                   </div>
                 </div>
                 <div className="flex gap-4">
