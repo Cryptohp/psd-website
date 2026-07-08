@@ -120,6 +120,15 @@ export default function EcosystemSection() {
 
   return (
     <section className="bg-[#f8f8f8] py-[30px]" ref={ref}>
+      <style>{`
+        @media (max-width: 767px) {
+          .eco-layout { flex-direction: column !important; }
+          .eco-panel { width: 100% !important; padding: 24px 20px !important; }
+          .eco-scroll-wrapper { margin-left: 0 !important; }
+          .eco-scroll-inner { padding-left: 16px !important; }
+          .eco-nav-btns { top: auto !important; bottom: 12px !important; }
+        }
+      `}</style>
       <div className="mx-auto" style={{ maxWidth: "1300px", paddingLeft: "16px", paddingRight: "16px" }}>
         <div className="eco-layout flex items-stretch">
 

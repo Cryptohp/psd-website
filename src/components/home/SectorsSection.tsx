@@ -117,6 +117,15 @@ export default function SectorsSection() {
 
   return (
     <section className="bg-white py-[30px]" ref={ref}>
+      <style>{`
+        @media (max-width: 767px) {
+          .sectors-layout { flex-direction: column !important; }
+          .sectors-panel { width: 100% !important; padding: 24px 20px !important; }
+          .sectors-scroll-wrapper { margin-left: 0 !important; }
+          .sectors-scroll-inner { padding-left: 16px !important; }
+          .sectors-nav-btns { top: auto !important; bottom: 12px !important; }
+        }
+      `}</style>
       <div className="mx-auto" style={{ maxWidth: "1300px", paddingLeft: "16px", paddingRight: "16px" }}>
         <div className="sectors-layout flex items-stretch">
 
