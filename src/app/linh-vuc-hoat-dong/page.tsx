@@ -332,7 +332,7 @@ export default function SectorsPage() {
           >
             <section className="vin-overlap">
               <div style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 10px 0" }}>
-                <p style={{ fontSize: 28, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#1a1a1a" }}>
+                <p className="vin-thongtin-heading" style={{ fontSize: 28, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#1a1a1a" }}>
                   Thông tin chi tiết
                 </p>
               </div>
