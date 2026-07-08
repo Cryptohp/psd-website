@@ -1,0 +1,1017 @@
+@import "tailwindcss"; /* wiv3 */
+
+@keyframes slow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* phat-trien-ben-vung responsive */
+.ptbv-philosophy-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.ptbv-drum {
+  display: none;
+}
+.ptbv-drum-inner {
+  width: clamp(280px, 36vw, 480px) !important;
+  height: clamp(280px, 36vw, 480px) !important;
+}
+.ptbv-featured-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.ptbv-three-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 640px) {
+  .ptbv-three-col { grid-template-columns: repeat(2, 1fr); }
+}
+/* philosophy heading — scales to keep each phrase on 1 line */
+.ptbv-philosophy-h2 {
+  font-size: clamp(15px, 4.5vw, 24px);
+  white-space: nowrap;
+}
+@media (min-width: 768px) {
+  .ptbv-philosophy-grid { grid-template-columns: 1.2fr 1fr; gap: 72px; }
+  .ptbv-drum { display: flex; justify-content: center; align-items: center; }
+  .ptbv-featured-grid { grid-template-columns: 1.6fr 1fr; }
+  .ptbv-three-col { grid-template-columns: repeat(3, 1fr); }
+  .ptbv-philosophy-h2 { font-size: clamp(20px, 2.7vw, 40px); white-space: nowrap; }
+}
+
+/* tin-tuc tab: mobile dropdown / desktop tabs */
+.tintuc-tab-mobile { display: block; }
+.tintuc-tab-desktop { display: none; }
+@media (min-width: 640px) {
+  .tintuc-tab-mobile { display: none; }
+  .tintuc-tab-desktop { display: flex; }
+}
+
+/* tin-tuc tab filter */
+.tintuc-tab-wrap {
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tintuc-tab-btn {
+  padding: 10px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .tintuc-tab-btn { padding: 14px 20px; font-size: 12px; }
+}
+
+/* tin-tuc responsive */
+.tintuc-featured-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.tintuc-three-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 600px) {
+  .tintuc-three-col { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .tintuc-featured-grid { grid-template-columns: 1.6fr 1fr; }
+  .tintuc-three-col { grid-template-columns: repeat(3, 1fr); }
+}
+
+:root {
+  /* PSD Brand Colors */
+  --psd-red: #e82127;
+  --psd-red-hover: #c91c21;
+  --psd-gray: #6e6e74;
+  --psd-gray-light: #f4f4f5;
+  --psd-gray-border: #e5e5e7;
+  --psd-dark: #3f3f44;
+  --psd-white: #ffffff;
+  --psd-text: #1a1a1a;
+  --psd-text-secondary: #6e6e74;
+
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Be Vietnam Pro", sans-serif;
+
+  /* PSD custom colors */
+  --color-psd-red: var(--psd-red);
+  --color-psd-red-hover: var(--psd-red-hover);
+  --color-psd-gray: var(--psd-gray);
+  --color-psd-gray-light: var(--psd-gray-light);
+  --color-psd-gray-border: var(--psd-gray-border);
+  --color-psd-dark: var(--psd-dark);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Container */
+.container-psd {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 1536px) {
+  .container-psd {
+    max-width: 1320px;
+  }
+}
+
+/* Typography scale theo Brand Guidelines */
+.text-hero {
+  font-size: clamp(28px, 5vw, 72px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.text-section-title {
+  font-size: clamp(22px, 3.5vw, 44px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-card-title {
+  font-size: clamp(15px, 2vw, 22px);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* PSD Card style */
+.card-psd {
+  background: #ffffff;
+  border: 1px solid #e5e5e7;
+  border-radius: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+}
+
+.card-psd:hover {
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.13);
+  transform: translateY(-6px);
+  border-color: #e82127;
+}
+
+/* Card image zoom — dùng với .card-img-wrap > img hoặc .card-img-wrap > div */
+.card-img-wrap {
+  overflow: hidden;
+}
+
+.card-img-wrap img,
+.card-img-wrap .card-img-inner {
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.card-psd:hover .card-img-wrap img,
+.card-psd:hover .card-img-wrap .card-img-inner {
+  transform: scale(1.06);
+}
+
+/* Button Primary — fill sweep từ phải sang trái */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e82127;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+  isolation: isolate;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #c91c21;
+  transform: translateX(101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.btn-primary:hover::before {
+  transform: translateX(0);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(232, 33, 39, 0.35);
+}
+
+/* Button Outline — fill sweep vào */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: #e82127;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 11px 27px;
+  border-radius: 8px;
+  border: 1.5px solid #e82127;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+  isolation: isolate;
+}
+
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #e82127;
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.btn-outline:hover::before {
+  transform: translateX(0);
+}
+
+.btn-outline:hover {
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(232, 33, 39, 0.25);
+}
+
+/* Text CTA link — gạch chân chạy vào */
+.btn-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #e82127;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.btn-text-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #e82127;
+  transition: width 0.3s ease;
+}
+
+.btn-text-link:hover::after {
+  width: 100%;
+}
+
+.btn-text-link svg {
+  transition: transform 0.25s ease;
+}
+
+.btn-text-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* Section padding */
+.section-padding {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+/* ============================================
+   VINGROUP-STYLE PAGE: /linh-vuc-hoat-dong
+   ============================================ */
+
+.vin-font {
+  font-family: var(--font-be-vietnam), sans-serif;
+}
+
+/* Sidebar */
+.vin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 95px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.vin-sidebar.menu-open {
+  background: #e82127;
+}
+
+.vin-sidebar .vin-logo {
+  margin-top: 19px;
+  width: 54px;
+  height: 54px;
+  background: #e82127;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.vin-sidebar.menu-open .vin-logo {
+  background: #ffffff;
+}
+
+.vin-sidebar .vin-hamburger {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.vin-sidebar .vin-hamburger .bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #1a1a1a;
+  border-radius: 1px;
+  transition: background 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.vin-sidebar.menu-open .vin-hamburger .bar {
+  background: #ffffff;
+}
+
+.vin-sidebar .vin-bot {
+  position: absolute;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Menu overlay */
+.vin-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 95px;
+  width: 340px;
+  height: 100%;
+  background: #e82127;
+  z-index: 99;
+  padding: 60px 40px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.vin-menu-overlay a {
+  display: block;
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: opacity 0.2s ease;
+}
+
+.vin-menu-overlay a:hover {
+  opacity: 0.75;
+}
+
+/* Main content area */
+.vin-main {
+  padding-left: 95px;
+}
+
+/* Hero banner */
+.vin-hero {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.vin-hero-img {
+  width: 100%;
+  height: auto;
+  max-height: 720px;
+  object-fit: cover;
+  display: block;
+}
+
+.vin-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.55) 100%);
+}
+
+.vin-hero-text {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-weight: 800;
+  font-size: clamp(72px, 13vw, 180px);
+  color: rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  padding-left: 2%;
+  user-select: none;
+}
+
+/* Sector tab bar */
+.vin-tabs {
+  background: #f7f7f7;
+  border-bottom: 1px solid #e8e8e8;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.vin-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.vin-tabs-inner {
+  display: flex;
+}
+
+.vin-tab {
+  flex: 1 1 0%;
+  min-width: 100px;
+  padding: 20px 12px;
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #424d54;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  border-right: 1px solid #e8e8e8;
+  line-height: 1.2;
+}
+
+.vin-tab:last-child {
+  border-right: none;
+}
+
+.vin-tab.active,
+.vin-tab:hover {
+  background: #e82127;
+  color: #ffffff;
+}
+
+/* historyPd equivalent */
+.vin-overlap {
+  position: relative;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  overflow: clip;
+  background: #f5f5f5;
+}
+
+.vin-overlap-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+  position: relative;
+  height: 400px;
+}
+
+.vin-overlap-img {
+  position: absolute;
+  left: 10px;
+  width: 84%;
+  top: -60px;
+  bottom: -60px;
+  overflow: hidden;
+}
+
+.vin-overlap-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vin-overlap-copy {
+  position: absolute;
+  width: 38%;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 44px;
+  overflow: visible;
+}
+
+.vin-overlap-copy-bg {
+  display: none;
+}
+
+.vin-overlap-copy::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3000px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.vin-overlap-copy-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.vin-year {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: clamp(60px, 7vw, 100px);
+  font-weight: 400;
+  color: #dedede;
+  line-height: 1;
+  margin: 0;
+}
+
+.vin-sector-title {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #424d54;
+  margin-top: -8px;
+  padding-bottom: 18px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.vin-desc {
+  font-size: 16px;
+  color: #6e6e74;
+  line-height: 1.75;
+  max-width: 340px;
+}
+
+/* btn-2 equivalent */
+.vin-btn2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a7a7a7;
+  text-decoration: none;
+  margin-top: 24px;
+  transition: color 0.3s ease, gap 0.3s ease;
+}
+
+.vin-btn2:hover {
+  color: #e82127;
+  gap: 18px;
+}
+
+/* Entity grid (partnertPd equivalent) */
+.vin-entities {
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.vin-entities-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.vin-entities-heading {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #424d54;
+  letter-spacing: 0.04em;
+  margin-bottom: 30px;
+}
+
+.vin-entity-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px -32px 0;
+}
+
+.vin-entity-col {
+  width: 33.333%;
+  padding: 0 32px;
+  border-right: 1px solid #dedede;
+  margin-bottom: 50px;
+}
+
+.vin-entity-col:nth-child(3n) {
+  border-right: none;
+}
+
+.vin-entity-logo {
+  width: 100px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+.vin-entity-logo span {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  color: #e82127;
+  letter-spacing: -0.02em;
+}
+
+.vin-entity-name {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #777;
+  margin-bottom: 3px;
+}
+
+.vin-entity-url {
+  font-style: italic;
+  font-size: 13px;
+  color: #a7a7a7;
+  text-decoration: underline;
+  display: block;
+  margin-bottom: 0;
+}
+
+.vin-entity-url:hover {
+  color: #e82127;
+}
+
+.vin-entity-desc {
+  font-size: 15px;
+  color: #424d54;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+
+/* Footer */
+.vin-footer {
+  background: #f7f7f7;
+  padding: 50px 0;
+  border-top: 1px solid #e8e8e8;
+}
+
+.vin-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.vin-footer-brand {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #e82127;
+  letter-spacing: 0.1em;
+}
+
+.vin-footer-copy {
+  font-size: 12px;
+  color: #a7a7a7;
+  margin-top: 6px;
+}
+
+.vin-footer-nav-title {
+  font-family: var(--font-be-vietnam), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #e82127;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.vin-footer-nav a {
+  display: block;
+  font-size: 13px;
+  color: #a7a7a7;
+  text-decoration: none;
+  margin-bottom: 7px;
+  transition: color 0.2s ease;
+}
+
+.vin-footer-nav a:hover {
+  color: #e82127;
+}
+
+/* Mobile top bar */
+.vin-mobile-bar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: #ffffff;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  align-items: center;
+  padding: 0 16px;
+}
+
+/* ── RESPONSIVE ── */
+
+/* Tablet: 768px–1024px */
+@media (max-width: 1024px) {
+  .vin-sidebar { display: none; }
+  .vin-mobile-bar { display: flex; }
+  .vin-menu-overlay { left: 0; width: 100%; }
+  .vin-main { padding-left: 0; padding-top: 52px; }
+  .vin-tab { font-size: 13px; padding: 14px 10px; min-width: 90px; }
+
+  /* Container padding reduce */
+  .container-psd { padding-left: 20px; padding-right: 20px; }
+
+  /* Overlap section: stack on tablet */
+  .vin-overlap { padding-top: 60px; padding-bottom: 60px; }
+  .vin-overlap-container { height: 340px; }
+
+  /* Entity grid: 2 cols on tablet */
+  .vin-entity-grid-responsive { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Section titles */
+  .vin-sector-title { font-size: 22px; }
+  .vin-year { font-size: clamp(50px, 7vw, 80px); }
+}
+
+/* Mobile: ≤768px */
+@media (max-width: 768px) {
+  /* Container */
+  .container-psd { padding-left: 16px; padding-right: 16px; }
+
+  /* Overlap section: stack vertically */
+  .vin-overlap { padding-top: 0; padding-bottom: 0; overflow: hidden; }
+  .vin-overlap-container { height: auto; }
+  .vin-overlap-img { position: static !important; width: 100% !important; height: auto !important; top: auto !important; bottom: auto !important; left: auto !important; transform: none !important; padding: 20px 0 0 !important; }
+  .vin-overlap-img img { display: block !important; margin: 0 auto !important; width: calc(100% - 40px) !important; }
+  .vin-overlap-img img { height: auto; max-height: 260px; width: 100%; object-fit: cover; }
+  .vin-overlap-copy {
+    position: static;
+    width: 100%;
+    display: block;
+    padding: 28px 20px 36px;
+    box-shadow: none;
+  }
+  .vin-overlap-copy::after { display: none; }
+  .vin-overlap-copy-bg { display: none; }
+
+  /* Overlap copy inner text */
+  .vin-year { font-size: clamp(40px, 12vw, 64px); }
+  .vin-sector-title { font-size: 18px; margin-top: -4px; }
+  .vin-desc { font-size: 15px; max-width: 100%; }
+
+  /* Entity grid: 1 col mobile */
+  .vin-entity-grid-responsive { grid-template-columns: 1fr !important; }
+
+  /* Legacy entity col */
+  .vin-entity-col {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #dedede;
+    padding: 0 10px;
+    margin-bottom: 32px;
+  }
+  .vin-entity-col:last-child { border-bottom: none; }
+  .vin-entity-grid { margin: 20px 0 0; }
+  .vin-hero-text { font-size: clamp(48px, 16vw, 100px); }
+
+  /* Entities section padding */
+  .vin-entities { padding-top: 40px; padding-bottom: 48px; }
+  .vin-entities-container { padding: 0 16px; }
+  .vin-entities-heading { font-size: clamp(22px, 7vw, 32px); }
+}
+
+/* Pillars grid (van-hoa-doanh-nghiep) */
+@media (max-width: 1024px) {
+  .pillars-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px) {
+  .pillars-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Timeline (hanh-trinh-phat-trien) — mobile layout handled in component HTML */
+
+/* Sector page — mobile dropdown / desktop tabs */
+.sectors-desktop-nav { display: none; }
+@media (min-width: 768px) {
+  .sectors-mobile-nav { display: none; }
+  .sectors-desktop-nav { display: block; }
+}
+
+/* Small phones: ≤480px */
+@media (max-width: 480px) {
+  .container-psd { padding-left: 14px; padding-right: 14px; }
+  .vin-tab { font-size: 11px; padding: 12px 8px; min-width: 70px; }
+}
+
+/* ── SectorsSection mobile (v2) ── */
+@media (max-width: 768px) {
+  /* Stack panel above scroll row */
+  .sectors-layout { flex-direction: column !important; }
+
+  /* Panel: full width, compact padding */
+  .sectors-panel {
+    width: 100% !important;
+    padding: 20px 16px !important;
+    border-bottom: none !important;
+  }
+
+  /* Scroll wrapper: reset negative margin */
+  .sectors-scroll-wrapper { margin-left: 0 !important; width: 100% !important; }
+
+  /* Inner scroll div: reset panel-offset padding, keep left edge */
+  .sectors-scroll-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 0 !important;
+    padding-bottom: 16px !important;
+  }
+
+  /* Cards: 80vw so next card peeks ~20% */
+  .sectors-card { width: 80vw !important; }
+}
+
+/* ── EcosystemSection mobile (v1) ── */
+@media (max-width: 768px) {
+  .eco-layout { flex-direction: column !important; }
+  .eco-panel {
+    width: 100% !important;
+    padding: 20px 16px !important;
+    border-bottom: none !important;
+  }
+  .eco-scroll-wrapper { margin-left: 0 !important; width: 100% !important; }
+  .eco-scroll-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 0 !important;
+    padding-bottom: 16px !important;
+  }
+  .eco-card { width: 80vw !important; }
+}
+
+/* ── ve-psd-group & sub-pages responsive (v2) ── */
+
+/* Hero banner height */
+@media (max-width: 768px) {
+  .vin-page-hero { height: 300px !important; }
+}
+
+/* Info cards: 2-col → 1-col on small mobile */
+@media (max-width: 600px) {
+  .info-cards-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Partners section: label col stacks above logo grid */
+@media (max-width: 768px) {
+  .partners-layout-grid { grid-template-columns: 1fr !important; }
+  .partners-logo-grid { grid-template-columns: repeat(2, 1fr) !important; row-gap: 32px !important; }
+}
+
+/* Tầm nhìn: value slider — text stacks above image */
+@media (max-width: 768px) {
+  .value-slider-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+  .value-slider-grid > div:last-child { height: 240px !important; min-height: unset !important; }
+}
+
+/* Tầm nhìn: mission section — image above text */
+@media (max-width: 768px) {
+  .mission-grid { grid-template-columns: 1fr !important; }
+  .mission-grid > div:first-child { min-height: 260px !important; height: 260px !important; }
+}
+
+/* Văn hóa: working env — text above image */
+@media (max-width: 768px) {
+  .env-grid { grid-template-columns: 1fr !important; }
+  .env-grid > div:last-child { min-height: 260px !important; }
+}
+
+@media (max-width: 768px) {
+  .du-an-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+}
+
+.du-an-nav-link {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  height: 52px; padding: 0 12px; white-space: nowrap;
+  font-size: 12px; font-weight: 700; color: #424d54;
+  letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+}
+.du-an-nav-link:hover { background: #e82127; color: #fff; }
