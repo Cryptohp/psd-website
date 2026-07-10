@@ -138,7 +138,9 @@ export default function Header() {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 width: "clamp(100px, 28vw, 300px)",
-                background: "linear-gradient(155deg, #c8181f 0%, #8c0c12 55%, #4a0508 100%)",
+                backgroundImage: "linear-gradient(155deg, #c8181f 0%, #8c0c12 45%, rgba(74,5,8,0.92) 65%, rgba(74,5,8,0) 100%), url('/tagline-menu03.png')",
+                backgroundSize: "cover, cover",
+                backgroundPosition: "center, center bottom",
                 position: "relative",
                 display: "flex",
                 flexDirection: "column",
@@ -146,13 +148,6 @@ export default function Header() {
                 flexShrink: 0,
               }}
             >
-              {/* Tagline image overlay */}
-              <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: "70%",
-                backgroundImage: "linear-gradient(to top, rgba(74,5,8,0) 0%, rgba(74,5,8,0.6) 55%, rgba(74,5,8,1) 100%), url('/tagline-menu03.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center bottom",
-              }} />
 
               {/* Content */}
               <div style={{
