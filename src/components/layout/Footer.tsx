@@ -37,7 +37,7 @@ export default function Footer() {
               <img src="/logo-horizontal.png" alt="PSD Group" style={{ height: 42, width: "auto", objectFit: "contain" }} />
             </Link>
 
-            <p className="text-[14px] text-[#6e6e74] leading-relaxed mb-6 max-w-[300px]">
+            <p className="text-[14px] text-[#6e6e74] leading-relaxed mb-6 w-full lg:max-w-[300px]">
               Hệ sinh thái doanh nghiệp đa ngành phát triển bền vững, lấy hiệu quả kinh tế và
               chiều sâu văn hóa Việt làm nền tảng cho sự trường tồn.
             </p>
@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           {/* Links columns */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
             {Object.entries(footerLinks).map(([group, links]) => (
               <div key={group}>
                 <h4 className="font-semibold text-[14px] text-[#1a1a1a] mb-4 uppercase tracking-wider">
