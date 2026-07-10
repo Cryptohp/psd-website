@@ -131,13 +131,13 @@ export default function Header() {
                 flexShrink: 0,
               }}
             >
-              {/* Building image overlay */}
+              {/* Tagline image overlay */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: "52%",
-                backgroundImage: "url('/home-hero-06.png')",
+                backgroundImage: "url('/tagline-menu.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center top",
-                opacity: 0.18,
+                opacity: 0.3,
                 maskImage: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
                 WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
               }} />
@@ -198,17 +198,6 @@ export default function Header() {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               style={{ flex: 1, background: "#fff", display: "flex", flexDirection: "column", overflow: "hidden", position: "relative" }}
             >
-              {/* Watermark map */}
-              <div style={{
-                position: "absolute", right: 0, bottom: 60,
-                width: "45%", height: "40%",
-                backgroundImage: "url('/ban-do-vn-muc-tieu-qg.png')",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "right bottom",
-                opacity: 0.04,
-                pointerEvents: "none",
-              }} />
 
               {/* Top bar */}
               <div style={{
