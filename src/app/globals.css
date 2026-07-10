@@ -929,23 +929,48 @@ body {
 }
 
 /* ── SectorsSection mobile ── */
+@keyframes sectors-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes eco-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 @media (max-width: 768px) {
   .sectors-layout { flex-direction: column !important; }
   .sectors-panel { width: 100% !important; padding: 20px 16px !important; border-bottom: none !important; }
-  .sectors-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: visible !important; }
-  .sectors-scroll-inner-wrap { width: 100% !important; }
-  .sectors-scroll-inner { padding-left: 16px !important; padding-right: 16px !important; padding-top: 0 !important; padding-bottom: 16px !important; }
-  .sectors-card { width: 78vw !important; flex-shrink: 0 !important; }
+  .sectors-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: hidden !important; }
+  .sectors-scroll-inner-wrap { width: 100% !important; overflow: hidden !important; }
+  .sectors-scroll-inner {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    animation: sectors-marquee 24s linear infinite;
+  }
+  .sectors-scroll-inner:hover { animation-play-state: paused; }
+  .sectors-card { width: 72vw !important; flex-shrink: 0 !important; }
+  .sectors-nav-btns { display: none !important; }
 }
 
 /* ── EcosystemSection mobile ── */
 @media (max-width: 768px) {
   .eco-layout { flex-direction: column !important; }
   .eco-panel { width: 100% !important; padding: 20px 16px !important; border-bottom: none !important; }
-  .eco-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: visible !important; }
-  .eco-scroll-inner-wrap { width: 100% !important; }
-  .eco-scroll-inner { padding-left: 16px !important; padding-right: 16px !important; padding-top: 0 !important; padding-bottom: 16px !important; }
-  .eco-card { width: 78vw !important; flex-shrink: 0 !important; }
+  .eco-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: hidden !important; }
+  .eco-scroll-inner-wrap { width: 100% !important; overflow: hidden !important; }
+  .eco-scroll-inner {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    animation: eco-marquee 24s linear infinite;
+  }
+  .eco-scroll-inner:hover { animation-play-state: paused; }
+  .eco-card { width: 72vw !important; flex-shrink: 0 !important; }
+  .eco-nav-btns { display: none !important; }
 }
 
 /* ── ve-psd-group & sub-pages responsive (v2) ── */

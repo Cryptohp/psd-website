@@ -78,8 +78,9 @@ export default function SectorsSection() {
   const [scrolled, setScrolled] = useState(false);
   const isPaused = useRef(false);
 
-  // Auto-scroll loop
+  // Auto-scroll loop (desktop only)
   useEffect(() => {
+    if (window.innerWidth <= 768) return;
     const el = scrollRef.current;
     if (!el) return;
     let animId: number;
@@ -87,7 +88,6 @@ export default function SectorsSection() {
     const tick = () => {
       if (!isPaused.current) {
         el.scrollLeft += SPEED;
-        // Reset seamless khi qua hết set 1
         if (el.scrollLeft >= SET_WIDTH) {
           el.scrollLeft -= SET_WIDTH;
         }

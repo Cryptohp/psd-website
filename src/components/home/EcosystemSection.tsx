@@ -85,6 +85,7 @@ export default function EcosystemSection() {
   const isPaused = useRef(false);
 
   useEffect(() => {
+    if (window.innerWidth <= 768) return;
     const el = scrollRef.current;
     if (!el) return;
     let animId: number;
