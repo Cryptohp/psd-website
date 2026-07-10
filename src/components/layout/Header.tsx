@@ -225,8 +225,8 @@ export default function Header() {
               {/* Top bar */}
               <div style={{ position: "relative", flexShrink: 0 }}>
               <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "0 12px 0 16px",
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "0 clamp(12px, 2vw, 28px)",
                 height: HEADER_H,
                 borderBottom: "1px solid #f0f0f0",
               }}>
