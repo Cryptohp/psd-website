@@ -137,7 +137,7 @@ export default function Header() {
               exit={{ x: -16, opacity: 0 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                width: "clamp(130px, 34vw, 300px)",
+                width: "clamp(100px, 28vw, 300px)",
                 background: "linear-gradient(155deg, #c8181f 0%, #8c0c12 55%, #4a0508 100%)",
                 position: "relative",
                 display: "flex",
@@ -161,20 +161,20 @@ export default function Header() {
               <div style={{
                 position: "relative", zIndex: 1,
                 display: "flex", flexDirection: "column", height: "100%",
-                padding: "clamp(18px, 3.5vh, 32px) clamp(14px, 2.5vw, 28px)",
+                padding: "clamp(14px, 3vh, 32px) clamp(10px, 2vw, 28px)",
               }}>
 
                 {/* Logo */}
-                <Link href="/" onClick={close} style={{ marginBottom: "clamp(20px, 3.5vh, 36px)", display: "inline-block" }}>
+                <Link href="/" onClick={close} style={{ marginBottom: "clamp(16px, 3vh, 36px)", display: "inline-block" }}>
                   <img
                     src="/logo-horizontal.png"
                     alt="PSD Group"
-                    style={{ height: "clamp(28px, 4vh, 40px)", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)" }}
+                    style={{ height: "clamp(24px, 3.5vh, 40px)", width: "auto", maxWidth: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }}
                   />
                 </Link>
 
-                {/* Quote + tagline */}
-                <div style={{ flex: 1 }}>
+                {/* Quote + tagline — ẩn trên mobile */}
+                <div className="hidden md:block" style={{ flex: 1 }}>
                   <div style={{ fontSize: "clamp(24px, 3.5vw, 44px)", color: "rgba(255,255,255,0.35)", fontFamily: "Georgia, serif", lineHeight: 1, marginBottom: 2 }}>"</div>
                   <h2 style={{ fontSize: "clamp(13px, 1.8vw, 20px)", fontWeight: 800, color: "#fff", lineHeight: 1.4, marginBottom: "clamp(10px, 1.8vh, 18px)", letterSpacing: "0.01em" }}>
                     Kiến tạo<br />thịnh vượng<br />
@@ -186,13 +186,21 @@ export default function Header() {
                   </p>
                 </div>
 
+                {/* Mobile tagline ngắn gọn */}
+                <div className="md:hidden" style={{ flex: 1 }}>
+                  <div style={{ fontSize: 20, color: "rgba(255,255,255,0.3)", fontFamily: "Georgia, serif", lineHeight: 1 }}>"</div>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: "#fff", lineHeight: 1.5, marginTop: 2 }}>
+                    Kiến tạo<br />thịnh vượng
+                  </p>
+                </div>
+
                 {/* Contact info */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: "auto" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                    <Phone size={11} color="rgba(255,255,255,0.55)" />
-                    <span style={{ fontSize: "clamp(9px, 1vw, 11px)", color: "rgba(255,255,255,0.75)" }}>09782 741 534</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: "auto" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <Phone size={10} color="rgba(255,255,255,0.55)" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: "clamp(8px, 1.8vw, 11px)", color: "rgba(255,255,255,0.75)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>09782 741 534</span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+                  <div className="hidden md:flex" style={{ alignItems: "flex-start", gap: 7 }}>
                     <Mail size={11} color="rgba(255,255,255,0.55)" style={{ marginTop: 1, flexShrink: 0 }} />
                     <span style={{ fontSize: "clamp(9px, 1vw, 11px)", color: "rgba(255,255,255,0.75)", wordBreak: "break-all" }}>psdgroup.hotmail@gmail.com</span>
                   </div>
@@ -217,41 +225,40 @@ export default function Header() {
               {/* Top bar */}
               <div style={{ position: "relative", flexShrink: 0 }}>
               <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "0 clamp(16px, 3vw, 32px)",
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "0 12px 0 16px",
                 height: HEADER_H,
                 borderBottom: "1px solid #f0f0f0",
               }}>
-                <Search size={15} color={searchQuery ? "#e82127" : "#bbb"} />
+                <Search size={14} color={searchQuery ? "#e82127" : "#bbb"} style={{ flexShrink: 0 }} />
                 <input
                   type="text"
-                  placeholder="Tìm kiếm trang..."
+                  placeholder="Tìm kiếm..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  style={{ flex: 1, border: "none", outline: "none", fontSize: 14, color: "#333", background: "transparent" }}
+                  style={{ flex: 1, minWidth: 0, border: "none", outline: "none", fontSize: 13, color: "#333", background: "transparent" }}
                 />
                 {searchQuery && (
-                  <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", padding: "2px 4px", display: "flex" }}>
-                    <X size={14} color="#bbb" />
+                  <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", padding: "2px", display: "flex", flexShrink: 0 }}>
+                    <X size={13} color="#bbb" />
                   </button>
                 )}
-                <div style={{ width: 1 }} />
 
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 7px", fontSize: 12, fontWeight: 700, color: "#bbb", letterSpacing: "0.08em" }}>EN</button>
-                  <span style={{ color: "#e8e8e8", fontSize: 11 }}>|</span>
-                  <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 7px", fontSize: 12, fontWeight: 700, color: "#e82127", letterSpacing: "0.08em" }}>VI</button>
+                <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                  <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 5px", fontSize: 11, fontWeight: 700, color: "#bbb", letterSpacing: "0.06em" }}>EN</button>
+                  <span style={{ color: "#e8e8e8", fontSize: 10 }}>|</span>
+                  <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 5px", fontSize: 11, fontWeight: 700, color: "#e82127", letterSpacing: "0.06em" }}>VI</button>
                 </div>
 
                 <button
                   onClick={close}
                   style={{
-                    width: 34, height: 34, borderRadius: "50%",
+                    width: 30, height: 30, borderRadius: "50%",
                     background: "#e82127", border: "none", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                   }}
                 >
-                  <X size={15} color="#fff" strokeWidth={2.5} />
+                  <X size={13} color="#fff" strokeWidth={2.5} />
                 </button>
               </div>
 
@@ -348,19 +355,20 @@ export default function Header() {
                           onClick={e => { if (subs.length > 0) e.preventDefault(); }}
                           style={{
                             display: "flex", alignItems: "center",
-                            gap: "clamp(10px, 1.8vw, 20px)",
-                            padding: "clamp(13px, 1.8vh, 17px) clamp(16px, 3vw, 32px)",
+                            gap: "clamp(8px, 1.5vw, 20px)",
+                            padding: "clamp(11px, 1.6vh, 17px) clamp(12px, 2.5vw, 32px)",
                             textDecoration: "none",
                           }}
                         >
-                          <Icon size={17} color={active ? "#e82127" : "#c8c8c8"} strokeWidth={1.6} style={{ flexShrink: 0 }} />
+                          <Icon size={15} color={active ? "#e82127" : "#c8c8c8"} strokeWidth={1.6} style={{ flexShrink: 0 }} />
                           <span style={{
                             flex: 1,
-                            fontSize: "clamp(10px, 1.3vw, 13px)",
+                            fontSize: "clamp(9px, 1.15vw, 13px)",
                             fontWeight: 700,
-                            letterSpacing: "0.09em",
+                            letterSpacing: "0.06em",
                             textTransform: "uppercase" as const,
                             color: active ? "#e82127" : "#222",
+                            lineHeight: 1.3,
                           }}>
                             {item.label}
                           </span>
@@ -415,31 +423,32 @@ export default function Header() {
               {/* Bottom CTA */}
               <div style={{
                 borderTop: "1px solid #f0f0f0",
-                padding: "clamp(12px, 1.8vh, 18px) clamp(16px, 3vw, 32px)",
-                display: "flex", alignItems: "center", gap: 14,
+                padding: "clamp(10px, 1.6vh, 18px) clamp(12px, 2.5vw, 32px)",
+                display: "flex", alignItems: "center", gap: 10,
                 flexShrink: 0, background: "#fff",
               }}>
                 <div style={{
-                  width: 38, height: 38, borderRadius: "50%",
+                  width: 32, height: 32, borderRadius: "50%",
                   background: "#fff0f0", border: "1px solid #fddcdc",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  <Handshake size={17} color="#e82127" />
+                  <Handshake size={14} color="#e82127" />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: "clamp(9px, 1.1vw, 12px)", fontWeight: 700, color: "#1a1a1a", letterSpacing: "0.04em", lineHeight: 1.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    KẾT NỐI HỢP TÁC CÙNG PSD GROUP
+                  <div style={{ fontSize: "clamp(8px, 1vw, 12px)", fontWeight: 700, color: "#1a1a1a", letterSpacing: "0.03em", lineHeight: 1.3 }}>
+                    KẾT NỐI HỢP TÁC<br className="md:hidden" />
+                    <span className="hidden md:inline"> </span>CÙNG PSD GROUP
                   </div>
-                  <div style={{ fontSize: "clamp(8px, 0.9vw, 11px)", color: "#b0b0b0", marginTop: 2 }}>
+                  <div className="hidden md:block" style={{ fontSize: 11, color: "#b0b0b0", marginTop: 2 }}>
                     Đồng hành phát triển – Kiến tạo tương lai
                   </div>
                 </div>
                 {/* Mobile: circle arrow */}
                 <Link href="/lien-he" onClick={close} className="md:hidden" style={{
-                  width: 34, height: 34, borderRadius: "50%",
+                  width: 30, height: 30, borderRadius: "50%",
                   background: "#e82127", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  <ArrowRight size={14} color="#fff" />
+                  <ArrowRight size={13} color="#fff" />
                 </Link>
                 {/* Desktop: text button */}
                 <Link href="/lien-he" onClick={close} className="hidden md:flex" style={{
