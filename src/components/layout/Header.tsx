@@ -149,12 +149,9 @@ export default function Header() {
               {/* Tagline image overlay */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: "70%",
-                backgroundImage: "url('/tagline-menu02.png')",
+                backgroundImage: "linear-gradient(to top, rgba(140,12,18,0) 0%, rgba(140,12,18,0.7) 100%), url('/tagline-menu02.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center bottom",
-                opacity: 0.55,
-                maskImage: "linear-gradient(to top, rgba(0,0,0,1) 40%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 40%, transparent 100%)",
               }} />
 
               {/* Content */}
@@ -428,8 +425,7 @@ export default function Header() {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: "clamp(8px, 1vw, 12px)", fontWeight: 700, color: "#1a1a1a", letterSpacing: "0.03em", lineHeight: 1.3 }}>
-                    KẾT NỐI HỢP TÁC<br className="md:hidden" />
-                    <span className="hidden md:inline"> </span>CÙNG PSD GROUP
+                    KẾT NỐI HỢP TÁC CÙNG PSD GROUP
                   </div>
                   <div className="hidden md:block" style={{ fontSize: 11, color: "#b0b0b0", marginTop: 2 }}>
                     Đồng hành phát triển – Kiến tạo tương lai
