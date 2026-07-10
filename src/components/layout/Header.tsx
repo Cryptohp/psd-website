@@ -149,7 +149,7 @@ export default function Header() {
               {/* Tagline image overlay */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: "70%",
-                backgroundImage: "linear-gradient(to top, rgba(74,5,8,0) 0%, rgba(74,5,8,0.6) 55%, rgba(74,5,8,1) 100%), url('/tagline-menu02.png')",
+                backgroundImage: "linear-gradient(to top, rgba(74,5,8,0) 0%, rgba(74,5,8,0.6) 55%, rgba(74,5,8,1) 100%), url('/tagline-menu03.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center bottom",
               }} />
