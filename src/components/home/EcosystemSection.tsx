@@ -162,7 +162,7 @@ export default function EcosystemSection() {
               </div>
             </div>
             <Link
-              href="/he-sinh-thai"
+              href="/du-an"
               className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[#e82127] font-semibold hover:gap-3 transition-all duration-300"
             >
               <span className="whitespace-nowrap">Xem tất cả</span>
