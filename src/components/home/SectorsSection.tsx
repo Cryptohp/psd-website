@@ -219,7 +219,7 @@ export default function SectorsSection() {
                     }}
                     className="sectors-card group"
                   >
-                    <Link href={sector.href} className="flex flex-col h-full relative overflow-hidden block">
+                    <div className="flex flex-col h-full relative overflow-hidden">
 
                       {/* Red top accent */}
                       <div className="h-[3px] bg-[#e82127] w-full relative z-10" />
@@ -254,7 +254,7 @@ export default function SectorsSection() {
                         </p>
                       </div>
 
-                    </Link>
+                    </div>
                   </motion.div>
                 ))}
               </div>
