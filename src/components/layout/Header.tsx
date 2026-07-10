@@ -173,24 +173,16 @@ export default function Header() {
                   />
                 </Link>
 
-                {/* Quote + tagline — ẩn trên mobile */}
-                <div className="hidden md:block" style={{ flex: 1 }}>
-                  <div style={{ fontSize: "clamp(24px, 3.5vw, 44px)", color: "rgba(255,255,255,0.35)", fontFamily: "Georgia, serif", lineHeight: 1, marginBottom: 2 }}>"</div>
-                  <h2 style={{ fontSize: "clamp(13px, 1.8vw, 20px)", fontWeight: 800, color: "#fff", lineHeight: 1.4, marginBottom: "clamp(10px, 1.8vh, 18px)", letterSpacing: "0.01em" }}>
+                {/* Quote + tagline */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: "clamp(20px, 3.5vw, 44px)", color: "rgba(255,255,255,0.35)", fontFamily: "Georgia, serif", lineHeight: 1, marginBottom: 2 }}>"</div>
+                  <h2 style={{ fontSize: "clamp(11px, 1.8vw, 20px)", fontWeight: 800, color: "#fff", lineHeight: 1.45, marginBottom: "clamp(8px, 1.8vh, 18px)", letterSpacing: "0.01em" }}>
                     Kiến tạo<br />thịnh vượng<br />
                     <span style={{ fontWeight: 400, opacity: 0.85 }}>Phụng sự xã hội</span>
                   </h2>
-                  <div style={{ width: 28, height: 2, background: "rgba(255,255,255,0.45)", marginBottom: "clamp(10px, 1.8vh, 18px)" }} />
-                  <p style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "rgba(255,255,255,0.6)", lineHeight: 1.65 }}>
+                  <div style={{ width: 24, height: 2, background: "rgba(255,255,255,0.45)", marginBottom: "clamp(8px, 1.8vh, 18px)" }} />
+                  <p className="hidden md:block" style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "rgba(255,255,255,0.6)", lineHeight: 1.65 }}>
                     PSD Group – Tập đoàn kinh tế đa ngành, kiến tạo giá trị bền vững cho doanh nghiệp, cộng đồng và xã hội.
-                  </p>
-                </div>
-
-                {/* Mobile tagline ngắn gọn */}
-                <div className="md:hidden" style={{ flex: 1 }}>
-                  <div style={{ fontSize: 20, color: "rgba(255,255,255,0.3)", fontFamily: "Georgia, serif", lineHeight: 1 }}>"</div>
-                  <p style={{ fontSize: 10, fontWeight: 700, color: "#fff", lineHeight: 1.5, marginTop: 2 }}>
-                    Kiến tạo<br />thịnh vượng
                   </p>
                 </div>
 
