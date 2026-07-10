@@ -196,8 +196,10 @@ export default function EcosystemSection() {
               ref={scrollRef}
               onMouseEnter={() => { isPaused.current = true; }}
               onMouseLeave={() => { isPaused.current = false; }}
-              className="overflow-x-auto"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              onTouchStart={() => { isPaused.current = true; }}
+              onTouchEnd={() => { setTimeout(() => { isPaused.current = false; }, 2000); }}
+              className="eco-scroll-inner-wrap"
+              style={{ overflowX: "scroll", overflowY: "hidden", scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" as never, touchAction: "pan-x" }}
             >
               <div
                 className="eco-scroll-inner flex items-stretch"

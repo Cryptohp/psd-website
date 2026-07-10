@@ -933,14 +933,9 @@ body {
   .sectors-layout { flex-direction: column !important; }
   .sectors-panel { width: 100% !important; padding: 20px 16px !important; border-bottom: none !important; }
   .sectors-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: visible !important; }
-  .sectors-scroll-inner {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    padding-top: 0 !important;
-    padding-bottom: 16px !important;
-  }
+  .sectors-scroll-inner-wrap { width: 100% !important; }
+  .sectors-scroll-inner { padding-left: 16px !important; padding-right: 16px !important; padding-top: 0 !important; padding-bottom: 16px !important; }
   .sectors-card { width: 78vw !important; flex-shrink: 0 !important; }
-  .sectors-xem-them { display: none !important; }
 }
 
 /* ── EcosystemSection mobile ── */
@@ -948,14 +943,9 @@ body {
   .eco-layout { flex-direction: column !important; }
   .eco-panel { width: 100% !important; padding: 20px 16px !important; border-bottom: none !important; }
   .eco-scroll-wrapper { margin-left: 0 !important; width: 100% !important; overflow: visible !important; }
-  .eco-scroll-inner {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    padding-top: 0 !important;
-    padding-bottom: 16px !important;
-  }
+  .eco-scroll-inner-wrap { width: 100% !important; }
+  .eco-scroll-inner { padding-left: 16px !important; padding-right: 16px !important; padding-top: 0 !important; padding-bottom: 16px !important; }
   .eco-card { width: 78vw !important; flex-shrink: 0 !important; }
-  .eco-xem-them { display: none !important; }
 }
 
 /* ── ve-psd-group & sub-pages responsive (v2) ── */
