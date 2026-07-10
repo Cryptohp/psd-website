@@ -252,10 +252,6 @@ export default function EcosystemSection() {
                         <p className="text-[13px] text-[#666] group-hover:text-white/90 leading-relaxed flex-1 relative z-10 transition-colors duration-300">
                           {company.desc}
                         </p>
-                        <div className="mt-5 flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[#1a1a1a] group-hover:text-white font-semibold relative z-10 transition-colors duration-300">
-                          Xem thêm
-                          <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                        </div>
                       </div>
 
                     </Link>
