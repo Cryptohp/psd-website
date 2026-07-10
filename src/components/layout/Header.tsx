@@ -161,7 +161,7 @@ export default function Header() {
                   <img
                     src="/logo-horizontal.png"
                     alt="PSD Group"
-                    style={{ height: "clamp(24px, 3.5vh, 40px)", width: "auto", maxWidth: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }}
+                    style={{ height: "clamp(18px, 3.5vh, 40px)", width: "auto", maxWidth: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }}
                   />
                 </Link>
 
