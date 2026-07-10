@@ -152,7 +152,7 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" onClick={close} style={{ marginBottom: "clamp(20px, 3.5vh, 36px)", display: "inline-block" }}>
                   <img
-                    src="/logo-full.jpg"
+                    src="/logo-psd.png"
                     alt="PSD Group"
                     style={{ height: "clamp(44px, 6.5vh, 64px)", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)" }}
                   />
