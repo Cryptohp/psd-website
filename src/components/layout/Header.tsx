@@ -41,9 +41,18 @@ function HamburgerIcon({ color }: { color: string }) {
   );
 }
 
+// Tất cả các trang có thể tìm kiếm
+const allSearchItems = [
+  ...navItems.map(({ label, href, Icon }) => ({ label, href, Icon, parent: null as string | null })),
+  ...navItems.flatMap(item =>
+    (item.subs ?? []).map(sub => ({ label: sub.label, href: sub.href, Icon: item.Icon, parent: item.label }))
+  ),
+];
+
 export default function Header() {
   const [menuOpen, setMenuOpen]         = useState(false);
   const [expandedHref, setExpandedHref] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery]   = useState("");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -59,7 +68,13 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
 
-  const close = () => { setMenuOpen(false); setExpandedHref(null); };
+  const close = () => { setMenuOpen(false); setExpandedHref(null); setSearchQuery(""); };
+
+  const searchResults = searchQuery.trim().length > 0
+    ? allSearchItems.filter(item =>
+        item.label.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   return (
     <>
@@ -200,21 +215,27 @@ export default function Header() {
             >
 
               {/* Top bar */}
+              <div style={{ position: "relative", flexShrink: 0 }}>
               <div style={{
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "0 clamp(16px, 3vw, 32px)",
                 height: HEADER_H,
                 borderBottom: "1px solid #f0f0f0",
-                flexShrink: 0,
               }}>
-                <Search size={15} color="#bbb" />
+                <Search size={15} color={searchQuery ? "#e82127" : "#bbb"} />
                 <input
                   type="text"
-                  placeholder="Tìm kiếm..."
-                  className="hidden md:block"
+                  placeholder="Tìm kiếm trang..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
                   style={{ flex: 1, border: "none", outline: "none", fontSize: 14, color: "#333", background: "transparent" }}
                 />
-                <div style={{ flex: 1 }} className="md:hidden" />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", padding: "2px 4px", display: "flex" }}>
+                    <X size={14} color="#bbb" />
+                  </button>
+                )}
+                <div style={{ width: 1 }} />
 
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <button style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 7px", fontSize: 12, fontWeight: 700, color: "#bbb", letterSpacing: "0.08em" }}>EN</button>
@@ -232,6 +253,67 @@ export default function Header() {
                 >
                   <X size={15} color="#fff" strokeWidth={2.5} />
                 </button>
+              </div>
+
+              {/* Search results dropdown */}
+              <AnimatePresence>
+                {searchResults.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    style={{
+                      position: "absolute", top: "100%", left: 0, right: 0,
+                      background: "#fff",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                      zIndex: 10,
+                      maxHeight: 320,
+                      overflowY: "auto",
+                      borderBottom: "2px solid #e82127",
+                    }}
+                  >
+                    {searchResults.map((item, i) => {
+                      const Icon = item.Icon;
+                      return (
+                        <Link
+                          key={i}
+                          href={item.href}
+                          onClick={close}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 12,
+                            padding: "12px clamp(16px, 3vw, 32px)",
+                            textDecoration: "none",
+                            borderBottom: "1px solid #f4f4f6",
+                            transition: "background 0.12s",
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.background = "#fff8f8")}
+                          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                        >
+                          <Icon size={15} color="#e82127" strokeWidth={1.6} style={{ flexShrink: 0 }} />
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>{item.label}</div>
+                            {item.parent && (
+                              <div style={{ fontSize: 11, color: "#aaa", marginTop: 1 }}>{item.parent}</div>
+                            )}
+                          </div>
+                          <ChevronRight size={13} color="#ddd" style={{ marginLeft: "auto", flexShrink: 0 }} />
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+                {searchQuery.trim().length > 0 && searchResults.length === 0 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    style={{ padding: "16px clamp(16px, 3vw, 32px)", fontSize: 13, color: "#aaa", borderBottom: "1px solid #f0f0f0", background: "#fff" }}
+                  >
+                    Không tìm thấy kết quả cho "<strong style={{ color: "#333" }}>{searchQuery}</strong>"
+                  </motion.div>
+                )}
+              </AnimatePresence>
               </div>
 
               {/* Nav items */}
