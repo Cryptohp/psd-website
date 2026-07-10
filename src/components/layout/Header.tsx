@@ -138,7 +138,7 @@ export default function Header() {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 width: "clamp(100px, 28vw, 300px)",
-                backgroundImage: "linear-gradient(155deg, #c8181f 0%, #8c0c12 45%, rgba(74,5,8,0.92) 65%, rgba(74,5,8,0) 100%), url('/tagline-menu03.png')",
+                backgroundImage: "linear-gradient(to bottom, #c8181f 0%, #8c0c12 30%, rgba(74,5,8,0.75) 50%, rgba(74,5,8,0) 75%), url('/tagline-menu03.png')",
                 backgroundSize: "cover, cover",
                 backgroundPosition: "center, center bottom",
                 position: "relative",
