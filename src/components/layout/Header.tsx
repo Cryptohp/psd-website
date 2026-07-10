@@ -134,7 +134,7 @@ export default function Header() {
               {/* Tagline image overlay */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: "52%",
-                backgroundImage: "url('/tagline-menu.png')",
+                backgroundImage: "url('/tagline-menu02.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center top",
                 opacity: 0.3,
