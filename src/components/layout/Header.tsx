@@ -133,13 +133,13 @@ export default function Header() {
             >
               {/* Tagline image overlay */}
               <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: "52%",
+                position: "absolute", bottom: 0, left: 0, right: 0, height: "70%",
                 backgroundImage: "url('/tagline-menu02.png')",
                 backgroundSize: "cover",
-                backgroundPosition: "center top",
-                opacity: 0.3,
-                maskImage: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+                backgroundPosition: "center bottom",
+                opacity: 0.55,
+                maskImage: "linear-gradient(to top, rgba(0,0,0,1) 40%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 40%, transparent 100%)",
               }} />
 
               {/* Content */}
