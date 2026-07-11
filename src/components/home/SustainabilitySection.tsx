@@ -12,8 +12,8 @@ const VP = { once: true, amount: 0 };
 const pillars = [
   {
     icon: BookOpen,
-    title: "Dự án Chấn hưng văn hóa",
-    desc: "PSD Group theo đuổi sứ mệnh chấn hưng văn hóa Việt thông qua hệ thống nghiên cứu, dự án và nền tảng số. Hệ thống 236 đề tài nghiên cứu về chấn hưng văn hóa Việt Nam là nền tảng tri thức cho các dự án thực tế của tập đoàn.",
+    title: "Nghiên cứu và phát triển văn hóa",
+    desc: "PSD Group theo đuổi sứ mệnh nghiên cứu và phát triển văn hóa Việt thông qua hệ thống nghiên cứu, dự án và nền tảng số. Hệ thống 236 đề tài nghiên cứu là nền tảng tri thức cho các dự án văn hóa – xã hội thực tế của tập đoàn.",
   },
   {
     icon: Globe,

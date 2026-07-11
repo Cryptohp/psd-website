@@ -13,8 +13,8 @@ const pillars = [
   {
     num: "01",
     label: "VĂN HÓA",
-    title: "Chấn hưng văn hóa Việt",
-    desc: "Hệ thống 236 đề tài nghiên cứu về chấn hưng văn hóa Việt Nam là nền tảng tri thức cho các dự án văn hóa – xã hội của PSD Group.",
+    title: "Nghiên cứu và phát triển văn hóa",
+    desc: "Hệ thống 236 đề tài nghiên cứu là nền tảng tri thức cho các dự án văn hóa – xã hội của PSD Group.",
     image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80",
   },
   {
