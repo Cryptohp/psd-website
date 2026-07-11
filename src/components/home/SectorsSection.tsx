@@ -77,6 +77,8 @@ export default function SectorsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const isPaused = useRef(false);
+  const touchStartX = useRef(0);
+  const touchScrollLeft = useRef(0);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -86,16 +88,24 @@ export default function SectorsSection() {
     const tick = () => {
       if (!isPaused.current) {
         el.scrollLeft += SPEED;
-        if (el.scrollLeft >= SET_WIDTH) {
-          el.scrollLeft -= SET_WIDTH;
-        }
+        if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
         setScrolled(el.scrollLeft > 10);
       }
       animId = requestAnimationFrame(tick);
     };
 
     animId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animId);
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const dx = touchStartX.current - e.touches[0].clientX;
+      el.scrollLeft = touchScrollLeft.current + dx;
+    };
+    el.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(animId);
+      el.removeEventListener("touchmove", handleTouchMove);
+    };
   }, []);
 
   const pause = (ms = 1500) => {
@@ -195,8 +205,12 @@ export default function SectorsSection() {
               ref={scrollRef}
               onMouseEnter={() => { isPaused.current = true; }}
               onMouseLeave={() => { isPaused.current = false; }}
-              onTouchStart={() => { isPaused.current = true; }}
-              onTouchEnd={() => { setTimeout(() => { isPaused.current = false; }, 2000); }}
+              onTouchStart={(e) => {
+                isPaused.current = true;
+                touchStartX.current = e.touches[0].clientX;
+                touchScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+              }}
+              onTouchEnd={() => { setTimeout(() => { isPaused.current = false; }, 1200); }}
               className="sectors-scroll-inner-wrap"
               style={{ overflowX: "scroll", overflowY: "hidden", scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" as never, touchAction: "pan-x" }}
             >
@@ -217,7 +231,7 @@ export default function SectorsSection() {
                     }}
                     className="sectors-card group"
                   >
-                    <div className="flex flex-col h-full relative overflow-hidden">
+                    <Link href={sector.href} className="flex flex-col h-full relative overflow-hidden">
 
                       {/* Red top accent */}
                       <div className="h-[3px] bg-[#e82127] w-full relative z-10" />
@@ -228,7 +242,7 @@ export default function SectorsSection() {
                           src={sector.image}
                           alt={sector.name.replace("\n", " ")}
                           fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="object-cover transition-transform duration-700 group-hover:scale-105 group-active:scale-105"
                           sizes="305px"
                         />
                       </div>
@@ -238,21 +252,20 @@ export default function SectorsSection() {
                         className="flex flex-col flex-1 bg-white relative overflow-hidden"
                         style={{ padding: "30px 24px" }}
                       >
-                        {/* Red overlay từ trên xuống */}
-                        <div className="absolute inset-0 bg-[#e82127] -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out z-0" />
+                        <div className="absolute inset-0 bg-[#e82127] -translate-y-full group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500 ease-in-out z-0" />
 
                         <h3
-                          className="font-bold uppercase tracking-wider text-[#e82127] group-hover:text-white mb-3 leading-tight whitespace-pre-line relative z-10 transition-colors duration-300"
+                          className="font-bold uppercase tracking-wider text-[#e82127] group-hover:text-white group-active:text-white mb-3 leading-tight whitespace-pre-line relative z-10 transition-colors duration-300"
                           style={{ fontSize: "15px" }}
                         >
                           {sector.name}
                         </h3>
-                        <p className="text-[13px] text-[#666] group-hover:text-white/90 leading-relaxed flex-1 relative z-10 transition-colors duration-300">
+                        <p className="text-[13px] text-[#666] group-hover:text-white/90 group-active:text-white/90 leading-relaxed flex-1 relative z-10 transition-colors duration-300">
                           {sector.desc}
                         </p>
                       </div>
 
-                    </div>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
