@@ -78,9 +78,7 @@ export default function SectorsSection() {
   const [scrolled, setScrolled] = useState(false);
   const isPaused = useRef(false);
 
-  // Auto-scroll loop (desktop only)
   useEffect(() => {
-    if (window.innerWidth <= 768) return;
     const el = scrollRef.current;
     if (!el) return;
     let animId: number;
