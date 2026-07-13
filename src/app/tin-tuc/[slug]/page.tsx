@@ -126,8 +126,15 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
                 <img src={post.image} alt={post.title} style={{ width: "100%", marginBottom: 28, borderRadius: 8 }} />
               )}
 
+              <style>{`
+                .article-content img[data-align="full"]   { display:block; width:100%; margin:16px 0; border-radius:8px; }
+                .article-content img[data-align="center"] { display:block; width:65%; margin:16px auto; border-radius:8px; }
+                .article-content img[data-align="left"]   { float:left; width:45%; margin-right:20px; margin-bottom:12px; border-radius:8px; }
+                .article-content img[data-align="right"]  { float:right; width:45%; margin-left:20px; margin-bottom:12px; border-radius:8px; }
+                .article-content img:not([data-align])    { display:block; width:100%; margin:16px 0; border-radius:8px; }
+              `}</style>
               <div
-                className="prose prose-lg max-w-none text-[#3f3f44] [&_h2]:text-[22px] [&_h2]:font-bold [&_h2]:text-[#1a1a1a] [&_h2]:mt-8 [&_h2]:mb-4 [&_p]:leading-relaxed [&_p]:mb-5 [&_blockquote]:border-l-4 [&_blockquote]:border-[#e82127] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#6e6e74] [&_blockquote]:my-6"
+                className="article-content prose prose-lg max-w-none text-[#3f3f44] [&_h2]:text-[22px] [&_h2]:font-bold [&_h2]:text-[#1a1a1a] [&_h2]:mt-8 [&_h2]:mb-4 [&_p]:leading-relaxed [&_p]:mb-5 [&_blockquote]:border-l-4 [&_blockquote]:border-[#e82127] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#6e6e74] [&_blockquote]:my-6"
                 dangerouslySetInnerHTML={{ __html: post.content || `<p>${post.excerpt ?? ""}</p>` }}
               />
 
