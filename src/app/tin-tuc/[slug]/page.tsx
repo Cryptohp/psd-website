@@ -4,34 +4,62 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Tag, ArrowLeft, Clock } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { readFileSync } from "fs";
-import { join } from "path";
+import { prisma } from "@/lib/prisma";
 
 type Post = {
   id: string;
   slug: string;
   title: string;
   category: string;
-  label: string;
   date: string;
-  imageAlign?: string;
-  image: string;
-  excerpt: string;
-  content: string;
-  status: string;
-  visible: boolean;
+  image: string | null;
+  excerpt: string | null;
+  content: string | null;
+  isPublished: boolean;
 };
 
-function getAllPosts(): Post[] {
+async function getPost(slug: string): Promise<Post | null> {
   try {
-    return JSON.parse(readFileSync(join(process.cwd(), "data", "tin-tuc.json"), "utf-8"));
+    const post = await prisma.newsPost.findFirst({
+      where: { slug },
+      include: { category: true },
+    });
+    if (!post) return null;
+    return {
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      category: (post as any).category?.name ?? "Tin tức",
+      date: new Date(post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      image: post.thumbnail,
+      excerpt: post.excerpt,
+      content: post.content,
+      isPublished: post.isPublished,
+    };
   } catch {
-    return [];
+    return null;
   }
 }
 
-function getPost(slug: string): Post | null {
-  return getAllPosts().find((p) => p.slug === slug) ?? null;
+async function getRelated(currentSlug: string, category: string): Promise<Post[]> {
+  try {
+    const posts = await prisma.newsPost.findMany({
+      where: { isPublished: true, slug: { not: currentSlug } },
+      include: { category: true },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+    });
+    const mapped = posts.map(p => ({
+      id: p.id, slug: p.slug, title: p.title,
+      category: (p as any).category?.name ?? "Tin tức",
+      date: new Date(p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      image: p.thumbnail, excerpt: p.excerpt, content: p.content, isPublished: p.isPublished,
+    }));
+    const sameCat = mapped.filter(p => p.category === category).slice(0, 2);
+    return sameCat.length > 0 ? sameCat : mapped.slice(0, 2);
+  } catch {
+    return [];
+  }
 }
 
 const catColor: Record<string, string> = {
@@ -45,24 +73,24 @@ const catColor: Record<string, string> = {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   return { title: post ? post.title : "Bài viết" };
 }
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPost(slug);
-  if (!post || post.status !== "published" || !post.visible) notFound();
+  const post = await getPost(slug);
+  if (!post || !post.isPublished) notFound();
 
-  const allPosts = getAllPosts().filter((p) => p.slug !== slug && p.status === "published" && p.visible);
-  const related = allPosts.filter((p) => p.category === post.category).slice(0, 2);
-  const relatedFinal = related.length > 0 ? related : allPosts.slice(0, 2);
+  const related = await getRelated(slug, post.category);
 
   return (
     <div className="pt-[72px]">
       {/* Hero image */}
       <div className="relative h-[420px] lg:h-[520px] bg-[#0f0f12] overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url('${post.image}')` }} />
+        {post.image && (
+          <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url('${post.image}')` }} />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-[#0f0f12]/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0">
           <div className="container-psd pb-10">
@@ -94,22 +122,14 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
                 <span className="flex items-center gap-1.5"><Clock size={14} />3 phút đọc</span>
               </div>
 
-              {/* Featured image with alignment */}
-              {post.image && (() => {
-                const align = post.imageAlign ?? "full";
-                const imgStyle: React.CSSProperties =
-                  align === "center" ? { display: "block", width: "65%", margin: "0 auto 28px", borderRadius: 8 } :
-                  align === "left"   ? { float: "left",  width: "45%", marginRight: 28, marginBottom: 16, borderRadius: 8 } :
-                  align === "right"  ? { float: "right", width: "45%", marginLeft:  28, marginBottom: 16, borderRadius: 8 } :
-                                       { width: "100%", marginBottom: 28, borderRadius: 8 };
-                return <img src={post.image} alt={post.title} style={imgStyle} />;
-              })()}
+              {post.image && (
+                <img src={post.image} alt={post.title} style={{ width: "100%", marginBottom: 28, borderRadius: 8 }} />
+              )}
 
               <div
                 className="prose prose-lg max-w-none text-[#3f3f44] [&_h2]:text-[22px] [&_h2]:font-bold [&_h2]:text-[#1a1a1a] [&_h2]:mt-8 [&_h2]:mb-4 [&_p]:leading-relaxed [&_p]:mb-5 [&_blockquote]:border-l-4 [&_blockquote]:border-[#e82127] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#6e6e74] [&_blockquote]:my-6"
-                dangerouslySetInnerHTML={{ __html: post.content || `<p>${post.excerpt}</p>` }}
+                dangerouslySetInnerHTML={{ __html: post.content || `<p>${post.excerpt ?? ""}</p>` }}
               />
-              <div style={{ clear: "both" }} />
 
               <div className="mt-12 pt-6 border-t border-[#e5e5e7]">
                 <Link href="/tin-tuc" className="inline-flex items-center gap-2 text-[14px] font-medium text-[#6e6e74] hover:text-[#e82127] transition-colors">
@@ -121,14 +141,16 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
             {/* Sidebar */}
             <aside className="lg:col-span-4">
               <div className="sticky top-[88px]">
-                {relatedFinal.length > 0 && (
+                {related.length > 0 && (
                   <>
                     <h3 className="font-bold text-[16px] text-[#1a1a1a] mb-5">Bài viết liên quan</h3>
                     <div className="flex flex-col gap-4 mb-8">
-                      {relatedFinal.map((r) => (
+                      {related.map((r) => (
                         <Link key={r.id} href={`/tin-tuc/${r.slug}`} className="group flex gap-3 card-psd p-4 bg-white">
                           <div className="w-16 h-16 rounded-lg overflow-hidden bg-[#f4f4f5] flex-shrink-0">
-                            <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" style={{ backgroundImage: `url('${r.image}')` }} />
+                            {r.image && (
+                              <div className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-300" style={{ backgroundImage: `url('${r.image}')` }} />
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="text-[13px] font-semibold text-[#1a1a1a] leading-snug line-clamp-2 group-hover:text-[#e82127] transition-colors">{r.title}</h4>

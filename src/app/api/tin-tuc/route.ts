@@ -5,6 +5,22 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
 
+  const slug = searchParams.get("slug");
+
+  if (slug) {
+    const post = await prisma.newsPost.findFirst({ where: { slug }, include: { category: true } });
+    if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({
+      id: post.id, title: post.title, slug: post.slug, excerpt: post.excerpt,
+      content: post.content, thumbnail: post.thumbnail, author: post.author,
+      category: post.category?.name ?? "Tin tức",
+      status: post.isPublished ? "published" : "draft",
+      visible: post.isPublished,
+      image: post.thumbnail,
+      date: new Date(post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+    });
+  }
+
   const posts = await prisma.newsPost.findMany({
     where: {
       ...(status === "published" ? { isPublished: true } : status === "draft" ? { isPublished: false } : {}),
