@@ -24,6 +24,7 @@ export default function AdminNewsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/tin-tuc")
@@ -46,12 +47,24 @@ export default function AdminNewsPage() {
   }
 
   async function toggleFeatured(id: string, current: boolean) {
-    const res = await fetch(`/api/tin-tuc/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isFeatured: !current }),
-    });
-    if (res.ok) setPosts(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
+    setTogglingId(id);
+    try {
+      const res = await fetch(`/api/tin-tuc/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: !current }),
+      });
+      if (res.ok) {
+        setPosts(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert("Lỗi: " + (err.error ?? err.message ?? res.status));
+      }
+    } catch {
+      alert("Không thể kết nối server");
+    } finally {
+      setTogglingId(null);
+    }
   }
 
   async function handleDelete(id: string) {
@@ -123,10 +136,11 @@ export default function AdminNewsPage() {
                   <td className="px-5 py-4 whitespace-nowrap">
                     <button
                       onClick={() => toggleFeatured(post.id, post.isFeatured)}
+                      disabled={togglingId === post.id}
                       title={post.isFeatured ? "Đang nổi bật — bấm để bỏ" : "Bấm để đặt nổi bật"}
-                      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${post.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}
+                      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors disabled:opacity-50 ${post.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}
                     >
-                      <Star size={12} className={post.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />
+                      {togglingId === post.id ? <Loader2 size={12} className="animate-spin" /> : <Star size={12} className={post.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />}
                       {post.isFeatured ? "Nổi bật" : "Thường"}
                     </button>
                   </td>
