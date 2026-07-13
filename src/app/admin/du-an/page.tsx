@@ -26,6 +26,7 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/du-an")
@@ -39,12 +40,24 @@ export default function AdminProjectsPage() {
   );
 
   async function toggleFeatured(id: string, current: boolean) {
-    const res = await fetch(`/api/du-an/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isFeatured: !current }),
-    });
-    if (res.ok) setProjects(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
+    setTogglingId(id);
+    try {
+      const res = await fetch(`/api/du-an/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: !current }),
+      });
+      if (res.ok) {
+        setProjects(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert("Lỗi: " + (err.error ?? res.status));
+      }
+    } catch {
+      alert("Không thể kết nối server");
+    } finally {
+      setTogglingId(null);
+    }
   }
 
   async function toggleVisible(id: string, current: boolean) {
@@ -110,8 +123,8 @@ export default function AdminProjectsPage() {
                     </span>
                   </td>
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <button onClick={() => toggleFeatured(p.id, p.isFeatured)} title={p.isFeatured ? "Đang nổi bật — bấm để bỏ" : "Bấm để đặt nổi bật"} className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${p.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}>
-                      <Star size={12} className={p.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />
+                    <button onClick={() => toggleFeatured(p.id, p.isFeatured)} disabled={togglingId === p.id} title={p.isFeatured ? "Đang nổi bật — bấm để bỏ" : "Bấm để đặt nổi bật"} className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors disabled:opacity-50 ${p.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}>
+                      {togglingId === p.id ? <Loader2 size={12} className="animate-spin" /> : <Star size={12} className={p.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />}
                       {p.isFeatured ? "Nổi bật" : "Thường"}
                     </button>
                   </td>
