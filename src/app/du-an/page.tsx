@@ -80,7 +80,7 @@ export default function ProjectsPage() {
         </AnimatePresence>
       </section>
 
-      <Breadcrumb items={[{ label: "Dự án & Công ty thành viên" }]} />
+      <Breadcrumb items={[{ label: "Dự án" }]} />
 
       {/* ── TABS — Mobile ── */}
       {sectors.length > 0 && (

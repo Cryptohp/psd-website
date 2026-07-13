@@ -63,7 +63,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const sector = sectorData[slug];
-  return { title: sector ? `${sector.name} – Lĩnh vực hoạt động` : "Lĩnh vực" };
+  return { title: sector ? `${sector.name} – Lĩnh vực & Công ty thành viên` : "Lĩnh vực" };
 }
 
 export default async function SectorDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -74,17 +74,17 @@ export default async function SectorDetailPage({ params }: { params: Promise<{ s
   return (
     <>
       <PageHero
-        tag="Lĩnh vực hoạt động"
+        tag="Lĩnh vực & Công ty thành viên"
         title={sector.name}
         desc={sector.desc}
         breadcrumbs={[
           { label: "Trang chủ", href: "/" },
-          { label: "Lĩnh vực hoạt động", href: "/linh-vuc-hoat-dong" },
+          { label: "Lĩnh vực & Công ty thành viên", href: "/linh-vuc-hoat-dong" },
           { label: sector.name },
         ]}
       />
 
-      <Breadcrumb items={[{ label: "Lĩnh vực hoạt động", href: "/linh-vuc-hoat-dong" }, { label: sector.name }]} />
+      <Breadcrumb items={[{ label: "Lĩnh vực & Công ty thành viên", href: "/linh-vuc-hoat-dong" }, { label: sector.name }]} />
 
       <section className="section-padding bg-white">
         <div className="container-psd max-w-[900px] mx-auto">

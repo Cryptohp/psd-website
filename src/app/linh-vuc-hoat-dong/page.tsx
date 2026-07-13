@@ -249,7 +249,7 @@ export default function SectorsPage() {
           </AnimatePresence>
         </section>
 
-        <Breadcrumb items={[{ label: "Lĩnh vực hoạt động" }]} />
+        <Breadcrumb items={[{ label: "Lĩnh vực & Công ty thành viên" }]} />
 
         {/* ── SECTOR TABS — Mobile dropdown ── */}
         <div className="sectors-mobile-nav" style={{ background: "#f2f2f2", position: "relative" as const }}>
