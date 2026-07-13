@@ -1,47 +1,67 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
-
-const DATA_FILE = join(process.cwd(), "data", "tin-tuc.json");
-
-function readPosts() {
-  try {
-    return JSON.parse(readFileSync(DATA_FILE, "utf-8"));
-  } catch {
-    return [];
-  }
-}
-
-function writePosts(posts: unknown[]) {
-  writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2), "utf-8");
-}
+import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const category = searchParams.get("category");
   const status = searchParams.get("status");
 
-  let posts = readPosts();
-  if (category && category !== "all") posts = posts.filter((p: { category: string }) => p.category === category);
-  if (status) posts = posts.filter((p: { status: string }) => p.status === status);
+  const posts = await prisma.newsPost.findMany({
+    where: {
+      ...(status === "published" ? { isPublished: true } : status === "draft" ? { isPublished: false } : {}),
+    },
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+  });
 
-  return NextResponse.json(posts);
+  return NextResponse.json(posts.map(p => ({
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    excerpt: p.excerpt,
+    content: p.content,
+    thumbnail: p.thumbnail,
+    author: p.author,
+    category: p.category?.name ?? "Tin tức",
+    label: (p.category?.name ?? "Tin tức").toUpperCase(),
+    status: p.isPublished ? "published" : "draft",
+    visible: p.isPublished,
+    views: 0,
+    date: new Date(p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+    image: p.thumbnail,
+    seoTitle: p.seoTitle,
+    seoDesc: p.seoDesc,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+  })));
 }
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const posts = readPosts();
 
-  const newPost = {
-    ...body,
-    id: Date.now().toString(),
+  const baseSlug = (body.slug || body.title)
+    .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+
+  const post = await prisma.newsPost.create({
+    data: {
+      title: body.title,
+      slug: `${baseSlug}-${Date.now()}`,
+      excerpt: body.excerpt ?? null,
+      content: body.content ?? "",
+      thumbnail: body.image ?? body.thumbnail ?? null,
+      author: body.author ?? null,
+      isPublished: body.status === "published",
+      publishedAt: body.status === "published" ? new Date() : null,
+      seoTitle: body.seoTitle ?? null,
+      seoDesc: body.seoDesc ?? null,
+    },
+  });
+
+  return NextResponse.json({
+    ...post,
+    status: post.isPublished ? "published" : "draft",
+    visible: post.isPublished,
+    category: "Tin tức",
     views: 0,
-    createdAt: new Date().toISOString(),
-    date: new Date().toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
-  };
-
-  posts.unshift(newPost);
-  writePosts(posts);
-
-  return NextResponse.json(newPost, { status: 201 });
+  }, { status: 201 });
 }

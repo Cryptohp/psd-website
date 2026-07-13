@@ -1,28 +1,83 @@
 "use client";
 
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState, use } from "react";
+import RichEditor from "@/components/admin/RichEditor";
+import ImageUploader from "@/components/admin/ImageUploader";
 
-const mockProjects: Record<string, { title: string; slug: string; sector: string; status: string; location: string; value: string; desc: string }> = {
-  "1": { title: "Khu đô thị sinh thái Nam Đà Lạt", slug: "khu-do-thi-sinh-thai-nam-da-lat", sector: "Bất động sản", status: "in_progress", location: "Đà Lạt", value: "850 tỷ", desc: "Dự án khu đô thị sinh thái quy mô lớn tại phía Nam thành phố Đà Lạt." },
-  "2": { title: "Nhà máy chế biến nông sản Tây Nguyên", slug: "nha-may-che-bien-nong-san-tay-nguyen", sector: "Nông nghiệp", status: "completed", location: "Đắk Lắk", value: "320 tỷ", desc: "Nhà máy chế biến nông sản công suất lớn phục vụ xuất khẩu." },
-  "3": { title: "Tổ hợp thương mại dịch vụ PSD Plaza", slug: "to-hop-thuong-mai-psd-plaza", sector: "Thương mại", status: "in_progress", location: "Buôn Ma Thuột", value: "1.2 nghìn tỷ", desc: "Tổ hợp thương mại – dịch vụ – văn phòng hiện đại tại trung tâm thành phố." },
-};
+function toSlug(str: string) {
+  return str.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+}
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const project = mockProjects[id] || mockProjects["1"];
+  const [form, setForm] = useState({
+    title: "", slug: "", shortDesc: "", description: "",
+    thumbnail: "", location: "", scale: "",
+    status: "IN_PROGRESS", startYear: "", isFeatured: false,
+  });
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch(`/api/du-an/${id}`)
+      .then(r => r.json())
+      .then(data => {
+        setForm({
+          title: data.name ?? data.title ?? "",
+          slug: data.slug ?? "",
+          shortDesc: data.shortDesc ?? "",
+          description: data.description ?? "",
+          thumbnail: data.thumbnail ?? "",
+          location: data.location ?? "",
+          scale: data.scale ?? "",
+          status: data.status ?? "IN_PROGRESS",
+          startYear: data.startYear ? String(data.startYear) : "",
+          isFeatured: data.isFeatured ?? false,
+        });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
 
   async function handleSave() {
-    setSaving(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setSaving(false);
-    router.push("/admin/du-an");
+    if (!form.title.trim()) { setError("Vui lòng nhập tên dự án"); return; }
+    setSaving(true); setError("");
+    try {
+      const res = await fetch(`/api/du-an/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, startYear: form.startYear ? Number(form.startYear) : null }),
+      });
+      if (!res.ok) throw new Error("Lưu thất bại");
+      router.push("/admin/du-an");
+    } catch {
+      setError("Có lỗi xảy ra, vui lòng thử lại");
+      setSaving(false);
+    }
   }
+
+  async function handleDelete() {
+    if (!confirm("Xác nhận xoá dự án này? Thao tác không thể hoàn tác.")) return;
+    const res = await fetch(`/api/du-an/${id}`, { method: "DELETE" });
+    if (res.ok) router.push("/admin/du-an");
+  }
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-24 text-[#6e6e74]">
+      <Loader2 size={20} className="animate-spin mr-2" /> Đang tải...
+    </div>
+  );
 
   return (
     <div className="space-y-5 max-w-4xl">
@@ -33,59 +88,42 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           </Link>
           <div>
             <h1 className="text-xl font-bold text-[#111114]">Chỉnh sửa dự án</h1>
-            <p className="text-xs text-[#6e6e74] mt-0.5">ID: {id}</p>
+            <p className="text-xs text-[#6e6e74] mt-0.5">{form.title}</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-4 py-2.5 text-sm border border-red-200 text-red-500 bg-white rounded-xl hover:bg-red-50">
-            <Trash2 size={14} />
-            Xoá
+          <button onClick={handleDelete} className="flex items-center gap-2 px-4 py-2.5 text-sm border border-red-200 text-red-500 bg-white rounded-xl hover:bg-red-50">
+            <Trash2 size={14} /> Xoá
           </button>
-          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[#e82127] hover:bg-[#c91c21] text-white rounded-xl transition-colors">
-            <Save size={14} />
-            {saving ? "Đang lưu..." : "Lưu thay đổi"}
+          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[#e82127] hover:bg-[#c91c21] text-white rounded-xl transition-colors disabled:opacity-60">
+            <Save size={14} />{saving ? "Đang lưu..." : "Lưu thay đổi"}
           </button>
         </div>
       </div>
+
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">{error}</div>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Tên dự án *</label>
-              <input defaultValue={project.title} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+              <input name="title" value={form.title} onChange={handleChange} placeholder="Nhập tên dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Slug URL</label>
               <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-[#e82127]">
                 <span className="px-3 py-3 text-sm text-[#6e6e74] bg-gray-50 border-r border-gray-200">/du-an/</span>
-                <input defaultValue={project.slug} className="flex-1 px-3 py-3 text-sm focus:outline-none" />
+                <input name="slug" value={form.slug} onChange={handleChange} placeholder="ten-du-an" className="flex-1 px-3 py-3 text-sm focus:outline-none" />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Mô tả ngắn</label>
-              <textarea rows={3} defaultValue={project.desc} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
+              <textarea name="shortDesc" value={form.shortDesc} onChange={handleChange} rows={3} placeholder="Mô tả tóm tắt dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung chi tiết</label>
-              <textarea rows={10} placeholder="Nội dung đầy đủ về dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <h3 className="font-semibold text-[#111114] text-sm mb-4">Chỉ số tác động</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: "Diện tích (ha)", value: "" },
-                { label: "Tổng vốn đầu tư", value: project.value },
-                { label: "Việc làm tạo ra", value: "" },
-                { label: "Năm hoàn thành", value: "" },
-              ].map((f) => (
-                <div key={f.label}>
-                  <label className="block text-xs text-[#6e6e74] mb-1.5">{f.label}</label>
-                  <input defaultValue={f.value} placeholder="Nhập giá trị..." className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
-                </div>
-              ))}
+              <RichEditor content={form.description} onChange={v => setForm(p => ({ ...p, description: v }))} placeholder="Nội dung đầy đủ về dự án..." />
             </div>
           </div>
         </div>
@@ -94,34 +132,35 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
             <h3 className="font-semibold text-[#111114] text-sm">Phân loại</h3>
             <div>
-              <label className="block text-xs text-[#6e6e74] mb-1.5">Lĩnh vực</label>
-              <select defaultValue={project.sector} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
-                {["Bất động sản", "Nông nghiệp", "Năng lượng", "Thương mại", "Du lịch", "Xây dựng", "Logistics"].map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
               <label className="block text-xs text-[#6e6e74] mb-1.5">Trạng thái</label>
-              <select defaultValue={project.status} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
-                <option value="planning">Lên kế hoạch</option>
-                <option value="in_progress">Đang triển khai</option>
-                <option value="completed">Hoàn thành</option>
+              <select name="status" value={form.status} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
+                <option value="PLANNING">Lên kế hoạch</option>
+                <option value="IN_PROGRESS">Đang triển khai</option>
+                <option value="COMPLETED">Hoàn thành</option>
+                <option value="ON_HOLD">Tạm dừng</option>
               </select>
             </div>
             <div>
               <label className="block text-xs text-[#6e6e74] mb-1.5">Địa điểm</label>
-              <input defaultValue={project.location} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+              <input name="location" value={form.location} onChange={handleChange} placeholder="Tỉnh/Thành phố..." className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
             </div>
+            <div>
+              <label className="block text-xs text-[#6e6e74] mb-1.5">Quy mô / Vốn đầu tư</label>
+              <input name="scale" value={form.scale} onChange={handleChange} placeholder="VD: 500 tỷ đồng" className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+            </div>
+            <div>
+              <label className="block text-xs text-[#6e6e74] mb-1.5">Năm bắt đầu</label>
+              <input name="startYear" value={form.startYear} onChange={handleChange} type="number" placeholder="2024" className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+            </div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.isFeatured} onChange={e => setForm(p => ({ ...p, isFeatured: e.target.checked }))} className="accent-[#e82127]" />
+              <span className="text-sm text-[#111114]">Dự án nổi bật</span>
+            </label>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <h3 className="font-semibold text-[#111114] text-sm mb-3">Ảnh đại diện</h3>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-[#e82127] transition-colors cursor-pointer">
-              <div className="text-2xl mb-2">🏗️</div>
-              <p className="text-xs font-medium text-[#111114]">Thay ảnh</p>
-              <p className="text-xs text-[#6e6e74] mt-0.5">PNG, JPG tối đa 2MB</p>
-            </div>
+            <ImageUploader value={form.thumbnail} onChange={v => setForm(p => ({ ...p, thumbnail: v }))} />
           </div>
         </div>
       </div>

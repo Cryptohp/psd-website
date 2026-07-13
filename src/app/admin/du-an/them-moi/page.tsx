@@ -2,18 +2,50 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, Eye } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
+import RichEditor from "@/components/admin/RichEditor";
+import ImageUploader from "@/components/admin/ImageUploader";
+
+function toSlug(str: string) {
+  return str.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+}
 
 export default function NewProjectPage() {
   const router = useRouter();
+  const [form, setForm] = useState({
+    title: "", slug: "", shortDesc: "", description: "",
+    thumbnail: "", location: "", province: "", scale: "",
+    status: "IN_PROGRESS", startYear: "", isFeatured: false,
+  });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    const { name, value } = e.target;
+    setForm(prev => {
+      const next = { ...prev, [name]: value };
+      if (name === "title" && !prev.slug) next.slug = toSlug(value);
+      return next;
+    });
+  }
 
   async function handleSave() {
-    setSaving(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setSaving(false);
-    router.push("/admin/du-an");
+    if (!form.title.trim()) { setError("Vui lòng nhập tên dự án"); return; }
+    setSaving(true); setError("");
+    try {
+      const res = await fetch("/api/du-an", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Lưu thất bại");
+      router.push("/admin/du-an");
+    } catch {
+      setError("Có lỗi xảy ra, vui lòng thử lại");
+      setSaving(false);
+    }
   }
 
   return (
@@ -29,50 +61,36 @@ export default function NewProjectPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => router.push("/admin/du-an")} className="px-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl hover:bg-gray-50 text-[#6e6e74]">
-            Huỷ
-          </button>
-          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[#e82127] hover:bg-[#c91c21] text-white rounded-xl transition-colors">
-            <Save size={14} />
-            {saving ? "Đang lưu..." : "Lưu dự án"}
+          <button onClick={() => router.push("/admin/du-an")} className="px-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl hover:bg-gray-50 text-[#6e6e74]">Huỷ</button>
+          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[#e82127] hover:bg-[#c91c21] text-white rounded-xl transition-colors disabled:opacity-60">
+            <Save size={14} />{saving ? "Đang lưu..." : "Lưu dự án"}
           </button>
         </div>
       </div>
+
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">{error}</div>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Tên dự án *</label>
-              <input placeholder="Nhập tên dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+              <input name="title" value={form.title} onChange={handleChange} placeholder="Nhập tên dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Slug URL</label>
               <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-[#e82127]">
                 <span className="px-3 py-3 text-sm text-[#6e6e74] bg-gray-50 border-r border-gray-200">/du-an/</span>
-                <input placeholder="ten-du-an" className="flex-1 px-3 py-3 text-sm focus:outline-none" />
+                <input name="slug" value={form.slug} onChange={handleChange} placeholder="ten-du-an" className="flex-1 px-3 py-3 text-sm focus:outline-none" />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Mô tả ngắn</label>
-              <textarea rows={3} placeholder="Mô tả tóm tắt dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
+              <textarea name="shortDesc" value={form.shortDesc} onChange={handleChange} rows={3} placeholder="Mô tả tóm tắt dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung chi tiết</label>
-              <textarea rows={10} placeholder="Nội dung đầy đủ về dự án..." className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] resize-none" />
-            </div>
-          </div>
-
-          {/* Metrics */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <h3 className="font-semibold text-[#111114] text-sm mb-4">Chỉ số tác động</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {["Diện tích (ha)", "Tổng vốn đầu tư", "Việc làm tạo ra", "Năm hoàn thành"].map((label) => (
-                <div key={label}>
-                  <label className="block text-xs text-[#6e6e74] mb-1.5">{label}</label>
-                  <input placeholder="Nhập giá trị..." className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
-                </div>
-              ))}
+              <RichEditor content={form.description} onChange={v => setForm(p => ({ ...p, description: v }))} placeholder="Nội dung đầy đủ về dự án..." />
             </div>
           </div>
         </div>
@@ -81,34 +99,35 @@ export default function NewProjectPage() {
           <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
             <h3 className="font-semibold text-[#111114] text-sm">Phân loại</h3>
             <div>
-              <label className="block text-xs text-[#6e6e74] mb-1.5">Lĩnh vực</label>
-              <select className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
-                {["Bất động sản", "Nông nghiệp", "Năng lượng", "Thương mại", "Du lịch", "Xây dựng", "Logistics"].map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
               <label className="block text-xs text-[#6e6e74] mb-1.5">Trạng thái</label>
-              <select className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
-                <option value="planning">Lên kế hoạch</option>
-                <option value="in_progress">Đang triển khai</option>
-                <option value="completed">Hoàn thành</option>
+              <select name="status" value={form.status} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
+                <option value="PLANNING">Lên kế hoạch</option>
+                <option value="IN_PROGRESS">Đang triển khai</option>
+                <option value="COMPLETED">Hoàn thành</option>
+                <option value="ON_HOLD">Tạm dừng</option>
               </select>
             </div>
             <div>
               <label className="block text-xs text-[#6e6e74] mb-1.5">Địa điểm</label>
-              <input placeholder="Tỉnh/Thành phố..." className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+              <input name="location" value={form.location} onChange={handleChange} placeholder="Tỉnh/Thành phố..." className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
             </div>
+            <div>
+              <label className="block text-xs text-[#6e6e74] mb-1.5">Quy mô / Vốn đầu tư</label>
+              <input name="scale" value={form.scale} onChange={handleChange} placeholder="VD: 500 tỷ đồng" className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+            </div>
+            <div>
+              <label className="block text-xs text-[#6e6e74] mb-1.5">Năm bắt đầu</label>
+              <input name="startYear" value={form.startYear} onChange={handleChange} type="number" placeholder="2024" className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]" />
+            </div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.isFeatured} onChange={e => setForm(p => ({ ...p, isFeatured: e.target.checked }))} className="accent-[#e82127]" />
+              <span className="text-sm text-[#111114]">Dự án nổi bật</span>
+            </label>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 p-5">
             <h3 className="font-semibold text-[#111114] text-sm mb-3">Ảnh đại diện</h3>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-[#e82127] transition-colors cursor-pointer">
-              <div className="text-2xl mb-2">🏗️</div>
-              <p className="text-xs font-medium text-[#111114]">Tải ảnh lên</p>
-              <p className="text-xs text-[#6e6e74] mt-0.5">PNG, JPG tối đa 2MB</p>
-            </div>
+            <ImageUploader value={form.thumbnail} onChange={v => setForm(p => ({ ...p, thumbnail: v }))} />
           </div>
         </div>
       </div>

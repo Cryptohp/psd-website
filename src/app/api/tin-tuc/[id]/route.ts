@@ -1,46 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
-
-const DATA_FILE = join(process.cwd(), "data", "tin-tuc.json");
-
-function readPosts() {
-  try {
-    return JSON.parse(readFileSync(DATA_FILE, "utf-8"));
-  } catch {
-    return [];
-  }
-}
-
-function writePosts(posts: unknown[]) {
-  writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2), "utf-8");
-}
+import { prisma } from "@/lib/prisma";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const posts = readPosts();
-  const post = posts.find((p: { id: string }) => p.id === id);
+  const post = await prisma.newsPost.findUnique({ where: { id }, include: { category: true } });
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(post);
+  return NextResponse.json({
+    ...post,
+    status: post.isPublished ? "published" : "draft",
+    visible: post.isPublished,
+    category: post.category?.name ?? "Tin tức",
+    image: post.thumbnail,
+  });
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await req.json();
-  const posts = readPosts();
-  const idx = posts.findIndex((p: { id: string }) => p.id === id);
-  if (idx === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  posts[idx] = { ...posts[idx], ...body, id };
-  writePosts(posts);
-  return NextResponse.json(posts[idx]);
+  const post = await prisma.newsPost.update({
+    where: { id },
+    data: {
+      ...(body.title !== undefined ? { title: body.title } : {}),
+      ...(body.excerpt !== undefined ? { excerpt: body.excerpt } : {}),
+      ...(body.content !== undefined ? { content: body.content } : {}),
+      ...(body.image !== undefined ? { thumbnail: body.image } : {}),
+      ...(body.thumbnail !== undefined ? { thumbnail: body.thumbnail } : {}),
+      ...(body.author !== undefined ? { author: body.author } : {}),
+      ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
+      ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
+      ...(body.status !== undefined ? {
+        isPublished: body.status === "published",
+        publishedAt: body.status === "published" ? new Date() : null,
+      } : {}),
+      ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
+    },
+  });
+
+  return NextResponse.json({ ...post, status: post.isPublished ? "published" : "draft", visible: post.isPublished });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const posts = readPosts();
-  const filtered = posts.filter((p: { id: string }) => p.id !== id);
-  if (filtered.length === posts.length) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  writePosts(filtered);
+  await prisma.newsPost.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }
