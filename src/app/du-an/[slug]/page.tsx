@@ -75,7 +75,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             {/* Main */}
             <div className="lg:col-span-8">
               {project.description && (
-                <p className="text-[17px] text-[#6e6e74] leading-relaxed mb-10">{project.description}</p>
+                <div className="article-content text-[16px] text-[#444] leading-relaxed mb-10"
+                  dangerouslySetInnerHTML={{ __html: project.description }} />
               )}
               {!project.description && project.shortDesc && (
                 <p className="text-[17px] text-[#6e6e74] leading-relaxed mb-10">{project.shortDesc}</p>
