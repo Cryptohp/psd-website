@@ -439,16 +439,19 @@ export default function RichEditor({ content = "", onChange, placeholder = "Nháº
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(e) => {
+              onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                  const src = ev.target?.result as string;
-                  editor.chain().focus().setImage({ src }).run();
-                  setShowImageInput(false);
-                };
-                reader.readAsDataURL(file);
+                const formData = new FormData();
+                formData.append("file", file);
+                try {
+                  const res = await fetch("/api/upload", { method: "POST", body: formData });
+                  const data = await res.json();
+                  if (data.url) {
+                    editor.chain().focus().setImage({ src: data.url }).run();
+                    setShowImageInput(false);
+                  }
+                } catch {}
               }}
             />
           </label>
