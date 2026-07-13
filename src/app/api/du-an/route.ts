@@ -4,10 +4,12 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
+  const featured = searchParams.get("featured");
 
   const projects = await prisma.project.findMany({
     where: {
       ...(status ? { status: status as never } : {}),
+      ...(featured === "true" ? { isFeatured: true } : {}),
     },
     include: { sector: true },
     orderBy: [{ isFeatured: "desc" }, { order: "asc" }, { createdAt: "desc" }],

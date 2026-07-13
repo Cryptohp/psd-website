@@ -6,70 +6,29 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const VP = { once: true, amount: 0 };
 
-const categories = ["Tất cả", "Văn hóa", "Công nghiệp", "Logistics", "Du lịch"];
+type Project = { id: string; title: string; name: string; slug: string; shortDesc: string | null; thumbnail: string | null; sector: string; location: string | null };
 
-const projects = [
-  {
-    name: "Văn Minh Việt",
-    category: "Văn hóa",
-    location: "Hà Nội",
-    desc: "Nền tảng số hóa và lan tỏa tri thức, di sản văn hóa Việt đến cộng đồng và thế hệ trẻ trên toàn quốc.",
-    status: "Đang triển khai",
-    image: "/vanminhviet.png",
-    href: "/du-an/van-minh-viet",
-  },
-  {
-    name: "Nhà máy SOFAVI",
-    category: "Công nghiệp",
-    location: "Miền Bắc",
-    desc: "Nhà máy sản xuất sorbitol, tinh bột, cồn và dầu thực vật quy mô công nghiệp.",
-    status: "Đang vận hành",
-    image: "/sofavi-du-an-tieu-bieu.jpg",
-    href: "/du-an/sofavi",
-  },
-  {
-    name: "Tấn Sang Logistics",
-    category: "Logistics",
-    location: "Toàn quốc",
-    desc: "Hệ thống logistics, kho bãi và chuỗi cung ứng kết nối toàn quốc.",
-    status: "Đang vận hành",
-    image: "/tansang-du-an-tieu-bieu.jpg",
-    href: "/du-an/tan-sang-logistics",
-  },
-  {
-    name: "Công ty CP Du lịch Long Việt",
-    category: "Du lịch",
-    location: "Miền Bắc",
-    desc: "Khu du lịch sinh thái văn hóa gắn với di sản và bản sắc Việt Nam.",
-    status: "Đang phát triển",
-    image: "/longviet-du-an-tieu-bieu.jpg",
-    href: "/du-an/long-viet",
-  },
-  {
-    name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long",
-    category: "Khoáng sản",
-    location: "Toàn quốc",
-    desc: "Khai thác và chế biến khoáng sản theo định hướng bền vững, cân bằng kinh tế và môi trường.",
-    status: "Đang vận hành",
-    image: "/thanglong.jpg",
-    href: "/du-an/thang-long",
-  },
-];
 
 export default function ProjectsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px" });
   const [activeTab, setActiveTab] = useState("Tất cả");
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const filtered =
-    activeTab === "Tất cả"
-      ? projects
-      : projects.filter((p) => p.category === activeTab);
+  useEffect(() => {
+    fetch("/api/du-an?featured=true")
+      .then(r => r.json())
+      .then(data => setProjects(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
 
+  const categories = ["Tất cả", ...Array.from(new Set(projects.map(p => p.sector).filter(Boolean)))];
+
+  const filtered = activeTab === "Tất cả" ? projects : projects.filter(p => p.sector === activeTab);
   const featured = filtered[0] ?? null;
   const rest = filtered.slice(1);
 
@@ -152,32 +111,22 @@ export default function ProjectsSection() {
           <div style={{ overflowX: "auto", scrollbarWidth: "none", display: "flex", gap: 12, padding: "0 20px 4px" }}>
             {filtered.map((project) => (
               <Link
-                key={project.href}
-                href={project.href}
+                key={project.id}
+                href={`/du-an/${project.slug}`}
                 style={{ flexShrink: 0, width: 240, textDecoration: "none", display: "block" }}
               >
                 <div style={{ position: "relative", height: 160, overflow: "hidden", background: "#eee" }}>
-                  <Image
-                    src={project.image}
-                    alt={project.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="240px"
-                  />
+                  {project.thumbnail && <Image src={project.thumbnail} alt={project.title} fill style={{ objectFit: "cover" }} sizes="240px" />}
                 </div>
                 <div style={{ padding: "12px 0 0" }}>
                   <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#e82127", marginBottom: 4 }}>
-                    {project.category}
+                    {project.sector}
                   </div>
                   <h3 style={{ fontSize: 14, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, margin: "0 0 4px" }}>
-                    {project.name}
+                    {project.title}
                   </h3>
-                  <p style={{
-                    fontSize: 12, color: "#888", lineHeight: 1.5, margin: 0,
-                    display: "-webkit-box", WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical" as const, overflow: "hidden",
-                  }}>
-                    {project.desc}
+                  <p style={{ fontSize: 12, color: "#888", lineHeight: 1.5, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>
+                    {project.shortDesc ?? ""}
                   </p>
                 </div>
               </Link>
@@ -216,14 +165,14 @@ export default function ProjectsSection() {
                 {/* Featured item — 66.667% width */}
                 {featured && (
                   <li style={{ width: "66.6666%", padding: "0 12px 24px" }}>
-                    <Link href={featured.href} className="group" style={{ display: "block", textDecoration: "none", position: "relative", overflow: "hidden" }}>
+                    <Link href={`/du-an/${featured.slug}`} className="group" style={{ display: "block", textDecoration: "none", position: "relative", overflow: "hidden" }}>
                       <div style={{ position: "relative", paddingTop: "62%", overflow: "hidden", background: "#eee" }}>
-                        <Image src={featured.image} alt={featured.name} fill style={{ objectFit: "cover", transition: "transform 0.55s ease" }} className="group-hover:scale-[1.06]" sizes="67vw" />
+                        {featured.thumbnail && <Image src={featured.thumbnail} alt={featured.title} fill style={{ objectFit: "cover", transition: "transform 0.55s ease" }} className="group-hover:scale-[1.06]" sizes="67vw" />}
                       </div>
                       <div style={{ position: "absolute", bottom: 0, left: 0, width: "55%", padding: "20px 24px", background: "rgba(255,255,255,0.88)", backdropFilter: "blur(2px)" }}>
-                        <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#e82127", marginBottom: 6 }}>{featured.category}</div>
-                        <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.3, margin: 0, transition: "color 0.18s" }} className="group-hover:text-[#e82127]">{featured.name}</h3>
-                        <p style={{ fontSize: 13, color: "#666", marginTop: 6, marginBottom: 0, lineHeight: 1.55 }}>{featured.desc}</p>
+                        <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#e82127", marginBottom: 6 }}>{featured.sector}</div>
+                        <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.3, margin: 0, transition: "color 0.18s" }} className="group-hover:text-[#e82127]">{featured.title}</h3>
+                        <p style={{ fontSize: 13, color: "#666", marginTop: 6, marginBottom: 0, lineHeight: 1.55 }}>{featured.shortDesc ?? ""}</p>
                       </div>
                     </Link>
                   </li>
@@ -231,15 +180,15 @@ export default function ProjectsSection() {
 
                 {/* Regular items — 33.333% each */}
                 {rest.map((project) => (
-                  <li key={project.href} style={{ width: "33.3333%", padding: "0 12px 24px" }}>
-                    <Link href={project.href} className="group" style={{ display: "block", textDecoration: "none" }}>
+                  <li key={project.id} style={{ width: "33.3333%", padding: "0 12px 24px" }}>
+                    <Link href={`/du-an/${project.slug}`} className="group" style={{ display: "block", textDecoration: "none" }}>
                       <div style={{ position: "relative", paddingTop: "66%", overflow: "hidden", background: "#eee" }}>
-                        <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover", transition: "transform 0.55s ease" }} className="group-hover:scale-[1.06]" sizes="33vw" />
+                        {project.thumbnail && <Image src={project.thumbnail} alt={project.title} fill style={{ objectFit: "cover", transition: "transform 0.55s ease" }} className="group-hover:scale-[1.06]" sizes="33vw" />}
                       </div>
                       <div style={{ padding: "14px 0 0" }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#e82127", marginBottom: 6 }}>{project.category}</div>
-                        <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, margin: "0 0 6px", transition: "color 0.18s" }} className="group-hover:text-[#e82127]">{project.name}</h3>
-                        <p style={{ fontSize: 13, color: "#888", lineHeight: 1.55, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>{project.desc}</p>
+                        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#e82127", marginBottom: 6 }}>{project.sector}</div>
+                        <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, margin: "0 0 6px", transition: "color 0.18s" }} className="group-hover:text-[#e82127]">{project.title}</h3>
+                        <p style={{ fontSize: 13, color: "#888", lineHeight: 1.55, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>{project.shortDesc ?? ""}</p>
                       </div>
                     </Link>
                   </li>

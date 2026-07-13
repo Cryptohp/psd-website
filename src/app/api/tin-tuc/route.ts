@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
   const status = searchParams.get("status");
 
   const slug = searchParams.get("slug");
+  const featured = searchParams.get("featured");
 
   if (slug) {
     const post = await prisma.newsPost.findFirst({ where: { slug }, include: { category: true } });
@@ -24,6 +25,7 @@ export async function GET(req: NextRequest) {
   const posts = await prisma.newsPost.findMany({
     where: {
       ...(status === "published" ? { isPublished: true } : status === "draft" ? { isPublished: false } : {}),
+      ...(featured === "true" ? { isFeatured: true, isPublished: true } : {}),
     },
     include: { category: true },
     orderBy: { createdAt: "desc" },
@@ -41,6 +43,7 @@ export async function GET(req: NextRequest) {
     label: (p.category?.name ?? "Tin tức").toUpperCase(),
     status: p.isPublished ? "published" : "draft",
     visible: p.isPublished,
+    isFeatured: p.isFeatured,
     views: 0,
     date: new Date(p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
     image: p.thumbnail,

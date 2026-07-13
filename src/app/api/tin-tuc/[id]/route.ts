@@ -34,6 +34,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         publishedAt: body.status === "published" ? new Date() : null,
       } : {}),
       ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
+      ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
     },
   });
 

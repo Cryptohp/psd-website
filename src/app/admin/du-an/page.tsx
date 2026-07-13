@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Search, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, EyeOff, Loader2, Star } from "lucide-react";
 
 type Project = {
   id: string;
@@ -10,6 +10,7 @@ type Project = {
   sector: string;
   status: string;
   visible: boolean;
+  isFeatured: boolean;
   location: string;
   scale: string;
 };
@@ -36,6 +37,15 @@ export default function AdminProjectsPage() {
   const filtered = projects.filter(p =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  async function toggleFeatured(id: string, current: boolean) {
+    const res = await fetch(`/api/du-an/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isFeatured: !current }),
+    });
+    if (res.ok) setProjects(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
+  }
 
   async function toggleVisible(id: string, current: boolean) {
     const res = await fetch(`/api/du-an/${id}`, {
@@ -78,14 +88,14 @@ export default function AdminProjectsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/60">
-                {["Tên dự án", "Lĩnh vực", "Địa điểm", "Quy mô", "Trạng thái", "Hiển thị", ""].map((h, i) => (
+                {["Tên dự án", "Lĩnh vực", "Địa điểm", "Quy mô", "Trạng thái", "Nổi bật", "Hiển thị", ""].map((h, i) => (
                   <th key={i} className={`text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide whitespace-nowrap ${i === 6 ? "text-right" : ""}`}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-12 text-[#6e6e74] text-sm">Chưa có dự án nào</td></tr>
+                <tr><td colSpan={8} className="text-center py-12 text-[#6e6e74] text-sm">Chưa có dự án nào</td></tr>
               ) : filtered.map(p => (
                 <tr key={p.id} className={`border-b border-gray-50 hover:bg-gray-50/50 last:border-0 transition-colors ${!p.visible ? "opacity-50" : ""}`}>
                   <td className="px-5 py-4 font-medium text-[#111114] max-w-xs"><span className="line-clamp-1">{p.title}</span></td>
@@ -98,6 +108,12 @@ export default function AdminProjectsPage() {
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusMap[p.status]?.cls ?? "bg-gray-100 text-gray-600"}`}>
                       {statusMap[p.status]?.label ?? p.status}
                     </span>
+                  </td>
+                  <td className="px-5 py-4 whitespace-nowrap">
+                    <button onClick={() => toggleFeatured(p.id, p.isFeatured)} title={p.isFeatured ? "Đang nổi bật — bấm để bỏ" : "Bấm để đặt nổi bật"} className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${p.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}>
+                      <Star size={12} className={p.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />
+                      {p.isFeatured ? "Nổi bật" : "Thường"}
+                    </button>
                   </td>
                   <td className="px-5 py-4 whitespace-nowrap">
                     <button onClick={() => toggleVisible(p.id, p.visible)} className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${p.visible ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>

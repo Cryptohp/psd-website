@@ -5,40 +5,16 @@ import Link from "next/link";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
 const VP = { once: true, amount: 0 };
 
-const news = [
-  {
-    category: "Tin PSD Group",
-    title: "PSD Group ký kết hợp tác chiến lược với đối tác logistics hàng đầu",
-    excerpt: "Lễ ký kết hợp tác giữa PSD Group và đối tác chiến lược trong lĩnh vực logistics mở ra cơ hội phát triển mạnh mẽ cho hệ sinh thái vận tải — tạo nền tảng kết nối chuỗi cung ứng toàn quốc.",
-    date: "04/07/2026",
-    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=85",
-    href: "/tin-tuc/psd-group-ky-ket-hop-tac",
-    featured: true,
-  },
-  {
-    category: "Tin dự án",
-    title: "Nhà máy SOFAVI nâng công suất sản xuất sorbitol lên 200%",
-    excerpt: "Dự án mở rộng nhà máy SOFAVI hoàn thành đúng tiến độ, đánh dấu bước phát triển quan trọng trong lĩnh vực sản xuất công nghiệp.",
-    date: "01/07/2026",
-    image: "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=600&q=80",
-    href: "/tin-tuc/sofavi-nang-cong-suat",
-    featured: false,
-  },
-  {
-    category: "Hoạt động cộng đồng",
-    title: "PSD Group đồng hành cùng dự án phục dựng 50 ngôi đình làng Việt",
-    excerpt: "Chương trình phục dựng đình làng là một trong những cam kết dài hạn của PSD Group trong việc bảo tồn văn hóa dân tộc.",
-    date: "28/06/2026",
-    image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80",
-    href: "/tin-tuc/phuc-dung-dinh-lang",
-    featured: false,
-  },
-];
+type NewsItem = {
+  id: string; slug: string; title: string; excerpt: string | null;
+  category: string; date: string; image: string | null;
+};
+
 
 const categoryColor: Record<string, string> = {
   "Tin PSD Group": "bg-[#e82127]/10 text-[#e82127]",
@@ -49,7 +25,16 @@ const categoryColor: Record<string, string> = {
 export default function NewsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px" });
-  const featured = news[0];
+  const [news, setNews] = useState<NewsItem[]>([]);
+
+  useEffect(() => {
+    fetch("/api/tin-tuc?featured=true")
+      .then(r => r.json())
+      .then(data => setNews(Array.isArray(data) ? data.slice(0, 3) : []))
+      .catch(() => {});
+  }, []);
+
+  const featured = news[0] ?? null;
   const secondary = news.slice(1);
 
   return (
@@ -85,20 +70,21 @@ export default function NewsSection() {
         </motion.div>
 
         {/* Asymmetric grid: 1 featured lớn trái + 2 nhỏ phải */}
+        {news.length === 0 ? null : (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
           {/* Featured card — chiếm 3/5 */}
-          <motion.div
+          {featured && <motion.div
             className="lg:col-span-3"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }} viewport={VP}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <Link href={featured.href} className="group card-psd overflow-hidden bg-white flex flex-col h-full block">
+            <Link href={`/tin-tuc/${featured.slug}`} className="group card-psd overflow-hidden bg-white flex flex-col h-full block">
               {/* Image lớn */}
               <div className="card-img-wrap relative h-[300px] lg:h-[360px]">
                 <Image
-                  src={featured.image}
+                  src={featured.image ?? "/placeholder-news.jpg"}
                   alt={featured.title}
                   fill
                   className="card-img-inner object-cover"
@@ -123,7 +109,7 @@ export default function NewsSection() {
                   {featured.title}
                 </h3>
                 <p className="text-[14px] text-[#6e6e74] leading-relaxed line-clamp-3 flex-1">
-                  {featured.excerpt}
+                  {featured.excerpt ?? ""}
                 </p>
                 <div className="mt-5">
                   <span className="btn-text-link text-[13px]">
@@ -133,23 +119,23 @@ export default function NewsSection() {
                 </div>
               </div>
             </Link>
-          </motion.div>
+          </motion.div>}
 
           {/* Secondary cards — chiếm 2/5, xếp dọc */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {secondary.map((item, i) => (
               <motion.div
-                key={item.href}
+                key={item.id}
                 className="flex-1"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }} viewport={VP}
                 transition={{ duration: 0.6, delay: 0.15 + i * 0.12 }}
               >
-                <Link href={item.href} className="group card-psd overflow-hidden bg-white flex flex-col h-full block">
+                <Link href={`/tin-tuc/${item.slug}`} className="group card-psd overflow-hidden bg-white flex flex-col h-full block">
                   {/* Image nhỏ */}
                   <div className="card-img-wrap relative h-[160px]">
                     <Image
-                      src={item.image}
+                      src={item.image ?? "/placeholder-news.jpg"}
                       alt={item.title}
                       fill
                       className="card-img-inner object-cover"
@@ -190,6 +176,8 @@ export default function NewsSection() {
             <ArrowRight size={13} />
           </Link>
         </div>
+        </div>
+        )}
 
       </div>
     </section>

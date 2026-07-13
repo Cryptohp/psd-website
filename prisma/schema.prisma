@@ -131,6 +131,7 @@ model NewsPost {
   thumbnail   String?
   author      String?
   isPublished Boolean       @default(false)
+  isFeatured  Boolean       @default(false)
   publishedAt DateTime?
   seoTitle    String?
   seoDesc     String?

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Search, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, EyeOff, Loader2, Star } from "lucide-react";
 
 type Post = {
   id: string;
@@ -10,6 +10,7 @@ type Post = {
   category: string;
   status: string;
   visible: boolean;
+  isFeatured: boolean;
   views: number;
   date: string;
 };
@@ -41,9 +42,16 @@ export default function AdminNewsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ visible: !current }),
     });
-    if (res.ok) {
-      setPosts((prev) => prev.map((p) => p.id === id ? { ...p, visible: !current } : p));
-    }
+    if (res.ok) setPosts(prev => prev.map(p => p.id === id ? { ...p, visible: !current } : p));
+  }
+
+  async function toggleFeatured(id: string, current: boolean) {
+    const res = await fetch(`/api/tin-tuc/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isFeatured: !current }),
+    });
+    if (res.ok) setPosts(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !current } : p));
   }
 
   async function handleDelete(id: string) {
@@ -89,6 +97,7 @@ export default function AdminNewsPage() {
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Tiêu đề</th>
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide whitespace-nowrap">Danh mục</th>
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Trạng thái</th>
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Nổi bật</th>
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Hiển thị</th>
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Lượt xem</th>
                 <th className="text-left px-5 py-3.5 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Ngày</th>
@@ -97,7 +106,7 @@ export default function AdminNewsPage() {
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-12 text-[#6e6e74] text-sm">Không có bài viết nào</td></tr>
+                <tr><td colSpan={8} className="text-center py-12 text-[#6e6e74] text-sm">Không có bài viết nào</td></tr>
               ) : filtered.map((post) => (
                 <tr key={post.id} className={`border-b border-gray-50 hover:bg-gray-50/50 transition-colors last:border-0 ${!post.visible ? "opacity-50" : ""}`}>
                   <td className="px-5 py-4">
@@ -110,6 +119,16 @@ export default function AdminNewsPage() {
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusLabel[post.status]?.cls ?? "bg-gray-100 text-gray-600"}`}>
                       {statusLabel[post.status]?.label ?? post.status}
                     </span>
+                  </td>
+                  <td className="px-5 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => toggleFeatured(post.id, post.isFeatured)}
+                      title={post.isFeatured ? "Đang nổi bật — bấm để bỏ" : "Bấm để đặt nổi bật"}
+                      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${post.isFeatured ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}
+                    >
+                      <Star size={12} className={post.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />
+                      {post.isFeatured ? "Nổi bật" : "Thường"}
+                    </button>
                   </td>
                   <td className="px-5 py-4 whitespace-nowrap">
                     <button
