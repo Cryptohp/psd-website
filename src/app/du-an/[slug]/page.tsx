@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Tag, Calendar, ArrowLeft, ArrowRight, Building2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const statusLabel: Record<string, string> = {
   PLANNING: "Lên kế hoạch",
@@ -45,13 +46,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-[#0f0f12]/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0">
           <div className="container-psd pb-10">
-            <nav className="flex items-center gap-2 text-[12px] text-white/40 mb-4">
-              <Link href="/" className="hover:text-white/70">Trang chủ</Link>
-              <span>/</span>
-              <Link href="/du-an" className="hover:text-white/70">Dự án</Link>
-              <span>/</span>
-              <span className="text-white/60">{project.name}</span>
-            </nav>
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${statusColor[project.status] ?? "bg-gray-100 text-gray-600"}`}>
                 {statusLabel[project.status] ?? project.status}
@@ -67,6 +61,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
       </div>
+
+      <Breadcrumb items={[{ label: "Dự án", href: "/du-an" }, { label: project.name }]} />
 
       {/* Content */}
       <div className="bg-white">
