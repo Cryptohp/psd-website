@@ -18,27 +18,32 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const { id } = await params;
   const body = await req.json();
 
-  const post = await prisma.newsPost.update({
-    where: { id },
-    data: {
-      ...(body.title !== undefined ? { title: body.title } : {}),
-      ...(body.excerpt !== undefined ? { excerpt: body.excerpt } : {}),
-      ...(body.content !== undefined ? { content: body.content } : {}),
-      ...(body.image !== undefined ? { thumbnail: body.image } : {}),
-      ...(body.thumbnail !== undefined ? { thumbnail: body.thumbnail } : {}),
-      ...(body.author !== undefined ? { author: body.author } : {}),
-      ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
-      ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
-      ...(body.status !== undefined ? {
-        isPublished: body.status === "published",
-        publishedAt: body.status === "published" ? new Date() : null,
-      } : {}),
-      ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
-      ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
-    },
-  });
-
-  return NextResponse.json({ ...post, status: post.isPublished ? "published" : "draft", visible: post.isPublished });
+  try {
+    const post = await prisma.newsPost.update({
+      where: { id },
+      data: {
+        ...(body.title !== undefined ? { title: body.title } : {}),
+        ...(body.excerpt !== undefined ? { excerpt: body.excerpt } : {}),
+        ...(body.content !== undefined ? { content: body.content } : {}),
+        ...(body.image !== undefined ? { thumbnail: body.image } : {}),
+        ...(body.thumbnail !== undefined ? { thumbnail: body.thumbnail } : {}),
+        ...(body.author !== undefined ? { author: body.author } : {}),
+        ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
+        ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
+        ...(body.status !== undefined ? {
+          isPublished: body.status === "published",
+          publishedAt: body.status === "published" ? new Date() : null,
+        } : {}),
+        ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
+        ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
+      },
+    });
+    return NextResponse.json({ ...post, status: post.isPublished ? "published" : "draft", visible: post.isPublished });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("PUT /api/tin-tuc/[id]:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
