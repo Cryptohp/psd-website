@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
@@ -12,15 +12,22 @@ function toSlug(str: string) {
     .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
 }
 
+type Sector = { id: string; name: string };
+
 export default function NewProjectPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     title: "", slug: "", shortDesc: "", description: "",
     thumbnail: "", location: "", province: "", scale: "",
-    status: "IN_PROGRESS", startYear: "", isFeatured: false,
+    status: "IN_PROGRESS", startYear: "", isFeatured: false, sectorId: "",
   });
+  const [sectors, setSectors] = useState<Sector[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/sectors").then(r => r.json()).then(setSectors).catch(() => {});
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value } = e.target;
@@ -98,6 +105,13 @@ export default function NewProjectPage() {
         <div className="space-y-4">
           <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
             <h3 className="font-semibold text-[#111114] text-sm">Phân loại</h3>
+            <div>
+              <label className="block text-xs text-[#6e6e74] mb-1.5">Lĩnh vực</label>
+              <select name="sectorId" value={form.sectorId} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
+                <option value="">-- Chọn lĩnh vực --</option>
+                {sectors.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
             <div>
               <label className="block text-xs text-[#6e6e74] mb-1.5">Trạng thái</label>
               <select name="status" value={form.status} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
