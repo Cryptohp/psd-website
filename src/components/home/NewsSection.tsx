@@ -71,6 +71,7 @@ export default function NewsSection() {
 
         {/* Asymmetric grid: 1 featured lớn trái + 2 nhỏ phải */}
         {news.length === 0 ? null : (
+        <>
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
           {/* Featured card — chiếm 3/5 */}
@@ -176,7 +177,7 @@ export default function NewsSection() {
             <ArrowRight size={13} />
           </Link>
         </div>
-        </div>
+        </>
         )}
 
       </div>
