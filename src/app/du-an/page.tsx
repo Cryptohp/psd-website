@@ -1,292 +1,244 @@
-import React from "react";
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import DuAnMobileNav from "./MobileNav";
 
-export const metadata: Metadata = {
-  title: "Dự án tiêu biểu – PSD Group",
-  description: "Danh mục dự án và công ty thành viên của PSD Group theo từng lĩnh vực hoạt động.",
-};
+type Project = { title: string; slug: string; image: string };
+type Sector = { id: string; label: string; tabLabel: string; heroImage: string; projects: Project[] };
 
-const SIDE_PAD = "max(24px, calc((100vw - 1300px) / 2 + 60px))";
-
-const sectors = [
+const sectors: Sector[] = [
   {
     id: "bat-dong-san",
-    num: "01",
-    title: "Bất động sản & Hạ tầng",
-    subtitle: "Phát triển dự án & hạ tầng",
-    companies: [
-      "Công ty TNHH Đầu tư và Phát triển Bất động sản PSD",
-      "Công ty CP Tập đoàn Đầu tư Golden Palace",
-      "Công ty CP Phát triển Hạ tầng và Giáo dục PSD",
-      "Công ty CP Đầu tư PSD Lai Châu",
-    ],
+    label: "Bất động sản & Hạ tầng",
+    tabLabel: "Hạ tầng",
+    heroImage: "/linh-vuc-bat-dong-san.png",
     projects: [
-      "Khu nhà ở thông minh Yên Mỹ",
-      "Khu nhà ở Ngọc Lâm (Long Biên, Hà Nội)",
-      "Nhà ở xã hội Sơn Đồng – Hải An (Hà Nội)",
-      "Nhà ở xã hội Tây Tựu – Hải An (Hà Nội)",
-      "Nhà ở xã hội Nam Hồ Linh Đàm (các lô HH11, HH12, CX-09)",
-      "Nhà ở xã hội Ngọc Hồi (Hà Nội)",
-      "Khu nhà ở thấp tầng An Thượng – Vị trí X2 (Hoài Đức, Hà Nội)",
-      "Dự án đấu giá đất lô X2A Yên Sở (Hoàng Mai, Hà Nội)",
-      "Dự án Trần Phú – Đông Phú, Cụm Công nghiệp (Công ty DPI)",
-      "Dự án Đào Trí",
-      "Dự án Nguyễn Duy Trinh",
-      "Khu nhà ở cao tầng Long Trường",
-      "Dự án Traco 1 (Hà Nội)",
-      "Bất động sản Thanh Hóa",
+      { title: "Khu nhà ở thông minh Yên Mỹ", slug: "khu-nha-o-thong-minh-yen-my", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Khu nhà ở Ngọc Lâm (Long Biên, Hà Nội)", slug: "khu-nha-o-ngoc-lam", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Nhà ở xã hội Sơn Đồng – Hải An (Hà Nội)", slug: "nha-o-xa-hoi-son-dong", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Nhà ở xã hội Tây Tựu – Hải An (Hà Nội)", slug: "nha-o-xa-hoi-tay-tuu", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Nhà ở xã hội Nam Hồ Linh Đàm", slug: "nha-o-xa-hoi-nam-ho-linh-dam", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Nhà ở xã hội Ngọc Hồi (Hà Nội)", slug: "nha-o-xa-hoi-ngoc-hoi", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Khu nhà ở thấp tầng An Thượng – Hoài Đức", slug: "khu-nha-o-an-thuong", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Dự án Đào Trí", slug: "du-an-dao-tri", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Dự án Nguyễn Duy Trinh", slug: "du-an-nguyen-duy-trinh", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Khu nhà ở cao tầng Long Trường", slug: "khu-nha-o-long-truong", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Dự án Traco 1 (Hà Nội)", slug: "du-an-traco-1", image: "/linh-vuc-bat-dong-san.png" },
+      { title: "Bất động sản Thanh Hóa", slug: "bat-dong-san-thanh-hoa", image: "/linh-vuc-bat-dong-san.png" },
     ],
   },
   {
     id: "san-xuat-cong-nghiep",
-    num: "02",
-    title: "Sản xuất & Công nghiệp",
-    subtitle: "Nhà máy & công nghiệp chế biến",
-    companies: [
-      "Công ty CP PSD STEEL",
-      "Công ty TNHH Sản xuất và Đầu tư Thương mại Tiên Phong",
-      "Công ty TNHH DPC Group Việt Nam",
-      "Công ty TNHH Công thương Nam Anh",
-      "Công ty TNHH Đầu tư và Thương mại Việt An Hà Nội (Công ty cổ phần Sorbitol Pháp - Việt)",
-    ],
+    label: "Sản xuất & Công nghiệp",
+    tabLabel: "Công nghiệp",
+    heroImage: "/linh-vuc-san-xuat-cong-nghiep.png",
     projects: [
-      "Nhà máy dầu Quang Minh (Lương Bằng, Hưng Yên) & Dự án Quang Minh (KCN Quang Minh)",
-      "Nhà máy tinh bột Nước Trong; Sầm Nhứt; Bình Định",
-      "Nhà máy Cồn Quảng Nam",
-      "Dự án Sắt và Cụm công nghiệp Yên Bái",
-      "Nhà máy dăm gỗ & viên nén Vinafor (Lệ Thủy, Quảng Trị – 4,5ha) và Năng lượng Xanh La Sơn (2,7ha)",
+      { title: "Nhà máy dầu Quang Minh (Hưng Yên)", slug: "nha-may-dau-quang-minh", image: "/linh-vuc-san-xuat-cong-nghiep.png" },
+      { title: "Nhà máy tinh bột Nước Trong", slug: "nha-may-tinh-bot-nuoc-trong", image: "/linh-vuc-san-xuat-cong-nghiep.png" },
+      { title: "Nhà máy Cồn Quảng Nam", slug: "nha-may-con-quang-nam", image: "/linh-vuc-san-xuat-cong-nghiep.png" },
+      { title: "Dự án Sắt và Cụm công nghiệp Yên Bái", slug: "du-an-sat-yen-bai", image: "/linh-vuc-san-xuat-cong-nghiep.png" },
+      { title: "Nhà máy dăm gỗ & viên nén Vinafor (Quảng Trị)", slug: "nha-may-dam-go-vinafor", image: "/linh-vuc-san-xuat-cong-nghiep.png" },
     ],
   },
   {
     id: "khoang-san",
-    num: "03",
-    title: "Khoáng sản",
-    subtitle: "Tài nguyên có trách nhiệm",
-    companies: [
-      "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long (và địa điểm Cốc Chặng)",
-      "Công ty CP Cao Lanh Như Xuân",
-      "Công ty TNHH Khoáng sản PSG Bắc Việt",
-      "Công ty CP Đầu tư Xây dựng và Khoáng sản PSD",
-      "Công ty TNHH Việt Thanh – Stone",
-      "Công ty tại Campuchia: PCG Mining, Dalip Mining, Công ty TNHH Đầu tư PHGC Angkor",
-    ],
+    label: "Khoáng sản",
+    tabLabel: "Khoáng sản",
+    heroImage: "/linh-vuc-khoang-san.png",
     projects: [],
   },
   {
     id: "logistics",
-    num: "04",
-    title: "Logistics & Cảng biển",
-    subtitle: "Vận hành & chuỗi cung ứng",
-    companies: [
-      "Công ty CP Đầu tư Thương mại và Dịch vụ Tấn Sang Logistics",
-    ],
+    label: "Logistics & Cảng biển",
+    tabLabel: "Logistics",
+    heroImage: "/linh-vuc-logistics.png",
     projects: [
-      "Trung tâm Logistics Chân Mây (cảng Chân Mây, Phú Lộc, Huế)",
-      "Cảng Tổng hợp Thị Vải và kho bãi tại cảng Phú Mỹ (TP. Hồ Chí Minh)",
+      { title: "Trung tâm Logistics Chân Mây (Huế)", slug: "logistics-chan-may", image: "/linh-vuc-logistics.png" },
+      { title: "Cảng Tổng hợp Thị Vải & kho bãi cảng Phú Mỹ", slug: "cang-thi-vai-phu-my", image: "/linh-vuc-logistics.png" },
     ],
-    projectsNote: "Hợp tác hệ sinh thái: LEC Group",
   },
   {
     id: "nong-nghiep",
-    num: "05",
-    title: "Nông nghiệp & Thủy sản",
-    subtitle: "Phát triển bền vững",
-    companies: [
-      "Công ty CP Đầu tư và Phát triển Nông nghiệp PSD",
-      "Công ty CP Thủy sản PSD",
-    ],
+    label: "Nông nghiệp & Thủy sản",
+    tabLabel: "Nông nghiệp",
+    heroImage: "/linh-vuc-nong-nghiep.png",
     projects: [
-      "Dự án Nông nghiệp",
+      { title: "Dự án Nông nghiệp PSD", slug: "du-an-nong-nghiep-psd", image: "/linh-vuc-nong-nghiep.png" },
     ],
   },
   {
     id: "du-lich",
-    num: "06",
-    title: "Du lịch & Dịch vụ sinh thái",
-    subtitle: "Nghỉ dưỡng & không gian sinh thái",
-    companies: [
-      "Công ty CP Du lịch Long Việt",
-      "Công ty TNHH Tâm Linh Bách Việt",
-    ],
+    label: "Du lịch & Sinh thái",
+    tabLabel: "Du lịch",
+    heroImage: "/linh-vuc-du-lich.png",
     projects: [
-      "Khu du lịch sinh thái văn hóa Long Việt – điểm đến hội tụ giá trị sinh thái, bản sắc văn hóa Việt và trải nghiệm nghỉ dưỡng bền vững",
-      "Khách sạn Sunrise (Đông Gia Nghĩa, Lâm Đồng)",
-      "Công viên nghĩa trang sinh thái: Tâm Điền (Đông Phú, Bắc Ninh), Đắk Lắk, Quảng Bình",
+      { title: "Khu du lịch sinh thái văn hóa Long Việt", slug: "khu-du-lich-long-viet", image: "/linh-vuc-du-lich.png" },
+      { title: "Khách sạn Sunrise (Lâm Đồng)", slug: "khach-san-sunrise-lam-dong", image: "/linh-vuc-du-lich.png" },
+      { title: "Công viên nghĩa trang sinh thái Tâm Điền (Bắc Ninh)", slug: "cong-vien-tam-dien", image: "/linh-vuc-du-lich.png" },
     ],
   },
   {
     id: "dau-tu-dich-vu",
-    num: "07",
-    title: "Đầu tư & Dịch vụ",
-    subtitle: "Tài chính, thương mại & dịch vụ chuyên nghiệp",
-    companies: [
-      "Công ty TNHH Quản lý và Đầu tư PSD Holdings",
-      "Công ty CP Đầu tư Thương mại và Xuất nhập khẩu PSD",
-      "Công ty TNHH XNK Homey",
-      "Công ty TNHH Đầu tư và Thương mại Thanh Thái",
-      "Công ty Luật TNHH PSD",
-      "Công ty TNHH Dịch vụ và Thiết bị Ostech Việt Nam",
-    ],
+    label: "Đầu tư & Dịch vụ",
+    tabLabel: "Đầu tư",
+    heroImage: "/linh-vuc-dau-tu-dich-vu.png",
     projects: [],
   },
   {
     id: "trach-nhiem-xa-hoi",
-    num: "08",
-    title: "Trách nhiệm xã hội",
-    subtitle: "Trụ cột trách nhiệm xã hội",
-    companies: [],
+    label: "Trách nhiệm xã hội",
+    tabLabel: "Xã hội",
+    heroImage: "/linh-vuc-trach-nhiem-xa-hoi.png",
     projects: [],
   },
 ];
 
 export default function ProjectsPage() {
-  return (
-    <main style={{ paddingTop: 68 }}>
+  const [active, setActive] = useState(sectors[0]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-      {/* Hero */}
-      <div className="relative w-full" style={{ height: "clamp(260px, 28.6vw, 670px)", background: "#111" }}>
-        <Image
-          src="/mobile-he-ro-du-an.png"
-          alt="Dự án PSD Group"
-          fill className="object-cover opacity-40" priority unoptimized
-        />
-        <div style={{
-          position: "absolute", inset: 0,
-          display: "flex", flexDirection: "column" as const, justifyContent: "flex-end",
-          paddingLeft: SIDE_PAD, paddingRight: SIDE_PAD, paddingBottom: 48,
-        }}>
-          <h1 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, textTransform: "uppercase" as const, letterSpacing: "0.02em" }}>
-            Dự án & Công ty thành viên
-          </h1>
-          <p style={{ marginTop: 14, fontSize: 15, color: "rgba(255,255,255,0.65)", maxWidth: 560, lineHeight: 1.7 }}>
-            Danh mục dự án tiêu biểu và các công ty thành viên theo từng lĩnh vực hoạt động chiến lược của PSD Group.
-          </p>
-        </div>
-      </div>
+  return (
+    <div className="relative min-h-screen bg-white">
+
+      {/* ── HERO ── */}
+      <section style={{ position: "relative", height: "clamp(280px, 40vw, 560px)", overflow: "hidden", background: "#111", marginTop: 68 }}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id + "-hero"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.45 }}
+            style={{ position: "absolute", inset: 0 }}
+          >
+            <Image src={active.heroImage} alt={active.label} fill style={{ objectFit: "cover", opacity: 0.6 }} priority />
+          </motion.div>
+        </AnimatePresence>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)" }} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id + "-text"}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ position: "absolute", bottom: "clamp(36px, 6vw, 72px)", left: "clamp(24px, 5vw, 72px)", right: "clamp(24px, 5vw, 72px)" }}
+          >
+            <p className="vin-font" style={{ fontSize: "clamp(11px, 1.2vw, 13px)", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#e82127", marginBottom: 10 }}>
+              Dự án tiêu biểu
+            </p>
+            <h1 className="vin-font" style={{ fontSize: "clamp(24px, 3.2vw, 48px)", fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.15 }}>
+              {active.label}
+            </h1>
+          </motion.div>
+        </AnimatePresence>
+      </section>
 
       <Breadcrumb items={[{ label: "Dự án & Công ty thành viên" }]} />
 
-      {/* Sector nav — mobile dropdown */}
-      <div className="sectors-mobile-nav" style={{ position: "sticky", top: 68, zIndex: 10 }}>
-        <DuAnMobileNav sectors={sectors.map(s => ({ id: s.id, title: s.title }))} />
+      {/* ── TABS — Mobile ── */}
+      <div className="sectors-mobile-nav" style={{ background: "#f2f2f2", position: "relative" }}>
+        <button
+          onClick={() => setMobileMenuOpen(o => !o)}
+          className="vin-font"
+          style={{ width: "100%", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "#fff", background: "#e82127", border: "none", cursor: "pointer" }}
+        >
+          <span>{active.label}</span>
+          <span style={{ fontSize: 9, transform: mobileMenuOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block" }}>▼</span>
+        </button>
+        {mobileMenuOpen && (
+          <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 50, background: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", borderTop: "2px solid #e82127" }}>
+            {sectors.map(s => (
+              <button key={s.id} onClick={() => { setActive(s); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
+                style={{ width: "100%", display: "block", padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: active.id === s.id ? "#e82127" : "#424d54", background: active.id === s.id ? "#fff8f8" : "transparent", border: "none", borderBottom: "1px solid #f0f0f0", cursor: "pointer" }}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Sector nav — desktop horizontal */}
-      <nav className="sectors-desktop-nav" style={{ background: "#f2f2f2", position: "sticky", top: 68, zIndex: 10, overflowX: "auto", scrollbarWidth: "none" as const }}>
+      {/* ── TABS — Desktop ── */}
+      <nav className="sectors-desktop-nav" style={{ background: "#f2f2f2", overflowX: "auto", scrollbarWidth: "none" }}>
         <div style={{ display: "flex", width: "100%" }}>
-          {sectors.map((s) => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              className="du-an-nav-link"
+          {sectors.map(s => (
+            <button key={s.id} onClick={() => { setActive(s); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
+              style={{ flex: 1, padding: "0 12px", height: 52, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: active.id === s.id ? "#fff" : "#424d54", background: active.id === s.id ? "#e82127" : "transparent", border: "none", cursor: "pointer", whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s", borderRight: "1px solid rgba(0,0,0,0.08)" }}
+              onMouseEnter={e => { if (active.id !== s.id) (e.currentTarget as HTMLElement).style.color = "#e82127"; }}
+              onMouseLeave={e => { if (active.id !== s.id) (e.currentTarget as HTMLElement).style.color = "#424d54"; }}
             >
-              {s.title}
-            </a>
+              <span className="hidden lg:inline">{s.label}</span>
+              <span className="lg:hidden">{s.tabLabel}</span>
+            </button>
           ))}
         </div>
       </nav>
 
-      {/* Sectors list */}
-      <div style={{ background: "#fff" }}>
-        {sectors.map((s, idx) => (
-          <div
-            key={s.id}
-            id={s.id}
-            style={{
-              paddingLeft: SIDE_PAD, paddingRight: SIDE_PAD,
-              paddingTop: 56, paddingBottom: 56,
-              borderBottom: idx < sectors.length - 1 ? "2px solid #e82127" : "none",
-            }}
+      {/* ── PROJECT GRID ── */}
+      <section style={{ background: "#f8f8f8", padding: "56px clamp(20px, 5vw, 80px) 72px" }}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id + "-projects"}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35 }}
           >
-            {/* Sector header */}
-            <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 40 }}>
-              <h2 style={{
-                fontSize: 22, fontWeight: 700,
-                color: "#e82127", textTransform: "uppercase" as const,
-                letterSpacing: "0.03em", lineHeight: 1.2, margin: 0,
-              }}>
-                {s.title} - {s.subtitle}
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <h2 className="vin-font" style={{ fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#e82127", marginBottom: 32 }}>
+                Dự án tiêu biểu — {active.label}
               </h2>
-            </div>
 
-            {/* Stacked content */}
-            <div style={{ display: "flex", flexDirection: "column" as const, gap: 40 }}>
-
-              {/* Companies */}
-              {s.companies.length > 0 && (
-                <div>
-                  <h3 style={{
-                    fontSize: 22, fontWeight: 700,
-                    color: "#888",
-                    marginBottom: 16, paddingBottom: 10,
-                  }}>
-                    Công ty thành viên tiêu biểu
-                  </h3>
-                  <div>
-                    {s.companies.map((c, i) => (
-                      <div key={i} style={{
-                        display: "flex", alignItems: "flex-start", gap: 12,
-                        padding: "11px 0",
-                      }}>
-                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#e82127", flexShrink: 0, marginTop: 7 }} />
-                        <span style={{ fontSize: 14, color: "#444", lineHeight: 1.6 }}>{c}</span>
+              {active.projects.length === 0 ? (
+                <p style={{ fontSize: 15, color: "#999", fontStyle: "italic" }}>Đang cập nhật dự án tiêu biểu.</p>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
+                  {active.projects.map((p, i) => (
+                    <motion.div
+                      key={p.slug}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                      style={{ background: "#fff", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", display: "flex", flexDirection: "column" }}
+                    >
+                      {/* Card image */}
+                      <div style={{ position: "relative", height: 200, overflow: "hidden", background: "#e0e0e0" }}>
+                        <Image
+                          src={p.image}
+                          alt={p.title}
+                          fill
+                          style={{ objectFit: "cover", transition: "transform 0.4s" }}
+                          className="hover:scale-105"
+                        />
+                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)" }} />
                       </div>
-                    ))}
-                  </div>
+
+                      {/* Card body */}
+                      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.5, flex: 1, marginBottom: 20 }}>
+                          {p.title}
+                        </h3>
+                        <Link
+                          href={`/du-an/${p.slug}`}
+                          style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#e82127", textDecoration: "none", borderTop: "1px solid #f0f0f0", paddingTop: 16 }}
+                          className="group"
+                        >
+                          Xem chi tiết <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               )}
-
-              {/* Projects */}
-              {s.projects.length > 0 && (
-                <div>
-                  <h3 style={{
-                    fontSize: 22, fontWeight: 700,
-                    color: "#888",
-                    marginBottom: 16, paddingBottom: 10,
-                    display: "flex", alignItems: "center", gap: 8,
-                  }}>
-                    Dự án tiêu biểu
-                    {(s as any).projectsNote && (
-                      <span style={{ fontSize: 10, fontWeight: 500, color: "#bbb", textTransform: "none" as const, letterSpacing: 0 }}>
-                        — {(s as any).projectsNote}
-                      </span>
-                    )}
-                  </h3>
-                  <div>
-                    {s.projects.map((p, i) => (
-                      <div key={i} style={{
-                        display: "flex", alignItems: "flex-start", gap: 12,
-                        padding: "11px 0",
-                      }}>
-                        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#e82127", flexShrink: 0, marginTop: 7 }} />
-                        <span style={{ fontSize: 14, color: "#444", lineHeight: 1.6 }}>{p}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Special case: only companies, no projects */}
-              {s.companies.length > 0 && s.projects.length === 0 && (
-                <p style={{ fontSize: 13, color: "#bbb", fontStyle: "italic" }}>Đang cập nhật dự án tiêu biểu.</p>
-              )}
-
-              {/* Special case: no companies (sector 08) */}
-              {s.companies.length === 0 && s.projects.length === 0 && (
-                <p style={{ fontSize: 15, color: "#666", lineHeight: 1.85, maxWidth: 680 }}>
-                  Viện nghiên cứu hoạt động theo sứ mệnh trách nhiệm xã hội của PSD Group — nghiên cứu khoa học, hỗ trợ tái hòa nhập và lan tỏa giá trị nhân văn trong cộng đồng.
-                </p>
-              )}
-
             </div>
+          </motion.div>
+        </AnimatePresence>
+      </section>
 
-          </div>
-        ))}
-      </div>
-
-    </main>
+    </div>
   );
 }
