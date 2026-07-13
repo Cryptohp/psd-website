@@ -71,7 +71,7 @@ export default function ProjectsPage() {
             style={{ position: "absolute", bottom: "clamp(36px, 6vw, 72px)", left: "clamp(24px, 5vw, 72px)", right: "clamp(24px, 5vw, 72px)" }}
           >
             <p className="vin-font" style={{ fontSize: "clamp(11px, 1.2vw, 13px)", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#e82127", marginBottom: 10 }}>
-              Dự án tiêu biểu
+              Dự án
             </p>
             <h1 className="vin-font" style={{ fontSize: "clamp(24px, 3.2vw, 48px)", fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.15 }}>
               {activeSector || "Tất cả dự án"}
@@ -136,7 +136,7 @@ export default function ProjectsPage() {
             <div style={{ maxWidth: 1200, margin: "0 auto" }}>
               {activeSector && (
                 <h2 className="vin-font" style={{ fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#e82127", marginBottom: 32 }}>
-                  Dự án tiêu biểu — {activeSector}
+                  {activeSector}
                 </h2>
               )}
 

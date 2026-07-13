@@ -47,7 +47,7 @@ export default function ProjectsSection() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <div style={{ width: 32, height: 3, background: "#e82127", borderRadius: 2 }} />
               <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "#e82127" }}>
-                Dự án tiêu biểu
+                Dự án
               </span>
             </div>
             <h2 style={{ fontSize: "clamp(24px, 2.4vw, 36px)", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.15, margin: 0 }}>
