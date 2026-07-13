@@ -1,10 +1,10 @@
 "use client";
 
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEditor, EditorContent, Editor, NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
+import TiptapImage from "@tiptap/extension-image";
 import { TextStyle } from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
 import Color from "@tiptap/extension-color";
@@ -18,6 +18,56 @@ import {
   AlignRight, AlignJustify, Link2, Image as ImageIcon, List, ListOrdered,
   Quote, Undo, Redo, Highlighter, Palette, ChevronDown, Minus,
 } from "lucide-react";
+
+// Custom Image node with alignment support
+function ImageNodeView({ node, updateAttributes, selected }: any) {
+  const align = node.attrs.align ?? "full";
+  const styleMap: Record<string, React.CSSProperties> = {
+    full:   { display: "block", width: "100%", margin: "16px 0", borderRadius: 8 },
+    center: { display: "block", width: "65%", margin: "16px auto", borderRadius: 8 },
+    left:   { float: "left", width: "45%", marginRight: 20, marginBottom: 12, borderRadius: 8 },
+    right:  { float: "right", width: "45%", marginLeft: 20, marginBottom: 12, borderRadius: 8 },
+  };
+  return (
+    <NodeViewWrapper style={{ display: align === "left" || align === "right" ? "inline" : "block" }}>
+      <div style={{ position: "relative", display: align === "full" || align === "center" ? "block" : "inline-block" }}>
+        <img src={node.attrs.src} alt={node.attrs.alt ?? ""} style={styleMap[align]} />
+        {selected && (
+          <div style={{ position: "absolute", top: align === "full" || align === "center" ? 8 : 4, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 4, background: "#1a1a1a", borderRadius: 8, padding: "4px 6px", zIndex: 10 }}>
+            {([
+              { v: "full",   icon: "⬛", label: "Full width" },
+              { v: "left",   icon: "⬅", label: "Trái" },
+              { v: "center", icon: "⬜", label: "Giữa" },
+              { v: "right",  icon: "➡", label: "Phải" },
+            ] as const).map(({ v, icon, label }) => (
+              <button
+                key={v}
+                type="button"
+                title={label}
+                onMouseDown={(e) => { e.preventDefault(); updateAttributes({ align: v }); }}
+                style={{ background: align === v ? "#e82127" : "transparent", border: "none", color: "#fff", borderRadius: 5, padding: "2px 7px", fontSize: 12, cursor: "pointer", fontWeight: align === v ? 700 : 400 }}
+              >
+                {icon}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </NodeViewWrapper>
+  );
+}
+
+const CustomImage = TiptapImage.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      align: { default: "full", parseHTML: (el) => el.getAttribute("data-align") ?? "full", renderHTML: (attrs) => ({ "data-align": attrs.align }) },
+    };
+  },
+  addNodeView() {
+    return ReactNodeViewRenderer(ImageNodeView);
+  },
+});
 
 // Custom FontSize extension
 const FontSize = Extension.create({
@@ -150,7 +200,7 @@ export default function RichEditor({ content = "", onChange, placeholder = "Nh�
       StarterKit.configure({ heading: { levels: [1, 2, 3, 4] } }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-[#e82127] underline cursor-pointer" } }),
-      Image.configure({ HTMLAttributes: { class: "max-w-full rounded-xl my-4" } }),
+      CustomImage.configure({ HTMLAttributes: { class: "max-w-full" } }),
       TextStyle,
       FontSize,
       FontFamily,
