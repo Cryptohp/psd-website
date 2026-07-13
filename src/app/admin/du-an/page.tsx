@@ -22,6 +22,17 @@ const statusMap: Record<string, { label: string; cls: string }> = {
   ON_HOLD: { label: "Tạm dừng", cls: "bg-gray-100 text-gray-600" },
 };
 
+const sectorColors: Record<string, string> = {
+  "Bất động sản & Hạ tầng":  "bg-red-50 text-red-700",
+  "Sản xuất & Công nghiệp":   "bg-orange-50 text-orange-700",
+  "Khoáng sản":               "bg-stone-100 text-stone-700",
+  "Logistics & Cảng biển":    "bg-sky-50 text-sky-700",
+  "Nông nghiệp & Thủy sản":   "bg-green-50 text-green-700",
+  "Du lịch & Nghỉ dưỡng":    "bg-teal-50 text-teal-700",
+  "Đầu tư & Dịch vụ":         "bg-purple-50 text-purple-700",
+  "Trách nhiệm xã hội":       "bg-pink-50 text-pink-700",
+};
+
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,7 +124,7 @@ export default function AdminProjectsPage() {
                 <tr key={p.id} className={`border-b border-gray-50 hover:bg-gray-50/50 last:border-0 transition-colors ${!p.visible ? "opacity-50" : ""}`}>
                   <td className="px-5 py-4 font-medium text-[#111114] max-w-xs"><span className="line-clamp-1">{p.title}</span></td>
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <span className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full font-medium">{p.sector || "—"}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${sectorColors[p.sector] ?? "bg-gray-100 text-gray-600"}`}>{p.sector || "—"}</span>
                   </td>
                   <td className="px-5 py-4 text-[#6e6e74] text-xs whitespace-nowrap">{p.location || "—"}</td>
                   <td className="px-5 py-4 text-[#6e6e74] text-xs whitespace-nowrap">{p.scale || "—"}</td>
