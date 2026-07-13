@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 type Project = { id: string; title: string; slug: string; thumbnail: string | null; sector: string; shortDesc: string | null };
+type Sector = { id: string; name: string; slug: string };
 
 const SECTOR_HERO: Record<string, string> = {
   "Bất động sản & Hạ tầng": "/linh-vuc-bat-dong-san.png",
@@ -15,29 +16,28 @@ const SECTOR_HERO: Record<string, string> = {
   "Khoáng sản": "/linh-vuc-khoang-san.png",
   "Logistics & Cảng biển": "/linh-vuc-logistics.png",
   "Nông nghiệp & Thủy sản": "/linh-vuc-nong-nghiep.png",
-  "Du lịch & Sinh thái": "/linh-vuc-du-lich.png",
+  "Du lịch & Nghỉ dưỡng": "/linh-vuc-du-lich.png",
   "Đầu tư & Dịch vụ": "/linh-vuc-dau-tu-dich-vu.png",
   "Trách nhiệm xã hội": "/linh-vuc-trach-nhiem-xa-hoi.png",
-  "Văn hóa & Giáo dục": "/linh-vuc-van-hoa-giao-duc.png",
 };
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [sectors, setSectors] = useState<string[]>([]);
+  const [sectors, setSectors] = useState<Sector[]>([]);
   const [activeSector, setActiveSector] = useState<string>("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    fetch("/api/du-an")
-      .then(r => r.json())
-      .then((data: Project[]) => {
-        if (!Array.isArray(data)) return;
-        setProjects(data);
-        const unique = Array.from(new Set(data.map(p => p.sector).filter(Boolean)));
-        setSectors(unique);
-        if (unique.length > 0) setActiveSector(unique[0]);
-      })
-      .catch(() => {});
+    Promise.all([
+      fetch("/api/sectors").then(r => r.json()),
+      fetch("/api/du-an").then(r => r.json()),
+    ]).then(([sectorData, projectData]: [Sector[], Project[]]) => {
+      if (Array.isArray(sectorData)) {
+        setSectors(sectorData);
+        if (sectorData.length > 0) setActiveSector(sectorData[0].name);
+      }
+      if (Array.isArray(projectData)) setProjects(projectData);
+    }).catch(() => {});
   }, []);
 
   const filtered = activeSector ? projects.filter(p => p.sector === activeSector) : projects;
@@ -96,9 +96,9 @@ export default function ProjectsPage() {
           {mobileMenuOpen && (
             <div style={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 50, background: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", borderTop: "2px solid #e82127" }}>
               {sectors.map(s => (
-                <button key={s} onClick={() => { setActiveSector(s); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
-                  style={{ width: "100%", display: "block", padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: activeSector === s ? "#e82127" : "#424d54", background: activeSector === s ? "#fff8f8" : "transparent", border: "none", borderBottom: "1px solid #f0f0f0", cursor: "pointer" }}>
-                  {s}
+                <button key={s.id} onClick={() => { setActiveSector(s.name); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
+                  style={{ width: "100%", display: "block", padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: activeSector === s.name ? "#e82127" : "#424d54", background: activeSector === s.name ? "#fff8f8" : "transparent", border: "none", borderBottom: "1px solid #f0f0f0", cursor: "pointer" }}>
+                  {s.name}
                 </button>
               ))}
             </div>
@@ -111,12 +111,12 @@ export default function ProjectsPage() {
         <nav className="sectors-desktop-nav" style={{ background: "#f2f2f2", overflowX: "auto", scrollbarWidth: "none" }}>
           <div style={{ display: "flex", width: "100%" }}>
             {sectors.map(s => (
-              <button key={s} onClick={() => { setActiveSector(s); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
-                style={{ flex: 1, padding: "0 12px", height: 52, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: activeSector === s ? "#fff" : "#424d54", background: activeSector === s ? "#e82127" : "transparent", border: "none", cursor: "pointer", whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s", borderRight: "1px solid rgba(0,0,0,0.08)" }}
-                onMouseEnter={e => { if (activeSector !== s) (e.currentTarget as HTMLElement).style.color = "#e82127"; }}
-                onMouseLeave={e => { if (activeSector !== s) (e.currentTarget as HTMLElement).style.color = "#424d54"; }}
+              <button key={s.id} onClick={() => { setActiveSector(s.name); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="vin-font"
+                style={{ flex: 1, padding: "0 12px", height: 52, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: activeSector === s.name ? "#fff" : "#424d54", background: activeSector === s.name ? "#e82127" : "transparent", border: "none", cursor: "pointer", whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s", borderRight: "1px solid rgba(0,0,0,0.08)" }}
+                onMouseEnter={e => { if (activeSector !== s.name) (e.currentTarget as HTMLElement).style.color = "#e82127"; }}
+                onMouseLeave={e => { if (activeSector !== s.name) (e.currentTarget as HTMLElement).style.color = "#424d54"; }}
               >
-                {s}
+                {s.name}
               </button>
             ))}
           </div>
@@ -141,7 +141,9 @@ export default function ProjectsPage() {
               )}
 
               {filtered.length === 0 ? (
-                <p style={{ fontSize: 15, color: "#999", fontStyle: "italic" }}>Đang cập nhật dự án tiêu biểu.</p>
+                <div style={{ padding: "48px 0", textAlign: "center" }}>
+                  <p style={{ fontSize: 15, color: "#aaa", fontStyle: "italic" }}>Đang cập nhật...</p>
+                </div>
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
                   {filtered.map((p, i) => (
