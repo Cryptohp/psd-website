@@ -53,7 +53,7 @@ export default function NewsPage() {
     <main style={{ paddingTop: 68, background: "#fff", minHeight: "100vh" }}>
 
       {/* Page title */}
-      <div style={{ padding: "56px clamp(20px,5vw,80px) 32px" }}>
+      <div style={{ padding: "56px clamp(20px,5vw,80px) 32px", textAlign: "center" }}>
         <h1 style={{
           fontSize: "clamp(28px, 3vw, 42px)", fontWeight: 300,
           color: "#1a1a1a", letterSpacing: "0.06em", textTransform: "uppercase",
