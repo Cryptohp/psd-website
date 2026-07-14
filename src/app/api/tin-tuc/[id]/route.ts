@@ -9,7 +9,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     ...post,
     status: post.isPublished ? "published" : "draft",
     visible: post.isPublished,
-    category: post.category?.name ?? "Tin tức",
+    category: post.category?.name ?? "—",
     image: post.thumbnail,
     publishedAt: post.publishedAt ?? post.createdAt,
   });
@@ -20,6 +20,17 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const body = await req.json();
 
   try {
+    /* Resolve categoryId from name if provided */
+    let categoryId: string | null | undefined = undefined;
+    if (body.category !== undefined) {
+      if (body.category) {
+        const cat = await prisma.newsCategory.findFirst({ where: { name: body.category } });
+        categoryId = cat?.id ?? null;
+      } else {
+        categoryId = null;
+      }
+    }
+
     const post = await prisma.newsPost.update({
       where: { id },
       data: {
@@ -38,6 +49,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         } : {}),
         ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
         ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
+        ...(categoryId !== undefined ? { categoryId } : {}),
       },
     });
     return NextResponse.json({ ...post, status: post.isPublished ? "published" : "draft", visible: post.isPublished });

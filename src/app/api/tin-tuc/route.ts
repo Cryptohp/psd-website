@@ -39,8 +39,8 @@ export async function GET(req: NextRequest) {
     content: p.content,
     thumbnail: p.thumbnail,
     author: p.author,
-    category: p.category?.name ?? "Tin tức",
-    label: (p.category?.name ?? "Tin tức").toUpperCase(),
+    category: p.category?.name ?? "—",
+    label: (p.category?.name ?? "—").toUpperCase(),
     status: p.isPublished ? "published" : "draft",
     visible: p.isPublished,
     isFeatured: p.isFeatured,
@@ -61,6 +61,13 @@ export async function POST(req: NextRequest) {
     .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
 
+  /* Resolve categoryId from name */
+  let categoryId: string | null = null;
+  if (body.category) {
+    const cat = await prisma.newsCategory.findFirst({ where: { name: body.category } });
+    categoryId = cat?.id ?? null;
+  }
+
   const post = await prisma.newsPost.create({
     data: {
       title: body.title,
@@ -73,6 +80,7 @@ export async function POST(req: NextRequest) {
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.status === "published" ? new Date() : null),
       seoTitle: body.seoTitle ?? null,
       seoDesc: body.seoDesc ?? null,
+      ...(categoryId ? { categoryId } : {}),
     },
   });
 
