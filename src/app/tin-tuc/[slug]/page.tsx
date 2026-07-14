@@ -30,7 +30,7 @@ async function getPost(slug: string): Promise<Post | null> {
       slug: post.slug,
       title: post.title,
       category: (post as any).category?.name ?? "Tin tức",
-      date: new Date(post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      date: new Date(post.publishedAt ?? post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
       image: post.thumbnail,
       excerpt: post.excerpt,
       content: post.content,
@@ -52,7 +52,7 @@ async function getRelated(currentSlug: string, category: string): Promise<Post[]
     const mapped = posts.map(p => ({
       id: p.id, slug: p.slug, title: p.title,
       category: (p as any).category?.name ?? "Tin tức",
-      date: new Date(p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      date: new Date(p.publishedAt ?? p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
       image: p.thumbnail, excerpt: p.excerpt, content: p.content, isPublished: p.isPublished,
     }));
     const sameCat = mapped.filter(p => p.category === category).slice(0, 2);

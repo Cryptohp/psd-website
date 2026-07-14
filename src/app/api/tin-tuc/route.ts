@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       status: post.isPublished ? "published" : "draft",
       visible: post.isPublished,
       image: post.thumbnail,
-      date: new Date(post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+      date: new Date(post.publishedAt ?? post.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
     });
   }
 
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     visible: p.isPublished,
     isFeatured: p.isFeatured,
     views: 0,
-    date: new Date(p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
+    date: new Date(p.publishedAt ?? p.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-"),
     image: p.thumbnail,
     seoTitle: p.seoTitle,
     seoDesc: p.seoDesc,
