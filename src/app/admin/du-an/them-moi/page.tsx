@@ -6,6 +6,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import RichEditor from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
+import ImageGrid from "@/components/admin/ImageGrid";
 
 function toSlug(str: string) {
   return str.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -18,7 +19,7 @@ export default function NewProjectPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     title: "", slug: "", shortDesc: "", description: "",
-    thumbnail: "", location: "", province: "", scale: "",
+    thumbnail: "", images: [] as string[], location: "", province: "", scale: "",
     status: "IN_PROGRESS", startYear: "", isFeatured: false, sectorId: "",
     publishedAt: new Date().toISOString().slice(0, 10),
   });
@@ -141,6 +142,10 @@ export default function NewProjectPage() {
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Ảnh đại diện</label>
           <ImageUploader value={form.thumbnail} onChange={v => setForm(p => ({ ...p, thumbnail: v }))} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh dự án</label>
+          <ImageGrid value={form.images} onChange={v => setForm(p => ({ ...p, images: v }))} />
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung chi tiết</label>

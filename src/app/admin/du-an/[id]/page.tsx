@@ -6,6 +6,7 @@ import { ArrowLeft, Save, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import RichEditor from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
+import ImageGrid from "@/components/admin/ImageGrid";
 
 type Sector = { id: string; name: string };
 
@@ -14,7 +15,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
   const router = useRouter();
   const [form, setForm] = useState({
     title: "", slug: "", shortDesc: "", description: "",
-    thumbnail: "", location: "", scale: "",
+    thumbnail: "", images: [] as string[], location: "", scale: "",
     status: "IN_PROGRESS", startYear: "", isFeatured: false, sectorId: "",
     publishedAt: new Date().toISOString().slice(0, 10),
   });
@@ -34,6 +35,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           shortDesc: data.shortDesc ?? "",
           description: data.description ?? "",
           thumbnail: data.thumbnail ?? "",
+          images: Array.isArray(data.images) ? data.images : [],
           location: data.location ?? "",
           scale: data.scale ?? "",
           status: data.status ?? "IN_PROGRESS",
@@ -170,6 +172,10 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Ảnh đại diện</label>
           <ImageUploader value={form.thumbnail} onChange={v => setForm(p => ({ ...p, thumbnail: v }))} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh dự án</label>
+          <ImageGrid value={form.images} onChange={v => setForm(p => ({ ...p, images: v }))} />
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung chi tiết</label>
