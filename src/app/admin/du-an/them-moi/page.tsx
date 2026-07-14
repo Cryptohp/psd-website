@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
-import RichEditor from "@/components/admin/RichEditor";
+import RichEditor, { RichEditorHandle } from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
 import ImageGrid from "@/components/admin/ImageGrid";
 
@@ -23,6 +23,7 @@ export default function NewProjectPage() {
     status: "IN_PROGRESS", startYear: "", isFeatured: false, sectorId: "",
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+  const editorRef = useRef<RichEditorHandle>(null);
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -145,11 +146,11 @@ export default function NewProjectPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh dự án</label>
-          <ImageGrid value={form.images} onChange={v => setForm(p => ({ ...p, images: v }))} />
+          <ImageGrid value={form.images} onChange={v => setForm(p => ({ ...p, images: v }))} onInsert={url => editorRef.current?.insertImage(url)} />
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung chi tiết</label>
-          <RichEditor content={form.description} onChange={v => setForm(p => ({ ...p, description: v }))} placeholder="Nội dung đầy đủ về dự án..." />
+          <RichEditor ref={editorRef} content={form.description} onChange={v => setForm(p => ({ ...p, description: v }))} placeholder="Nội dung đầy đủ về dự án..." />
         </div>
       </div>
     </div>

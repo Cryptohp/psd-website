@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Trash2, Eye, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
-import RichEditor from "@/components/admin/RichEditor";
+import { useState, useEffect, use, useRef } from "react";
+import RichEditor, { RichEditorHandle } from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
 import ImageGrid from "@/components/admin/ImageGrid";
 
@@ -28,6 +28,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
   const { id } = use(params);
   const router = useRouter();
   const [form, setForm] = useState<Post | null>(null);
+  const editorRef = useRef<RichEditorHandle>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -177,7 +178,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           />
           <div className="mt-4">
             <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh bài viết</label>
-            <ImageGrid value={form.images ?? []} onChange={v => setForm(prev => prev ? { ...prev, images: v } : prev)} />
+            <ImageGrid value={form.images ?? []} onChange={v => setForm(prev => prev ? { ...prev, images: v } : prev)} onInsert={url => editorRef.current?.insertImage(url)} />
           </div>
           <div className="mt-3">
             <label className="block text-xs text-[#6e6e74] mb-2">Căn chỉnh ảnh</label>
@@ -208,6 +209,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung bài viết *</label>
           <RichEditor
+            ref={editorRef}
             content={form.content}
             placeholder="Nhập nội dung bài viết..."
             onChange={(html) => setForm((prev) => prev ? { ...prev, content: html } : prev)}

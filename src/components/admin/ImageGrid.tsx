@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Upload, X, Loader2, GripVertical } from "lucide-react";
+import { Upload, X, Loader2, GripVertical, ImagePlus } from "lucide-react";
 
 interface Props {
   value: string[];
   onChange: (urls: string[]) => void;
+  onInsert?: (url: string) => void;
 }
 
-export default function ImageGrid({ value, onChange }: Props) {
+export default function ImageGrid({ value, onChange, onInsert }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -109,6 +110,17 @@ export default function ImageGrid({ value, onChange }: Props) {
               <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <GripVertical size={14} className="text-white drop-shadow" />
               </div>
+              {/* Insert into editor button */}
+              {onInsert && (
+                <button
+                  type="button"
+                  onClick={() => onInsert(url)}
+                  title="Chèn vào bài"
+                  className="absolute top-1 right-8 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-50 hover:text-blue-500 text-[#6e6e74]"
+                >
+                  <ImagePlus size={11} />
+                </button>
+              )}
               {/* Remove button */}
               <button
                 type="button"

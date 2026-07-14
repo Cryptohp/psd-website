@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import Link from "next/link";
-import RichEditor from "@/components/admin/RichEditor";
+import RichEditor, { RichEditorHandle } from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
 import ImageGrid from "@/components/admin/ImageGrid";
 
@@ -35,6 +35,7 @@ export default function NewPostPage() {
     visible: true,
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+  const editorRef = useRef<RichEditorHandle>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -164,7 +165,7 @@ export default function NewPostPage() {
           <ImageUploader value={form.image} onChange={(url) => setForm((prev) => ({ ...prev, image: url }))} />
           <div className="mt-4">
             <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh bài viết</label>
-            <ImageGrid value={form.images} onChange={v => setForm(prev => ({ ...prev, images: v }))} />
+            <ImageGrid value={form.images} onChange={v => setForm(prev => ({ ...prev, images: v }))} onInsert={url => editorRef.current?.insertImage(url)} />
           </div>
           <div className="mt-3">
             <label className="block text-xs text-[#6e6e74] mb-2">Căn chỉnh ảnh</label>
@@ -194,7 +195,7 @@ export default function NewPostPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Nội dung bài viết *</label>
-          <RichEditor placeholder="Nhập nội dung bài viết..." onChange={(html) => setForm((prev) => ({ ...prev, content: html }))} />
+          <RichEditor ref={editorRef} placeholder="Nhập nội dung bài viết..." onChange={(html) => setForm((prev) => ({ ...prev, content: html }))} />
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ import Underline from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Extension } from "@tiptap/core";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, forwardRef, useImperativeHandle } from "react";
 import {
   Bold, Italic, UnderlineIcon, Strikethrough, AlignLeft, AlignCenter,
   AlignRight, AlignJustify, Link2, Image as ImageIcon, List, ListOrdered,
@@ -181,13 +181,20 @@ function Dropdown({
   );
 }
 
+export interface RichEditorHandle {
+  insertImage: (url: string) => void;
+}
+
 interface Props {
   content?: string;
   onChange?: (html: string) => void;
   placeholder?: string;
 }
 
-export default function RichEditor({ content = "", onChange, placeholder = "Nhập nội dung bài viết..." }: Props) {
+const RichEditor = forwardRef<RichEditorHandle, Props>(function RichEditor(
+  { content = "", onChange, placeholder = "Nhập nội dung bài viết..." },
+  ref,
+) {
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [showImageInput, setShowImageInput] = useState(false);
@@ -217,6 +224,12 @@ export default function RichEditor({ content = "", onChange, placeholder = "Nh�
       },
     },
   });
+
+  useImperativeHandle(ref, () => ({
+    insertImage: (url: string) => {
+      editor?.chain().focus().setImage({ src: url }).run();
+    },
+  }), [editor]);
 
   const getHeadingValue = useCallback(() => {
     if (!editor) return "paragraph";
@@ -469,4 +482,6 @@ export default function RichEditor({ content = "", onChange, placeholder = "Nh�
       </div>
     </div>
   );
-}
+});
+
+export default RichEditor;
