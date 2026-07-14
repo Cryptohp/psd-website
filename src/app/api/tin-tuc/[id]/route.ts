@@ -39,6 +39,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         ...(body.content !== undefined ? { content: body.content } : {}),
         ...(body.image !== undefined ? { thumbnail: body.image } : {}),
         ...(body.thumbnail !== undefined ? { thumbnail: body.thumbnail } : {}),
+        ...(body.images !== undefined ? { images: Array.isArray(body.images) ? body.images : [] } : {}),
         ...(body.author !== undefined ? { author: body.author } : {}),
         ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
         ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),

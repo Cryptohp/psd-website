@@ -130,6 +130,7 @@ model NewsPost {
   excerpt     String?
   content     String        @db.Text
   thumbnail   String?
+  images      String[]
   author      String?
   isPublished Boolean       @default(false)
   isFeatured  Boolean       @default(false)

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect, use } from "react";
 import RichEditor from "@/components/admin/RichEditor";
 import ImageUploader from "@/components/admin/ImageUploader";
+import ImageGrid from "@/components/admin/ImageGrid";
 
 type Post = {
   id: string;
@@ -18,6 +19,7 @@ type Post = {
   excerpt: string;
   content: string;
   image: string;
+  images?: string[];
   imageAlign?: string;
   publishedAt?: string;
 };
@@ -173,6 +175,10 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             value={form.image ?? ""}
             onChange={(url) => setForm((prev) => prev ? { ...prev, image: url } : prev)}
           />
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-[#111114] mb-1.5">Grid ảnh bài viết</label>
+            <ImageGrid value={form.images ?? []} onChange={v => setForm(prev => prev ? { ...prev, images: v } : prev)} />
+          </div>
           <div className="mt-3">
             <label className="block text-xs text-[#6e6e74] mb-2">Căn chỉnh ảnh</label>
             <div className="flex gap-2">

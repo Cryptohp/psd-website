@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
       excerpt: body.excerpt ?? null,
       content: body.content ?? "",
       thumbnail: body.image ?? body.thumbnail ?? null,
+      images: Array.isArray(body.images) ? body.images : [],
       author: body.author ?? null,
       isPublished: body.status === "published",
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.status === "published" ? new Date() : null),
