@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
       order: body.order ?? 0,
       seoTitle: body.seoTitle ?? null,
       seoDesc: body.seoDesc ?? null,
+      publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
       ...(body.sectorId ? { sectorId: body.sectorId } : {}),
     },
     include: { sector: true },
