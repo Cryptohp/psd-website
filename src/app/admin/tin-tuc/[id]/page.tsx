@@ -19,6 +19,7 @@ type Post = {
   content: string;
   image: string;
   imageAlign?: string;
+  publishedAt?: string;
 };
 
 export default function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
@@ -32,7 +33,13 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
   useEffect(() => {
     fetch(`/api/tin-tuc/${id}`)
       .then((r) => r.json())
-      .then((data) => { setForm(data); setLoading(false); })
+      .then((data) => {
+        setForm({
+          ...data,
+          publishedAt: data.publishedAt ? new Date(data.publishedAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        });
+        setLoading(false);
+      })
       .catch(() => { setError("Không tìm thấy bài viết"); setLoading(false); });
   }, [id]);
 
@@ -129,6 +136,10 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             <option value="true">Hiện</option>
             <option value="false">Ẩn</option>
           </select>
+        </div>
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs text-[#6e6e74] mb-1.5">Ngày đăng</label>
+          <input type="date" name="publishedAt" value={form.publishedAt ?? ""} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white" />
         </div>
       </div>
 

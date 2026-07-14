@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       thumbnail: body.image ?? body.thumbnail ?? null,
       author: body.author ?? null,
       isPublished: body.status === "published",
-      publishedAt: body.status === "published" ? new Date() : null,
+      publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.status === "published" ? new Date() : null),
       seoTitle: body.seoTitle ?? null,
       seoDesc: body.seoDesc ?? null,
     },

@@ -11,6 +11,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     visible: post.isPublished,
     category: post.category?.name ?? "Tin tức",
     image: post.thumbnail,
+    publishedAt: post.publishedAt ?? post.createdAt,
   });
 }
 
@@ -30,9 +31,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         ...(body.author !== undefined ? { author: body.author } : {}),
         ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
         ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
+        ...(body.publishedAt !== undefined ? { publishedAt: new Date(body.publishedAt) } : {}),
         ...(body.status !== undefined ? {
           isPublished: body.status === "published",
-          publishedAt: body.status === "published" ? new Date() : null,
+          ...(body.publishedAt === undefined && body.status === "published" ? { publishedAt: new Date() } : {}),
         } : {}),
         ...(body.visible !== undefined ? { isPublished: body.visible } : {}),
         ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
