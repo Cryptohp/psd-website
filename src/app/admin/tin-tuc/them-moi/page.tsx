@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import Link from "next/link";
@@ -33,8 +33,16 @@ export default function NewPostPage() {
     visible: true,
     publishedAt: new Date().toISOString().slice(0, 10),
   });
+  const [categories, setCategories] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/tin-tuc/categories")
+      .then(r => r.json())
+      .then((data: { name: string }[]) => { if (Array.isArray(data)) setCategories(data.map(c => c.name)); })
+      .catch(() => {});
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value } = e.target;
@@ -101,7 +109,7 @@ export default function NewPostPage() {
         <div className="flex-1 min-w-[160px]">
           <label className="block text-xs text-[#6e6e74] mb-1.5">Danh mục</label>
           <select name="category" value={form.category} onChange={handleChange} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white">
-            {["Tin tức", "Tin PSD Group", "Tin dự án", "Hoạt động cộng đồng", "Về PSD", "Bền vững", "Hợp tác"].map((c) => (
+            {categories.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>

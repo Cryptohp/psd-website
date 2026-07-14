@@ -7,15 +7,6 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const PAGE_SIZE = 12;
 
-const categories = [
-  "Tất cả",
-  "Tin PSD Group",
-  "Tin dự án",
-  "Truyền thông & Báo chí",
-  "Hoạt động cộng đồng",
-  "Góc nhìn & Chia sẻ",
-];
-
 type NewsItem = {
   id: string;
   slug: string;
@@ -33,8 +24,15 @@ export default function NewsPage() {
   const [active, setActive] = useState("Tất cả");
   const [page, setPage] = useState(1);
   const [news, setNews] = useState<NewsItem[]>([]);
+  const [categories, setCategories] = useState<string[]>(["Tất cả"]);
 
   useEffect(() => {
+    fetch("/api/tin-tuc/categories")
+      .then((r) => r.json())
+      .then((data: { name: string }[]) => {
+        if (Array.isArray(data)) setCategories(["Tất cả", ...data.map(c => c.name)]);
+      })
+      .catch(() => {});
     fetch("/api/tin-tuc?status=published")
       .then((r) => r.json())
       .then((data: NewsItem[]) => setNews(data.filter((n) => n.visible)))
