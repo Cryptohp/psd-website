@@ -40,7 +40,13 @@ export default function NewPostPage() {
   useEffect(() => {
     fetch("/api/tin-tuc/categories")
       .then(r => r.json())
-      .then((data: { name: string }[]) => { if (Array.isArray(data)) setCategories(data.map(c => c.name)); })
+      .then((data: { name: string }[]) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const names = data.map(c => c.name);
+          setCategories(names);
+          setForm(prev => ({ ...prev, category: names[0], label: names[0].toUpperCase() }));
+        }
+      })
       .catch(() => {});
   }, []);
 

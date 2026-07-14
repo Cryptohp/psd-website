@@ -34,7 +34,9 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
   useEffect(() => {
     fetch("/api/tin-tuc/categories")
       .then(r => r.json())
-      .then((data: { name: string }[]) => { if (Array.isArray(data)) setCategories(data.map(c => c.name)); })
+      .then((data: { name: string }[]) => {
+        if (Array.isArray(data) && data.length > 0) setCategories(data.map(c => c.name));
+      })
       .catch(() => {});
     fetch(`/api/tin-tuc/${id}`)
       .then((r) => r.json())
