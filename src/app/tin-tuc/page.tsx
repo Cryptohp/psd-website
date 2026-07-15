@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const PAGE_SIZE = 12;
@@ -105,73 +106,62 @@ export default function NewsPage() {
 
       <Breadcrumb items={[{ label: "Tin tức sự kiện" }]} />
 
-      {/* 3 × 4 grid */}
-      <div style={{ padding: "48px clamp(20px,5vw,80px) 72px" }}>
-        {filtered.length === 0 ? (
-          <p style={{ padding: "48px 0", color: "#999", fontSize: 15 }}>Chưa có bài viết trong mục này.</p>
-        ) : (
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "40px 28px",
-          }}
-            className="news-grid"
-          >
-            {paged.map((item) => (
-              <Link key={item.slug} href={`/tin-tuc/${item.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
-                {/* Thumbnail */}
-                <div style={{ position: "relative", width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#e8e8e8", marginBottom: 16, flexShrink: 0 }}>
-                  {item.image ? (
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      unoptimized
-                      style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                    />
-                  ) : (
-                    <div style={{ width: "100%", height: "100%", background: "#d0d0d0" }} />
-                  )}
+      {/* Grid */}
+      <section style={{ background: "#f8f8f8", padding: "48px clamp(20px,5vw,80px) 72px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          {filtered.length === 0 ? (
+            <p style={{ padding: "48px 0", textAlign: "center", color: "#aaa", fontSize: 15, fontStyle: "italic" }}>Chưa có bài viết trong mục này.</p>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }} className="news-grid">
+              {paged.map((item) => (
+                <div key={item.slug} style={{ background: "#fff", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", display: "flex", flexDirection: "column" }}>
+                  {/* Image */}
+                  <div style={{ position: "relative", height: 200, overflow: "hidden", background: "#e0e0e0", flexShrink: 0 }}>
+                    {item.image ? (
+                      <Image src={item.image} alt={item.title} fill unoptimized style={{ objectFit: "cover", transition: "transform 0.4s" }} className="hover:scale-105" />
+                    ) : (
+                      <div style={{ width: "100%", height: "100%", background: "#d0d0d0" }} />
+                    )}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)" }} />
+                    {/* Category badge */}
+                    <span style={{ position: "absolute", top: 14, left: 14, fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#fff", background: "#e82127", padding: "3px 8px" }}>
+                      {item.label || item.category}
+                    </span>
+                  </div>
+                  {/* Content */}
+                  <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+                    <p style={{ fontSize: 11, color: "#999", marginBottom: 8, letterSpacing: "0.04em" }}>{item.date}</p>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.5, flex: 1, marginBottom: 20, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>
+                      {item.title}
+                    </h3>
+                    <Link
+                      href={`/tin-tuc/${item.slug}`}
+                      style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#e82127", textDecoration: "none", borderTop: "1px solid #f0f0f0", paddingTop: 16 }}
+                      className="group"
+                    >
+                      Xem chi tiết <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
+              ))}
+            </div>
+          )}
 
-                {/* Meta */}
-                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "#e82127", marginBottom: 8, textTransform: "uppercase" }}>
-                  {item.label || item.category}
-                </p>
-                <h3 style={{
-                  fontSize: "clamp(14px, 1.1vw, 16px)", fontWeight: 700, color: "#1a1a1a",
-                  lineHeight: 1.45, letterSpacing: "0.01em", marginBottom: 10, flex: 1,
-                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" as const, overflow: "hidden",
-                }}>
-                  {item.title}
-                </h3>
-                <p style={{ fontSize: 12, color: "#999", letterSpacing: "0.04em" }}>{item.date}</p>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 64 }}>
-            {page > 1 && (
-              <button onClick={() => setPage(p => p - 1)} style={btnStyle(false)}>‹</button>
-            )}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <button key={p} onClick={() => setPage(p)} style={btnStyle(p === page)}>{p}</button>
-            ))}
-            {page < totalPages && (
-              <button onClick={() => setPage(p => p + 1)} style={btnStyle(false)}>›</button>
-            )}
-          </div>
-        )}
-      </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 64 }}>
+              {page > 1 && <button onClick={() => setPage(p => p - 1)} style={btnStyle(false)}>‹</button>}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button key={p} onClick={() => setPage(p)} style={btnStyle(p === page)}>{p}</button>
+              ))}
+              {page < totalPages && <button onClick={() => setPage(p => p + 1)} style={btnStyle(false)}>›</button>}
+            </div>
+          )}
+        </div>
+      </section>
 
       <style>{`
-        @media (max-width: 900px) { .news-grid { grid-template-columns: repeat(2,1fr) !important; } }
-        @media (max-width: 560px) { .news-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 640px) { .news-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </main>
   );
