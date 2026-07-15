@@ -118,20 +118,22 @@ export default function ImageGrid({ value, onChange, onInsert }: Props) {
               >
                 <X size={11} />
               </button>
-              {/* Insert into editor — always visible bar at bottom */}
+              {/* Index badge */}
+              {!onInsert && (
+                <span className="absolute bottom-1 left-1 text-[10px] font-bold text-white bg-black/40 rounded px-1 leading-4">
+                  {i + 1}
+                </span>
+              )}
+              {/* Insert into editor — always visible */}
               {onInsert && (
                 <button
                   type="button"
                   onClick={() => onInsert(url)}
-                  className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1 py-1 bg-black/60 hover:bg-[#e82127]/90 text-white text-[10px] font-medium transition-colors opacity-0 group-hover:opacity-100"
+                  className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1 py-1.5 bg-black/55 hover:bg-[#e82127] text-white text-[10px] font-semibold transition-colors"
                 >
                   <ImagePlus size={10} /> Chèn vào bài
                 </button>
               )}
-              {/* Index badge */}
-              <span className="absolute bottom-1 left-1 text-[10px] font-bold text-white bg-black/40 rounded px-1 leading-4">
-                {i + 1}
-              </span>
             </div>
           ))}
 
