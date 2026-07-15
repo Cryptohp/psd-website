@@ -55,41 +55,47 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
 
-  const baseSlug = (body.slug || body.title)
-    .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
-    .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+    const baseSlug = (body.slug || body.title || "bai-viet")
+      .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/đ/g, "d").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-") || "bai-viet";
 
-  /* Resolve categoryId from name */
-  let categoryId: string | null = null;
-  if (body.category) {
-    const cat = await prisma.newsCategory.findFirst({ where: { name: body.category } });
-    categoryId = cat?.id ?? null;
+    /* Resolve categoryId from name */
+    let categoryId: string | null = null;
+    if (body.category) {
+      const cat = await prisma.newsCategory.findFirst({ where: { name: body.category } });
+      categoryId = cat?.id ?? null;
+    }
+
+    const post = await prisma.newsPost.create({
+      data: {
+        title: body.title,
+        slug: `${baseSlug}-${Date.now()}`,
+        excerpt: body.excerpt ?? null,
+        content: body.content ?? "",
+        thumbnail: body.image ?? body.thumbnail ?? null,
+        images: Array.isArray(body.images) ? body.images : [],
+        author: body.author ?? null,
+        isPublished: body.status === "published",
+        publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.status === "published" ? new Date() : null),
+        seoTitle: body.seoTitle ?? null,
+        seoDesc: body.seoDesc ?? null,
+        ...(categoryId ? { categoryId } : {}),
+      },
+    });
+
+    return NextResponse.json({
+      ...post,
+      status: post.isPublished ? "published" : "draft",
+      visible: post.isPublished,
+      category: "Tin tức",
+      views: 0,
+    }, { status: 201 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("POST /api/tin-tuc:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
-
-  const post = await prisma.newsPost.create({
-    data: {
-      title: body.title,
-      slug: `${baseSlug}-${Date.now()}`,
-      excerpt: body.excerpt ?? null,
-      content: body.content ?? "",
-      thumbnail: body.image ?? body.thumbnail ?? null,
-      images: Array.isArray(body.images) ? body.images : [],
-      author: body.author ?? null,
-      isPublished: body.status === "published",
-      publishedAt: body.publishedAt ? new Date(body.publishedAt) : (body.status === "published" ? new Date() : null),
-      seoTitle: body.seoTitle ?? null,
-      seoDesc: body.seoDesc ?? null,
-      ...(categoryId ? { categoryId } : {}),
-    },
-  });
-
-  return NextResponse.json({
-    ...post,
-    status: post.isPublished ? "published" : "draft",
-    visible: post.isPublished,
-    category: "Tin tức",
-    views: 0,
-  }, { status: 201 });
 }
