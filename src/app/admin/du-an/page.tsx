@@ -40,7 +40,7 @@ export default function AdminProjectsPage() {
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/du-an")
+    fetch("/api/du-an?all=true")
       .then(r => r.json())
       .then(data => { setProjects(data); setLoading(false); })
       .catch(() => setLoading(false));
