@@ -5,20 +5,28 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
   const featured = searchParams.get("featured");
-
   const all = searchParams.get("all") === "true";
 
   const projects = await prisma.project.findMany({
     where: {
       ...(status ? { status: status as never } : {}),
       ...(featured === "true" ? { isFeatured: true } : {}),
-      ...(!all ? { isActive: true } : {}),
     },
     include: { sector: true },
     orderBy: [{ isFeatured: "desc" }, { order: "asc" }, { createdAt: "desc" }],
   });
 
-  return NextResponse.json(projects.map(p => ({
+  // Get isActive via raw SQL (bypasses Prisma client field validation)
+  const activeRows = await prisma.$queryRaw<{ id: string; isActive: boolean }[]>`
+    SELECT id, "isActive" FROM "projects"
+  `;
+  const activeMap = new Map(activeRows.map(r => [r.id, r.isActive]));
+
+  const filtered = all
+    ? projects
+    : projects.filter(p => activeMap.get(p.id) !== false);
+
+  return NextResponse.json(filtered.map(p => ({
     id: p.id,
     title: p.name,
     name: p.name,
@@ -35,7 +43,7 @@ export async function GET(req: NextRequest) {
     status: p.status,
     startYear: p.startYear,
     isFeatured: p.isFeatured,
-    visible: p.isActive ?? true,
+    visible: activeMap.get(p.id) ?? true,
     order: p.order,
     seoTitle: p.seoTitle,
     seoDesc: p.seoDesc,
