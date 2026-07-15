@@ -5,7 +5,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   const project = await prisma.project.findUnique({ where: { id }, include: { sector: true } });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive, publishedAt: project.publishedAt ?? project.createdAt });
+  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive ?? true, publishedAt: project.publishedAt ?? project.createdAt });
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -36,7 +36,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     include: { sector: true },
   });
 
-  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive, publishedAt: project.publishedAt ?? project.createdAt });
+  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive ?? true, publishedAt: project.publishedAt ?? project.createdAt });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

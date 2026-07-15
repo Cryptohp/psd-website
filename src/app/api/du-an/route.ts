@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     status: p.status,
     startYear: p.startYear,
     isFeatured: p.isFeatured,
-    visible: p.isActive,
+    visible: p.isActive ?? true,
     order: p.order,
     seoTitle: p.seoTitle,
     seoDesc: p.seoDesc,
