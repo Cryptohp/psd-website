@@ -112,7 +112,7 @@ export default function NewsPage() {
           {filtered.length === 0 ? (
             <p style={{ padding: "48px 0", textAlign: "center", color: "#aaa", fontSize: 15, fontStyle: "italic" }}>Chưa có bài viết trong mục này.</p>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }} className="news-grid">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }} className="news-grid">
               {paged.map((item) => (
                 <div key={item.slug} style={{ background: "#fff", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", display: "flex", flexDirection: "column" }}>
                   {/* Image */}
@@ -161,7 +161,8 @@ export default function NewsPage() {
       </section>
 
       <style>{`
-        @media (max-width: 640px) { .news-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 900px) { .news-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 560px) { .news-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </main>
   );
