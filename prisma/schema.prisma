@@ -89,6 +89,7 @@ model Project {
   status       ProjectStatus @default(IN_PROGRESS)
   startYear    Int?
   isFeatured   Boolean       @default(false)
+  isActive     Boolean       @default(true)
   order        Int           @default(0)
   seoTitle     String?
   seoDesc      String?

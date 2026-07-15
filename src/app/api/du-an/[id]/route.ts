@@ -5,7 +5,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   const project = await prisma.project.findUnique({ where: { id }, include: { sector: true } });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: true, publishedAt: project.publishedAt ?? project.createdAt });
+  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive, publishedAt: project.publishedAt ?? project.createdAt });
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -26,6 +26,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       ...(body.status !== undefined ? { status: body.status } : {}),
       ...(body.startYear !== undefined ? { startYear: body.startYear ? Number(body.startYear) : null } : {}),
       ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
+      ...(body.visible !== undefined ? { isActive: body.visible } : {}),
       ...(body.order !== undefined ? { order: body.order } : {}),
       ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
       ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
@@ -35,7 +36,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     include: { sector: true },
   });
 
-  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: true, publishedAt: project.publishedAt ?? project.createdAt });
+  return NextResponse.json({ ...project, title: project.name, sector: project.sector?.name ?? "", visible: project.isActive, publishedAt: project.publishedAt ?? project.createdAt });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
