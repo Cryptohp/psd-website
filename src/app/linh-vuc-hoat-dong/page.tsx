@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 /* ─── Types ─────────────────────────────────────────── */
-type Entity = { name: string; url?: string; logo?: string; desc?: string; id?: string };
+type Entity = { name: string; url?: string; logo?: string; desc?: string; id?: string; slug?: string; coverImage?: string; shortDesc?: string };
 type Sector = {
   slug: string;
   label: string;
@@ -155,25 +155,21 @@ export default function SectorsPage() {
   const [sectorList, setSectorList] = useState<Sector[]>(sectors);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Fetch company IDs from DB and merge into sectors
+  // Fetch company data from DB and merge into sectors
   useEffect(() => {
-    fetch("/api/sectors")
+    fetch("/api/cong-ty")
       .then(r => r.json())
-      .then((dbSectors: Array<{ slug: string; companies: Array<{ id: string; name: string }> }>) => {
-        setSectorList(prev => prev.map(s => {
-          const dbSector = dbSectors.find(d => d.slug === s.slug);
-          if (!dbSector) return s;
-          return {
-            ...s,
-            entities: s.entities.map(e => {
-              const match = dbSector.companies.find(c =>
-                c.name.toLowerCase().includes(e.name.toLowerCase().slice(0, 20)) ||
-                e.name.toLowerCase().includes(c.name.toLowerCase().slice(0, 20))
-              );
-              return match ? { ...e, id: match.id } : e;
-            }),
-          };
-        }));
+      .then((dbCompanies: Array<{ id: string; name: string; slug: string; logo: string | null; shortDesc: string | null }>) => {
+        setSectorList(prev => prev.map(s => ({
+          ...s,
+          entities: s.entities.map(e => {
+            const match = dbCompanies.find(c =>
+              c.name.toLowerCase().includes(e.name.toLowerCase().slice(0, 20)) ||
+              e.name.toLowerCase().includes(c.name.toLowerCase().slice(0, 20))
+            );
+            return match ? { ...e, id: match.id, slug: match.slug, coverImage: match.logo ?? undefined, shortDesc: match.shortDesc ?? undefined } : e;
+          }),
+        })));
       })
       .catch(() => {});
   }, []);
@@ -426,47 +422,66 @@ export default function SectorsPage() {
                     transition={{ duration: 0.45, delay: 0.05 + i * 0.08 }}
                     style={{
                       border: "1px solid #e0e0e0",
-                      padding: "28px 24px 24px",
                       display: "flex",
                       flexDirection: "column" as const,
+                      overflow: "hidden",
+                      background: "#fff",
                     }}
                   >
-                    {/* số thứ tự */}
-                    <span style={{ fontSize: 16, fontWeight: 700, color: "#ccc", letterSpacing: "0.15em", display: "block", marginBottom: 14 }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    {/* tên công ty */}
-                    <div style={{ fontSize: 14, fontWeight: 600, color: "#1a1a1a", lineHeight: 1.6, flex: 1, marginBottom: 24 }}>
-                      {entity.name}
+                    {/* ảnh bìa */}
+                    <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", background: "#f4f4f5", overflow: "hidden", flexShrink: 0 }}>
+                      {entity.coverImage ? (
+                        <Image
+                          src={entity.coverImage}
+                          alt={entity.name}
+                          fill
+                          unoptimized
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <span style={{ fontSize: 48, fontWeight: 800, color: "#e82127", opacity: 0.15 }}>
+                            {entity.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    {/* nút xem chi tiết */}
-                    {entity.id ? (
-                      <Link
-                        href={`/cong-ty-thanh-vien/${entity.id}`}
-                        style={{
-                          display: "inline-flex", alignItems: "center", gap: 8,
-                          fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
-                          textTransform: "uppercase" as const, color: "#e82127",
-                          textDecoration: "none", borderTop: "1px solid #f0f0f0",
-                          paddingTop: 14, transition: "gap 0.2s",
-                        }}
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = "14px"}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = "8px"}
-                      >
-                        Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
-                      </Link>
-                    ) : (
-                      <span
-                        style={{
-                          display: "inline-flex", alignItems: "center", gap: 8,
-                          fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
-                          textTransform: "uppercase" as const, color: "#ccc",
-                          borderTop: "1px solid #f0f0f0", paddingTop: 14,
-                        }}
-                      >
-                        Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
-                      </span>
-                    )}
+
+                    {/* nội dung */}
+                    <div style={{ padding: "20px 24px 24px", display: "flex", flexDirection: "column" as const, flex: 1 }}>
+                      {/* tên công ty */}
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#1a1a1a", lineHeight: 1.6, marginBottom: entity.shortDesc ? 10 : 0 }}>
+                        {entity.name}
+                      </div>
+                      {/* mô tả */}
+                      {entity.shortDesc && (
+                        <p style={{ fontSize: 13, color: "#6e6e74", lineHeight: 1.7, flex: 1, marginBottom: 16 }}>
+                          {entity.shortDesc}
+                        </p>
+                      )}
+                      {/* nút xem chi tiết */}
+                      <div style={{ marginTop: "auto", borderTop: "1px solid #f0f0f0", paddingTop: 14 }}>
+                        {entity.slug ? (
+                          <Link
+                            href={`/he-sinh-thai/${entity.slug}`}
+                            style={{
+                              display: "inline-flex", alignItems: "center", gap: 8,
+                              fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+                              textTransform: "uppercase" as const, color: "#e82127",
+                              textDecoration: "none", transition: "gap 0.2s",
+                            }}
+                            onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = "14px"}
+                            onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = "8px"}
+                          >
+                            Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
+                          </Link>
+                        ) : (
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#ccc" }}>
+                            Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
