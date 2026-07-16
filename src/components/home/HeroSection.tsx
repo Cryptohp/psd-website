@@ -1,37 +1,101 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+
+const slides = [
+  {
+    desktop: "/home-hero-06.png",
+    mobile: "/mobile-hero-trang-chu-03.png",
+    desktopW: 1920,
+    desktopH: 1080,
+    mobileW: 750,
+    mobileH: 1200,
+  },
+  {
+    desktop: "/home-hero-02.jpg",
+    mobile: "/mobile-home-hero-02.jpg",
+    desktopW: 1920,
+    desktopH: 1080,
+    mobileW: 750,
+    mobileH: 1200,
+  },
+];
 
 export default function HeroSection() {
-  return (
-    <section className="relative w-full" style={{ paddingTop: 68 }}>
+  const [current, setCurrent] = useState(0);
 
-      {/* Mobile hero */}
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative w-full overflow-hidden" style={{ paddingTop: 68 }}>
+
+      {/* Mobile slider */}
       <div className="relative w-full md:hidden">
-        <Image
-          src="/mobile-hero-trang-chu-03.png"
-          alt="PSD Group"
-          width={750}
-          height={1200}
-          priority
-          unoptimized
-          className="w-full h-auto block"
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`mobile-${current}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image
+              src={slides[current].mobile}
+              alt="PSD Group"
+              width={slides[current].mobileW}
+              height={slides[current].mobileH}
+              priority
+              unoptimized
+              className="w-full h-auto block"
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Desktop hero */}
+      {/* Desktop slider */}
       <div className="relative w-full hidden md:block">
-        <Image
-          src="/home-hero-06.png"
-          alt="PSD Group"
-          width={1920}
-          height={1080}
-          priority
-          unoptimized
-          className="w-full h-auto block"
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`desktop-${current}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image
+              src={slides[current].desktop}
+              alt="PSD Group"
+              width={slides[current].desktopW}
+              height={slides[current].desktopH}
+              priority
+              unoptimized
+              className="w-full h-auto block"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className="w-2 h-2 rounded-full transition-all duration-300"
+            style={{
+              background: i === current ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.35)",
+              transform: i === current ? "scale(1.3)" : "scale(1)",
+            }}
+          />
+        ))}
       </div>
 
       {/* Scroll indicator */}
