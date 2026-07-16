@@ -106,6 +106,7 @@ export default async function PhungSuDetailPage({ params }: { params: Promise<{ 
               <>
                 <div style={{ width: 32, height: 2, background: "#e82127", marginBottom: 20 }} />
                 <div
+                  className="article-content"
                   style={{ fontSize: 16, color: "#374151", lineHeight: 1.85 }}
                   dangerouslySetInnerHTML={{ __html: project.description }}
                 />
