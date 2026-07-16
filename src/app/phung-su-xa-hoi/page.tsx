@@ -13,7 +13,7 @@ const pillars = [
   {
     num: "01",
     label: "VĂN HÓA",
-    title: "Nghiên cứu và phát triển văn hóa",
+    title: "Dự án Nghiên cứu và Phát triển Văn hóa",
     desc: "Hệ thống 236 đề tài nghiên cứu là nền tảng tri thức cho các dự án văn hóa – xã hội của PSD Group.",
     image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80",
   },
@@ -27,22 +27,22 @@ const pillars = [
   {
     num: "03",
     label: "CÔNG NGHỆ",
-    title: "Văn Minh Việt",
+    title: "Dự án Văn Minh Số",
     desc: "Số hóa và lan tỏa tri thức, di sản văn hóa Việt trên nền tảng công nghệ — đưa văn hóa truyền thống đến gần hơn với thế hệ trẻ.",
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
   },
   {
     num: "04",
-    label: "ESG",
-    title: "ESG – Môi trường",
-    desc: "Khai thác tài nguyên có trách nhiệm, sản xuất xanh và cam kết giảm thiểu tác động đến môi trường trong mọi hoạt động của tập đoàn.",
+    label: "TÂM LINH",
+    title: "Dự án Tâm Linh Bách Việt",
+    desc: "Bảo tồn và phát huy các giá trị tâm linh, tín ngưỡng truyền thống của người Việt — kết nối cộng đồng qua các không gian văn hóa tâm linh.",
     image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80",
   },
   {
     num: "05",
     label: "CỘNG ĐỒNG",
-    title: "Phụng sự cộng đồng",
-    desc: "Tạo việc làm chất lượng, đầu tư giáo dục, hỗ trợ tái hòa nhập và đóng góp phúc lợi xã hội trực tiếp cho người dân địa phương.",
+    title: "Dự án Cuốn Sách Trao Đi Cuộc Đời Ở Lại",
+    desc: "Lan tỏa tri thức và nhân văn thông qua những cuốn sách được trao đi — mỗi cuốn sách là một hạt giống yêu thương gửi đến cộng đồng.",
     image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=900&q=80",
   },
 ];
