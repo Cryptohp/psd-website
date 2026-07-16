@@ -3,6 +3,8 @@ import Image from "next/image";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Phụng sự xã hội – PSD Group",
   description: "Triết lý phụng sự và cam kết phát triển bền vững của PSD Group — văn hóa là gốc rễ, phụng sự là đích đến.",
