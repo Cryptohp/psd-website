@@ -13,6 +13,7 @@ import {
   Settings,
   Globe,
   ChevronRight,
+  Network,
 } from "lucide-react";
 
 const nav = [
@@ -20,6 +21,7 @@ const nav = [
   { href: "/admin/tin-tuc", label: "Tin tức", icon: Newspaper },
   { href: "/admin/tuyen-dung", label: "Tuyển dụng", icon: Briefcase },
   { href: "/admin/du-an", label: "Dự án", icon: Building2 },
+  { href: "/admin/he-sinh-thai", label: "Hệ sinh thái", icon: Network },
   { href: "/admin/lanh-dao", label: "Ban lãnh đạo", icon: Users },
   { href: "/admin/lien-he", label: "Liên hệ & Leads", icon: MessageSquare },
   { href: "/admin/cai-dat", label: "Cài đặt", icon: Settings },
