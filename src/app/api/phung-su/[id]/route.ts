@@ -2,34 +2,54 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const item = await prisma.socialProject.findUnique({ where: { id } });
-  if (!item) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(item);
+  try {
+    const { id } = await params;
+    const rows = await prisma.$queryRaw<unknown[]>`SELECT * FROM "social_projects" WHERE id = ${id}`;
+    if (!rows.length) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(rows[0]);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const body = await req.json();
+  try {
+    const { id } = await params;
+    const body = await req.json();
 
-  // Support partial updates (e.g. toggle isActive only)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data: Record<string, any> = {};
-  if (body.title !== undefined) data.title = body.title;
-  if (body.label !== undefined) data.label = body.label;
-  if (body.shortDesc !== undefined) data.shortDesc = body.shortDesc ?? null;
-  if (body.description !== undefined) data.description = body.description ?? null;
-  if (body.thumbnail !== undefined) data.thumbnail = body.thumbnail ?? null;
-  if (body.images !== undefined) data.images = body.images;
-  if (body.order !== undefined) data.order = body.order;
-  if (body.isActive !== undefined) data.isActive = body.isActive;
+    // Fetch current record first for partial updates
+    const current = await prisma.$queryRaw<Record<string, unknown>[]>`SELECT * FROM "social_projects" WHERE id = ${id}`;
+    if (!current.length) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    const c = current[0];
 
-  const item = await prisma.socialProject.update({ where: { id }, data });
-  return NextResponse.json(item);
+    const title       = body.title       !== undefined ? body.title       : c.title;
+    const label       = body.label       !== undefined ? body.label       : c.label;
+    const shortDesc   = body.shortDesc   !== undefined ? body.shortDesc   : c.shortDesc;
+    const description = body.description !== undefined ? body.description : c.description;
+    const thumbnail   = body.thumbnail   !== undefined ? body.thumbnail   : c.thumbnail;
+    const images: string[] = body.images !== undefined ? body.images      : (c.images as string[]);
+    const order       = body.order       !== undefined ? body.order       : c.order;
+    const isActive    = body.isActive    !== undefined ? body.isActive    : c.isActive;
+
+    await prisma.$executeRaw`
+      UPDATE "social_projects"
+      SET title=${title}, label=${label}, "shortDesc"=${shortDesc}, description=${description},
+          thumbnail=${thumbnail}, images=${images}::text[], "order"=${order}, "isActive"=${isActive}, "updatedAt"=NOW()
+      WHERE id=${id}
+    `;
+    const rows = await prisma.$queryRaw<unknown[]>`SELECT * FROM "social_projects" WHERE id = ${id}`;
+    return NextResponse.json(rows[0]);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  await prisma.socialProject.delete({ where: { id } });
-  return NextResponse.json({ ok: true });
+  try {
+    const { id } = await params;
+    await prisma.$executeRaw`DELETE FROM "social_projects" WHERE id = ${id}`;
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }
