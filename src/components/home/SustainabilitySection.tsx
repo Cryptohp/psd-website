@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
@@ -13,9 +14,10 @@ type Project = {
   title: string;
   label: string;
   shortDesc: string | null;
+  thumbnail: string | null;
 };
 
-const ICONS = ["📖", "🏛️", "💻", "🌿", "🤝", "❤️", "🎨", "🌏"];
+const FALLBACK = "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=70";
 
 export default function SustainabilitySection() {
   const ref = useRef(null);
@@ -94,32 +96,35 @@ export default function SustainabilitySection() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }} viewport={VP}
                   transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-                  className="flex gap-4 p-4 rounded-xl hover:bg-[#f4f4f5] transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#4caf50]/10 flex items-center justify-center flex-shrink-0 text-xl">
-                    {ICONS[i] ?? "🌿"}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[14px] text-[#1a1a1a] mb-1">
-                      {pillar.title}
-                    </h4>
-                    {pillar.shortDesc && (
-                      <p className="text-[13px] text-[#6e6e74] leading-snug"
-                        style={{
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical" as const,
-                          overflow: "hidden",
-                        }}
-                      >{pillar.shortDesc}</p>
-                    )}
-                    <Link
-                      href={`/phung-su-xa-hoi/${pillar.id}`}
-                      className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#e82127] mt-2 hover:underline"
-                    >
-                      Xem thêm <ArrowRight size={12} />
-                    </Link>
-                  </div>
+                  <Link href={`/phung-su-xa-hoi/${pillar.id}`} className="block rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow group">
+                    {/* Thumbnail */}
+                    <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden">
+                      <Image
+                        src={pillar.thumbnail || FALLBACK}
+                        alt={pillar.title}
+                        fill
+                        unoptimized
+                        style={{ objectFit: "cover" }}
+                        className="group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    {/* Text */}
+                    <div className="p-4">
+                      {pillar.label && (
+                        <span className="text-[10px] font-bold tracking-wider uppercase text-[#e82127] mb-1 block">{pillar.label}</span>
+                      )}
+                      <h4 className="font-semibold text-[14px] text-[#1a1a1a] mb-1 leading-snug line-clamp-2">
+                        {pillar.title}
+                      </h4>
+                      {pillar.shortDesc && (
+                        <p className="text-[12px] text-[#6e6e74] leading-snug line-clamp-2">{pillar.shortDesc}</p>
+                      )}
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#e82127] mt-2">
+                        Xem thêm <ArrowRight size={11} />
+                      </span>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>
