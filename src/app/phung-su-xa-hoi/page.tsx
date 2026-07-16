@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { prisma } from "@/lib/prisma";
 
@@ -11,14 +13,18 @@ export const metadata: Metadata = {
 };
 
 const SIDE_PAD = "max(24px, calc((100vw - 1300px) / 2 + 60px))";
-
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80";
 
+type Row = {
+  id: string; title: string; label: string; shortDesc: string | null;
+  thumbnail: string | null; order: number; isActive: boolean;
+};
+
 export default async function PhungSuPage() {
-  const pillars = await prisma.socialProject.findMany({
-    where: { isActive: true },
-    orderBy: { order: "asc" },
-  });
+  const pillars = await prisma.$queryRaw<Row[]>`
+    SELECT id, title, label, "shortDesc", thumbnail, "order", "isActive"
+    FROM "social_projects" WHERE "isActive" = true ORDER BY "order" ASC
+  `;
 
   return (
     <main style={{ paddingTop: 68 }}>
@@ -98,7 +104,7 @@ export default async function PhungSuPage() {
           {pillars.length >= 2 && (
             <div className="ptbv-featured-grid">
               {/* Featured */}
-              <div>
+              <Link href={`/phung-su-xa-hoi/${pillars[0].id}`} style={{ textDecoration: "none", display: "block" }}>
                 <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden", background: "#111" }}>
                   <Image src={pillars[0].thumbnail || FALLBACK_IMAGE} alt={pillars[0].title} fill unoptimized style={{ objectFit: "cover" }} />
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)" }} />
@@ -106,20 +112,28 @@ export default async function PhungSuPage() {
                     <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e82127", marginBottom: 10 }}>{pillars[0].label}</p>
                     <h3 style={{ fontSize: "clamp(16px, 1.6vw, 22px)", fontWeight: 700, color: "#fff", lineHeight: 1.3, textTransform: "uppercase" as const, letterSpacing: "0.02em", marginBottom: 10 }}>{pillars[0].title}</h3>
                     {pillars[0].shortDesc && <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>{pillars[0].shortDesc}</p>}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 14, fontSize: 11, fontWeight: 700, color: "#e82127", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                      Xem chi tiết <ArrowRight size={12} />
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               {/* Second */}
               <div style={{ display: "flex", flexDirection: "column" as const }}>
-                <div style={{ position: "relative", width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#111", flexShrink: 0 }}>
-                  <Image src={pillars[1].thumbnail || FALLBACK_IMAGE} alt={pillars[1].title} fill unoptimized style={{ objectFit: "cover" }} />
-                </div>
-                <div style={{ paddingTop: 18, flex: 1 }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e82127", marginBottom: 10 }}>{pillars[1].label}</p>
-                  <h3 style={{ fontSize: "clamp(14px, 1.2vw, 18px)", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, textTransform: "uppercase" as const, letterSpacing: "0.02em", marginBottom: 10 }}>{pillars[1].title}</h3>
-                  {pillars[1].shortDesc && <p style={{ fontSize: 13, color: "#6e6e74", lineHeight: 1.7 }}>{pillars[1].shortDesc}</p>}
-                </div>
+                <Link href={`/phung-su-xa-hoi/${pillars[1].id}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#111", flexShrink: 0 }}>
+                    <Image src={pillars[1].thumbnail || FALLBACK_IMAGE} alt={pillars[1].title} fill unoptimized style={{ objectFit: "cover" }} />
+                  </div>
+                  <div style={{ paddingTop: 18, flex: 1 }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e82127", marginBottom: 10 }}>{pillars[1].label}</p>
+                    <h3 style={{ fontSize: "clamp(14px, 1.2vw, 18px)", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, textTransform: "uppercase" as const, letterSpacing: "0.02em", marginBottom: 10 }}>{pillars[1].title}</h3>
+                    {pillars[1].shortDesc && <p style={{ fontSize: 13, color: "#6e6e74", lineHeight: 1.7 }}>{pillars[1].shortDesc}</p>}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 14, fontSize: 11, fontWeight: 700, color: "#e82127", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                      Xem chi tiết <ArrowRight size={12} />
+                    </span>
+                  </div>
+                </Link>
               </div>
             </div>
           )}
@@ -128,28 +142,34 @@ export default async function PhungSuPage() {
           {pillars.length > 2 && (
             <div className="ptbv-three-col">
               {pillars.slice(2).map((p) => (
-                <div key={p.id}>
+                <Link key={p.id} href={`/phung-su-xa-hoi/${p.id}`} style={{ textDecoration: "none", display: "block" }}>
                   <div style={{ position: "relative", width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#111", marginBottom: 16 }}>
                     <Image src={p.thumbnail || FALLBACK_IMAGE} alt={p.title} fill unoptimized style={{ objectFit: "cover" }} />
                   </div>
                   <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e82127", marginBottom: 10 }}>{p.label}</p>
                   <h3 style={{ fontSize: "clamp(13px, 1vw, 15px)", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.4, textTransform: "uppercase" as const, letterSpacing: "0.02em", marginBottom: 10 }}>{p.title}</h3>
                   {p.shortDesc && <p style={{ fontSize: 13, color: "#6e6e74", lineHeight: 1.7 }}>{p.shortDesc}</p>}
-                </div>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 12, fontSize: 11, fontWeight: 700, color: "#e82127", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                    Xem chi tiết <ArrowRight size={12} />
+                  </span>
+                </Link>
               ))}
             </div>
           )}
 
-          {/* Single item fallback */}
+          {/* Single item */}
           {pillars.length === 1 && (
-            <div style={{ maxWidth: 640 }}>
+            <Link href={`/phung-su-xa-hoi/${pillars[0].id}`} style={{ textDecoration: "none", display: "block", maxWidth: 640 }}>
               <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden", background: "#111", marginBottom: 20 }}>
                 <Image src={pillars[0].thumbnail || FALLBACK_IMAGE} alt={pillars[0].title} fill unoptimized style={{ objectFit: "cover" }} />
               </div>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e82127", marginBottom: 10 }}>{pillars[0].label}</p>
               <h3 style={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.35, textTransform: "uppercase" as const, marginBottom: 10 }}>{pillars[0].title}</h3>
               {pillars[0].shortDesc && <p style={{ fontSize: 14, color: "#6e6e74", lineHeight: 1.7 }}>{pillars[0].shortDesc}</p>}
-            </div>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 14, fontSize: 11, fontWeight: 700, color: "#e82127", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                Xem chi tiết <ArrowRight size={12} />
+              </span>
+            </Link>
           )}
         </div>
       )}
