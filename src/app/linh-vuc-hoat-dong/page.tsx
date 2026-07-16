@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 /* ─── Types ─────────────────────────────────────────── */
-type Entity = { name: string; url?: string; logo?: string; desc?: string };
+type Entity = { name: string; url?: string; logo?: string; desc?: string; id?: string };
 type Sector = {
   slug: string;
   label: string;
@@ -152,7 +152,41 @@ const sectors: Sector[] = [
 /* ─── Component ──────────────────────────────────────── */
 export default function SectorsPage() {
   const [active, setActive] = useState<Sector>(sectors[0]);
+  const [sectorList, setSectorList] = useState<Sector[]>(sectors);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Fetch company IDs from DB and merge into sectors
+  useEffect(() => {
+    fetch("/api/sectors")
+      .then(r => r.json())
+      .then((dbSectors: Array<{ slug: string; companies: Array<{ id: string; name: string }> }>) => {
+        setSectorList(prev => prev.map(s => {
+          const dbSector = dbSectors.find(d => d.slug === s.slug);
+          if (!dbSector) return s;
+          return {
+            ...s,
+            entities: s.entities.map(e => {
+              const match = dbSector.companies.find(c =>
+                c.name.toLowerCase().includes(e.name.toLowerCase().slice(0, 20)) ||
+                e.name.toLowerCase().includes(c.name.toLowerCase().slice(0, 20))
+              );
+              return match ? { ...e, id: match.id } : e;
+            }),
+          };
+        }));
+      })
+      .catch(() => {});
+  }, []);
+
+  // Keep active in sync with sectorList
+  useEffect(() => {
+    setSectorList(prev => {
+      const updated = prev.find(s => s.slug === active.slug);
+      if (updated) setActive(updated);
+      return prev;
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectorList]);
 
   const overlapRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -271,7 +305,7 @@ export default function SectorsPage() {
           {/* Dropdown list */}
           {mobileMenuOpen && (
             <div style={{ position: "absolute" as const, top: "100%", left: 0, right: 0, zIndex: 50, background: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", borderTop: "2px solid #e82127" }}>
-              {sectors.map((sector) => (
+              {sectorList.map((sector) => (
                 <button
                   key={sector.slug}
                   onClick={() => handleSectorChange(sector)}
@@ -406,20 +440,33 @@ export default function SectorsPage() {
                       {entity.name}
                     </div>
                     {/* nút xem chi tiết */}
-                    <a
-                      href="#"
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: 8,
-                        fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
-                        textTransform: "uppercase" as const, color: "#e82127",
-                        textDecoration: "none", borderTop: "1px solid #f0f0f0",
-                        paddingTop: 14, transition: "gap 0.2s",
-                      }}
-                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = "14px"}
-                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = "8px"}
-                    >
-                      Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
-                    </a>
+                    {entity.id ? (
+                      <Link
+                        href={`/cong-ty-thanh-vien/${entity.id}`}
+                        style={{
+                          display: "inline-flex", alignItems: "center", gap: 8,
+                          fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+                          textTransform: "uppercase" as const, color: "#e82127",
+                          textDecoration: "none", borderTop: "1px solid #f0f0f0",
+                          paddingTop: 14, transition: "gap 0.2s",
+                        }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = "14px"}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = "8px"}
+                      >
+                        Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
+                      </Link>
+                    ) : (
+                      <span
+                        style={{
+                          display: "inline-flex", alignItems: "center", gap: 8,
+                          fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
+                          textTransform: "uppercase" as const, color: "#ccc",
+                          borderTop: "1px solid #f0f0f0", paddingTop: 14,
+                        }}
+                      >
+                        Xem chi tiết <span style={{ fontSize: 14 }}>→</span>
+                      </span>
+                    )}
                   </motion.div>
                 ))}
               </motion.div>
