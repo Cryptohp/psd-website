@@ -108,9 +108,11 @@ export default function SustainabilitySection() {
             >
               <Link
                 href="/phung-su-xa-hoi"
-                className="inline-flex items-center gap-2 px-5 py-3 border-2 border-[#e82127] text-[#e82127] text-[13px] font-semibold rounded-full hover:bg-[#e82127] hover:text-white transition-colors duration-300"
+                className="group relative inline-flex items-center gap-2 border border-[#e82127] text-[#e82127] font-medium px-6 py-3 rounded-lg overflow-hidden transition-colors duration-300 text-[14px] hover:text-white"
               >
-                Xem tất cả dự án <ArrowRight size={14} />
+                <span className="absolute inset-0 bg-[#e82127] -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
+                <span className="relative">Xem tất cả dự án</span>
+                <ArrowRight size={15} className="relative" />
               </Link>
             </motion.div>
           </div>
