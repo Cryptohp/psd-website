@@ -11,19 +11,20 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await req.json();
-  const item = await prisma.socialProject.update({
-    where: { id },
-    data: {
-      title: body.title,
-      label: body.label,
-      shortDesc: body.shortDesc ?? null,
-      description: body.description ?? null,
-      thumbnail: body.thumbnail ?? null,
-      images: body.images ?? [],
-      order: body.order ?? 0,
-      isActive: body.isActive ?? true,
-    },
-  });
+
+  // Support partial updates (e.g. toggle isActive only)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, any> = {};
+  if (body.title !== undefined) data.title = body.title;
+  if (body.label !== undefined) data.label = body.label;
+  if (body.shortDesc !== undefined) data.shortDesc = body.shortDesc ?? null;
+  if (body.description !== undefined) data.description = body.description ?? null;
+  if (body.thumbnail !== undefined) data.thumbnail = body.thumbnail ?? null;
+  if (body.images !== undefined) data.images = body.images;
+  if (body.order !== undefined) data.order = body.order;
+  if (body.isActive !== undefined) data.isActive = body.isActive;
+
+  const item = await prisma.socialProject.update({ where: { id }, data });
   return NextResponse.json(item);
 }
 
