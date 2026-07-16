@@ -23,6 +23,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       ...(body.isActive !== undefined ? { isActive: body.isActive } : {}),
       ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
       ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
+      ...(body.images !== undefined ? { images: body.images } : {}),
       ...(body.sectorId !== undefined ? { sectorId: body.sectorId || null } : {}),
     },
     include: { sector: true },

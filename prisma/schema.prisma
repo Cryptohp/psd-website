@@ -61,6 +61,7 @@ model Company {
   website     String?
   order       Int      @default(0)
   isActive    Boolean  @default(true)
+  images      Json?
   seoTitle    String?
   seoDesc     String?
   createdAt   DateTime @default(now())

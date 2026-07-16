@@ -183,7 +183,7 @@ export default function SuaCongTyPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#111114] mb-1.5">Logo công ty</label>
+          <label className="block text-sm font-medium text-[#111114] mb-1.5">Ảnh bìa công ty</label>
           <ImageUploader value={form.logo} onChange={v => set("logo", v)} />
         </div>
 
