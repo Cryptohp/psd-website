@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 type Sector = { id: string; name: string };
 
-export default function ThemCongTyPage() {
+function ThemCongTyForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultSectorId = searchParams.get("sectorId") ?? "";
@@ -168,5 +168,13 @@ export default function ThemCongTyPage() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ThemCongTyPage() {
+  return (
+    <Suspense>
+      <ThemCongTyForm />
+    </Suspense>
   );
 }
