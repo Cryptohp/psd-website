@@ -240,6 +240,24 @@ model Partner {
   @@map("partners")
 }
 
+// ==================== SOCIAL PROJECTS (PHỤNG SỰ XÃ HỘI) ====================
+
+model SocialProject {
+  id          String   @id @default(cuid())
+  title       String
+  label       String
+  shortDesc   String?
+  description String?  @db.Text
+  thumbnail   String?
+  images      String[]
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("social_projects")
+}
+
 // ==================== SITE SETTINGS ====================
 
 model SiteSetting {
