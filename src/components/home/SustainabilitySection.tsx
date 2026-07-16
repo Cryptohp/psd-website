@@ -34,37 +34,9 @@ export default function SustainabilitySection() {
   return (
     <section className="section-padding bg-white overflow-hidden" ref={ref}>
       <div className="container-psd">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left visual */}
-          <motion.div
-            className="lg:col-span-5 relative"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }} viewport={VP}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="relative rounded-2xl overflow-hidden aspect-square bg-[#f4f4f5]">
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: "url('/kinh-te-van-hoa.png')" }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-[#1a3a1a]/60 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-end p-8">
-                <div className="w-8 h-[3px] bg-[#e82127] mb-4" />
-                <blockquote className="text-white font-bold italic leading-snug mb-3" style={{ fontSize: "clamp(20px, 1.8vw, 26px)", textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
-                  "Văn hóa là gốc rễ –<br />
-                  Phụng sự là đích đến"
-                </blockquote>
-                <p className="text-white/75 text-[13px] font-medium tracking-wide">
-                  Triết lý phát triển bền vững của PSD Group
-                </p>
-              </div>
-            </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#4caf50]/10 rounded-full blur-2xl" />
-          </motion.div>
-
-          {/* Right: content */}
-          <div className="lg:col-span-7">
+        <div className="grid grid-cols-1 gap-12">
+          {/* Content */}
+          <div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }} viewport={VP}
