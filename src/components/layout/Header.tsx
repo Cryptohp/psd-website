@@ -25,7 +25,7 @@ const navItems = [
   },
   { label: "LĨNH VỰC & CÔNG TY THÀNH VIÊN", href: "/linh-vuc-hoat-dong", Icon: LayoutGrid },
   { label: "DỰ ÁN",                         href: "/du-an",              Icon: Briefcase  },
-  { label: "PHỤNG SỰ XÃ HỘI",            href: "/phat-trien-ben-vung", Icon: Heart      },
+  { label: "PHỤNG SỰ XÃ HỘI",            href: "/phung-su-xa-hoi", Icon: Heart      },
   { label: "TIN TỨC",                     href: "/tin-tuc",             Icon: Newspaper  },
   { label: "TUYỂN DỤNG",                  href: "/tuyen-dung",          Icon: Users      },
   { label: "LIÊN HỆ",                     href: "/lien-he",             Icon: Phone      },

@@ -14,7 +14,7 @@ const footerLinks = {
     { label: "Sản xuất & Công nghiệp", href: "/linh-vuc-hoat-dong/san-xuat-cong-nghiep" },
     { label: "Logistics & Cảng biển", href: "/linh-vuc-hoat-dong/logistics-cang-bien" },
     { label: "Du lịch & Sinh thái", href: "/linh-vuc-hoat-dong/du-lich-dich-vu-sinh-thai" },
-    { label: "Phát triển bền vững", href: "/phat-trien-ben-vung" },
+    { label: "Phát triển bền vững", href: "/phung-su-xa-hoi" },
   ],
   "Khám phá": [
     { label: "Hệ sinh thái", href: "/he-sinh-thai" },
