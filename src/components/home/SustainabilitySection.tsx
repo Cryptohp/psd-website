@@ -1,40 +1,33 @@
 "use client";
 
-
 import Link from "next/link";
-import { ArrowRight, Leaf, Users, BookOpen, Globe } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const VP = { once: true, amount: 0 };
 
-const pillars = [
-  {
-    icon: BookOpen,
-    title: "Nghiên cứu và phát triển văn hóa",
-    desc: "PSD Group theo đuổi sứ mệnh nghiên cứu và phát triển văn hóa Việt thông qua hệ thống nghiên cứu, dự án và nền tảng số. Hệ thống 236 đề tài nghiên cứu là nền tảng tri thức cho các dự án văn hóa – xã hội thực tế của tập đoàn.",
-  },
-  {
-    icon: Globe,
-    title: "Dự án Đình Làng",
-    desc: "Phục dựng và phát huy không gian đình làng — biểu tượng của văn hóa cộng đồng Việt. Dự án hướng tới khôi phục giá trị gắn kết cộng đồng và bảo tồn kiến trúc, tín ngưỡng truyền thống.",
-  },
-  {
-    icon: Leaf,
-    title: "Dự án Văn Minh Việt",
-    desc: "Số hóa và lan tỏa tri thức, di sản văn hóa Việt trên nền tảng công nghệ, đưa văn hóa truyền thống đến với cộng đồng rộng rãi, đặc biệt là thế hệ trẻ.",
-  },
-  {
-    icon: Users,
-    title: "Công tác phòng chống ma túy",
-    desc: "Viện Nghiên cứu và Ứng dụng Phòng chống ma túy PSD triển khai các chương trình nghiên cứu, tuyên truyền và hỗ trợ cai nghiện, góp phần xây dựng cộng đồng lành mạnh.",
-  },
-];
+type Project = {
+  id: string;
+  title: string;
+  label: string;
+  shortDesc: string | null;
+};
+
+const ICONS = ["📖", "🏛️", "💻", "🌿", "🤝", "❤️", "🎨", "🌏"];
 
 export default function SustainabilitySection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "0px" });
+  useInView(ref, { once: true, margin: "0px" });
+  const [pillars, setPillars] = useState<Project[]>([]);
+
+  useEffect(() => {
+    fetch("/api/phung-su")
+      .then(r => r.json())
+      .then(data => Array.isArray(data) ? setPillars(data.filter((p: Project & { isActive?: boolean }) => p.isActive !== false).slice(0, 4)) : null)
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="section-padding bg-white overflow-hidden" ref={ref}>
@@ -50,16 +43,10 @@ export default function SustainabilitySection() {
             <div className="relative rounded-2xl overflow-hidden aspect-square bg-[#f4f4f5]">
               <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: "url('/kinh-te-van-hoa.png')",
-                }}
+                style={{ backgroundImage: "url('/kinh-te-van-hoa.png')" }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-[#1a3a1a]/60 to-transparent" />
-
-              {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-              {/* Overlay content */}
               <div className="absolute inset-0 flex flex-col justify-end p-8">
                 <div className="w-8 h-[3px] bg-[#e82127] mb-4" />
                 <blockquote className="text-white font-bold italic leading-snug mb-3" style={{ fontSize: "clamp(20px, 1.8vw, 26px)", textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
@@ -71,8 +58,6 @@ export default function SustainabilitySection() {
                 </p>
               </div>
             </div>
-
-            {/* Accent */}
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#4caf50]/10 rounded-full blur-2xl" />
           </motion.div>
 
@@ -103,23 +88,22 @@ export default function SustainabilitySection() {
 
             {/* Pillars */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {pillars.map((pillar, i) => {
-                const Icon = pillar.icon;
-                return (
-                  <motion.div
-                    key={pillar.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }} viewport={VP}
-                    transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-                    className="flex gap-4 p-4 rounded-xl hover:bg-[#f4f4f5] transition-colors"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#4caf50]/10 flex items-center justify-center flex-shrink-0">
-                      <Icon size={20} className="text-[#4caf50]" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-[14px] text-[#1a1a1a] mb-1">
-                        {pillar.title}
-                      </h4>
+              {pillars.map((pillar, i) => (
+                <motion.div
+                  key={pillar.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }} viewport={VP}
+                  transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                  className="flex gap-4 p-4 rounded-xl hover:bg-[#f4f4f5] transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-[#4caf50]/10 flex items-center justify-center flex-shrink-0 text-xl">
+                    {ICONS[i] ?? "🌿"}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[14px] text-[#1a1a1a] mb-1">
+                      {pillar.title}
+                    </h4>
+                    {pillar.shortDesc && (
                       <p className="text-[13px] text-[#6e6e74] leading-snug"
                         style={{
                           display: "-webkit-box",
@@ -127,20 +111,34 @@ export default function SustainabilitySection() {
                           WebkitBoxOrient: "vertical" as const,
                           overflow: "hidden",
                         }}
-                      >{pillar.desc}</p>
-                      <button className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#e82127] mt-2 hover:underline">
-                        Xem thêm <ArrowRight size={12} />
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                      >{pillar.shortDesc}</p>
+                    )}
+                    <Link
+                      href={`/phung-su-xa-hoi/${pillar.id}`}
+                      className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#e82127] mt-2 hover:underline"
+                    >
+                      Xem thêm <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
             </div>
 
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }} viewport={VP}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Link
+                href="/phung-su-xa-hoi"
+                className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#e82127] hover:gap-3 transition-all duration-300 uppercase tracking-wider"
+              >
+                Xem tất cả dự án <ArrowRight size={14} />
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
     </section>
   );
 }
-
