@@ -108,7 +108,7 @@ export default function SustainabilitySection() {
             >
               <Link
                 href="/phung-su-xa-hoi"
-                className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#e82127] hover:gap-3 transition-all duration-300 uppercase tracking-wider"
+                className="inline-flex items-center gap-2 px-5 py-3 border-2 border-[#e82127] text-[#e82127] text-[13px] font-semibold rounded-full hover:bg-[#e82127] hover:text-white transition-colors duration-300"
               >
                 Xem tất cả dự án <ArrowRight size={14} />
               </Link>
