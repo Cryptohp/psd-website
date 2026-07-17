@@ -22,7 +22,7 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const SPEED = 0.2;
+const PX_PER_SEC = 40; // px per second (device-independent)
 
 export default function EcosystemSection() {
   const ref = useRef(null);
@@ -52,11 +52,14 @@ export default function EcosystemSection() {
     const el = scrollRef.current;
     if (!el || companies.length === 0) return;
 
-    const tick = () => {
-      if (!isPaused.current) {
-        el.scrollLeft += SPEED;
+    let lastTime = 0;
+    const tick = (time: number) => {
+      if (!isPaused.current && lastTime) {
+        const delta = Math.min(time - lastTime, 50);
+        el.scrollLeft += PX_PER_SEC * delta / 1000;
         if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
       }
+      lastTime = time;
       animRef.current = requestAnimationFrame(tick);
     };
 
