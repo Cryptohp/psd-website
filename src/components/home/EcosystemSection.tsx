@@ -22,7 +22,7 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const SPEED = 0.7;
+const SPEED = 0.4;
 
 export default function EcosystemSection() {
   const ref = useRef(null);
