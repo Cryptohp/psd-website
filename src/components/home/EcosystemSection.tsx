@@ -22,7 +22,7 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const PX_PER_SEC = 40; // px per second (device-independent)
+const PX_PER_SEC = 20; // px per second (device-independent)
 
 export default function EcosystemSection() {
   const ref = useRef(null);
