@@ -22,7 +22,7 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const SPEED = 0.4; // px/frame (same as SectorsSection logic)
+const SPEED = 0.7; // px/frame
 
 export default function EcosystemSection() {
   const ref = useRef(null);
@@ -166,8 +166,6 @@ export default function EcosystemSection() {
 
             <div
               ref={scrollRef}
-              onMouseEnter={() => { isPaused.current = true; }}
-              onMouseLeave={() => { isPaused.current = false; }}
               onTouchStart={(e) => {
                 isPaused.current = true;
                 touchStartX.current = e.touches[0].clientX;
