@@ -184,11 +184,8 @@ export default function EcosystemSection() {
                 style={{ width: "max-content", gap: GAP, paddingLeft: PANEL_W, paddingTop: 12, paddingBottom: 12 }}
               >
                 {looped.map((company, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }} viewport={VP}
-                    transition={{ duration: 0.5, delay: Math.min(i, 7) * 0.07 }}
                     style={{
                       width: CARD_W,
                       flexShrink: 0,
@@ -242,7 +239,7 @@ export default function EcosystemSection() {
                       </div>
 
                     </Link>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
