@@ -37,7 +37,6 @@ const sectors: Sector[] = [
       { name: "Công ty TNHH Đầu tư và Phát triển Bất động sản PSD", slug: "cong-ty-tnhh-dau-tu-va-phat-trien-bat-dong-san-psd-cmriy2-1" },
       { name: "Công ty CP Tập đoàn Đầu tư Golden Palace", slug: "cong-ty-cp-tap-doan-dau-tu-golden-palace-cmriy2-2" },
       { name: "Công ty CP Phát triển Hạ tầng và Giáo dục PSD", slug: "cong-ty-cp-phat-trien-ha-tang-va-giao-duc-psd-cmriy2-3" },
-      { name: "Công ty CP Đầu tư PSD Lai Châu", slug: "cong-ty-cp-dau-tu-psd-lai-chau-cmriy2-4" },
     ],
   },
   {
@@ -67,6 +66,7 @@ const sectors: Sector[] = [
     desc: "PSD Group phát triển lĩnh vực khoáng sản theo định hướng bền vững, tuân thủ pháp luật, cân bằng giữa giá trị kinh tế với bảo vệ môi trường, lợi ích cộng đồng địa phương và khu vực quốc tế tại Campuchia.",
     entities: [
       { name: "Công ty CP PSD STEEL", slug: "cong-ty-cp-psd-steel-cmriy2-1" },
+      { name: "Công ty CP Đầu tư PSD Lai Châu", slug: "cong-ty-cp-dau-tu-psd-lai-chau-cmriy2-4" },
       { name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long (Cốc Chặng)", slug: "cong-ty-cp-xay-dung-cau-duong-ha-tang-va-khoang-san-thang-lo-cmriy2-1" },
       { name: "Công ty CP Cao Lanh Như Xuân", slug: "cong-ty-cp-cao-lanh-nhu-xuan-cmriy2-2" },
       { name: "Công ty TNHH Khoáng sản PSG Bắc Việt", slug: "cong-ty-tnhh-khoang-san-psg-bac-viet-cmriy2-3" },
