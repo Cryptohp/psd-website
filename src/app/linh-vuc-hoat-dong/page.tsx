@@ -326,7 +326,7 @@ export default function SectorsPage() {
         {/* ── SECTOR TABS — Desktop horizontal ── */}
         <nav className="sectors-desktop-nav" style={{ background: "#f2f2f2", overflowX: "auto", scrollbarWidth: "none" as const }}>
           <div style={{ display: "flex", width: "100%" }}>
-            {sectors.map((sector) => (
+            {sectorList.map((sector) => (
               <button
                 key={sector.slug}
                 onClick={() => handleSectorChange(sector)}
