@@ -27,9 +27,9 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
   const images: string[] = Array.isArray(company.images) ? (company.images as string[]) : [];
 
   return (
-    <div className="pt-[72px]">
-      {/* Hero */}
-      <div className="relative bg-[#0f0f12] overflow-hidden" style={{ height: "clamp(320px, 55vw, 680px)" }}>
+    <div>
+      {/* Hero — full bleed, header floats on top */}
+      <div className="relative bg-[#0f0f12] overflow-hidden" style={{ height: "clamp(420px, 60vw, 720px)" }}>
         {company.logo && (
           <Image
             src={company.logo}
