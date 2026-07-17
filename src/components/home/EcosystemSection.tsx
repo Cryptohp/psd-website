@@ -1,80 +1,26 @@
 "use client";
 
-
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 const VP = { once: true, amount: 0 };
 
-const companies = [
-  {
-    name: "Công ty TNHH Đầu tư và Phát triển Bất động sản PSD",
-    desc: "Phát triển bất động sản, hạ tầng, nhà ở xã hội và khu đô thị chiến lược.",
-    tag: "Bất động sản",
-    href: "/linh-vuc-hoat-dong/bat-dong-san-ha-tang",
-    image: "/bds-hatang.png",
-  },
-  {
-    name: "Công ty TNHH Đầu tư và Thương mại Việt An Hà Nội (SOFAVI)",
-    desc: "Sản xuất sorbitol, tinh bột, cồn, dầu thực vật và năng lượng sinh khối.",
-    tag: "Công nghiệp",
-    href: "/linh-vuc-hoat-dong/san-xuat-cong-nghiep",
-    image: "/sofavi.png",
-  },
-  {
-    name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long",
-    desc: "Khai thác và chế biến khoáng sản theo định hướng bền vững.",
-    tag: "Khoáng sản",
-    href: "/linh-vuc-hoat-dong/khoang-san",
-    image: "/thanglong.jpg",
-  },
-  {
-    name: "Công ty CP Đầu tư Thương mại và Dịch vụ Tấn Sang Logistics",
-    desc: "Vận tải, kho bãi và chuỗi cung ứng kết nối toàn quốc.",
-    tag: "Logistics",
-    href: "/linh-vuc-hoat-dong/logistics-cang-bien",
-    image: "/tansang.png",
-  },
-  {
-    name: "Công ty CP Đầu tư và Phát triển Nông nghiệp PSD — Công ty CP Thủy sản PSD",
-    desc: "Nông nghiệp công nghệ cao, nuôi trồng và chế biến thủy sản bền vững.",
-    tag: "Nông nghiệp",
-    href: "/linh-vuc-hoat-dong/nong-nghiep-thuy-san",
-    image: "/nongnghiep-thuysan.png",
-  },
-  {
-    name: "Công ty CP Du lịch Long Việt — Công ty TNHH Tâm Linh Bách Việt",
-    desc: "Du lịch sinh thái gắn với di sản văn hóa Việt Nam và nghỉ dưỡng tâm linh.",
-    tag: "Du lịch",
-    href: "/linh-vuc-hoat-dong/du-lich-dich-vu-sinh-thai",
-    image: "/Longviet.jpg",
-  },
-  {
-    name: "Công ty TNHH Quản lý và Đầu tư PSD Holdings",
-    desc: "Đầu tư, M&A, thương mại xuất nhập khẩu và dịch vụ chuyên nghiệp.",
-    tag: "Đầu tư",
-    href: "/linh-vuc-hoat-dong/dau-tu-dich-vu",
-    image: "/dautu-dichvu.png",
-  },
-  {
-    name: "Viện Nghiên cứu và Ứng dụng Phòng chống ma túy PSD",
-    desc: "Nghiên cứu khoa học, hỗ trợ tái hòa nhập và lan tỏa giá trị nhân văn.",
-    tag: "Trách nhiệm XH",
-    href: "/linh-vuc-hoat-dong/trach-nhiem-xa-hoi",
-    image: "/VienPCMT.JPG",
-  },
-];
-
-const loopedCompanies = [...companies, ...companies];
+type Company = {
+  id: string;
+  name: string;
+  slug: string;
+  shortDesc: string | null;
+  logo: string | null;
+  sectorName: string;
+};
 
 const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
-const SET_WIDTH = companies.length * CARD_STEP;
 const PANEL_W = 260;
 const SPEED = 0.7;
 
@@ -85,21 +31,35 @@ export default function EcosystemSection() {
   const isPaused = useRef(false);
   const touchStartX = useRef(0);
   const touchScrollLeft = useRef(0);
+  const animRef = useRef<number>(0);
+
+  const [companies, setCompanies] = useState<Company[]>([]);
+
+  useEffect(() => {
+    fetch("/api/cong-ty?featured=true")
+      .then(r => r.json())
+      .then((data: Company[]) => {
+        if (Array.isArray(data)) setCompanies(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const looped = companies.length > 0 ? [...companies, ...companies] : [];
+  const SET_WIDTH = companies.length * CARD_STEP;
 
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
-    let animId: number;
+    if (!el || companies.length === 0) return;
 
     const tick = () => {
       if (!isPaused.current) {
         el.scrollLeft += SPEED;
         if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
       }
-      animId = requestAnimationFrame(tick);
+      animRef.current = requestAnimationFrame(tick);
     };
 
-    animId = requestAnimationFrame(tick);
+    animRef.current = requestAnimationFrame(tick);
 
     const handleTouchMove = (e: TouchEvent) => {
       const dx = touchStartX.current - e.touches[0].clientX;
@@ -108,10 +68,10 @@ export default function EcosystemSection() {
     el.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
-      cancelAnimationFrame(animId);
+      cancelAnimationFrame(animRef.current);
       el.removeEventListener("touchmove", handleTouchMove);
     };
-  }, []);
+  }, [companies, SET_WIDTH]);
 
   const pause = (ms = 1500) => {
     isPaused.current = true;
@@ -171,7 +131,7 @@ export default function EcosystemSection() {
               </div>
             </div>
             <Link
-              href="/du-an"
+              href="/linh-vuc-hoat-dong"
               className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[#e82127] font-semibold hover:gap-3 transition-all duration-300"
             >
               <span className="whitespace-nowrap">Xem tất cả</span>
@@ -219,7 +179,7 @@ export default function EcosystemSection() {
                 className="eco-scroll-inner flex items-stretch"
                 style={{ width: "max-content", gap: GAP, paddingLeft: PANEL_W, paddingTop: 12, paddingBottom: 12 }}
               >
-                {loopedCompanies.map((company, i) => (
+                {looped.map((company, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
@@ -232,20 +192,27 @@ export default function EcosystemSection() {
                     }}
                     className="eco-card group"
                   >
-                    <Link href={company.href} className="flex flex-col h-full relative overflow-hidden block">
+                    <Link href={`/linh-vuc-hoat-dong/${company.slug}`} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full relative overflow-hidden block">
 
                       {/* Red top accent */}
                       <div className="h-[3px] bg-[#e82127] w-full relative z-10" />
 
                       {/* Image */}
                       <div className="relative h-[200px] overflow-hidden bg-[#f0f0f0] flex-shrink-0">
-                        <Image
-                          src={company.image}
-                          alt={company.name}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                          sizes="305px"
-                        />
+                        {company.logo ? (
+                          <Image
+                            src={company.logo}
+                            alt={company.name}
+                            fill
+                            unoptimized
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            sizes="305px"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-[48px] font-bold text-[#e82127] opacity-15">{company.name.charAt(0)}</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Content */}
@@ -256,7 +223,7 @@ export default function EcosystemSection() {
                         <div className="absolute inset-0 bg-[#e82127] -translate-y-full group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500 ease-in-out z-0" />
 
                         <span className="inline-block self-start px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-[#e82127] text-[#e82127] group-hover:border-white group-hover:text-white group-active:border-white group-active:text-white mb-3 relative z-10 transition-colors duration-300">
-                          {company.tag}
+                          {company.sectorName}
                         </span>
 
                         <h3
@@ -266,7 +233,7 @@ export default function EcosystemSection() {
                           {company.name}
                         </h3>
                         <p className="text-[13px] text-[#666] group-hover:text-white/90 group-active:text-white/90 leading-relaxed flex-1 relative z-10 transition-colors duration-300">
-                          {company.desc}
+                          {company.shortDesc ?? ""}
                         </p>
                       </div>
 
@@ -282,4 +249,3 @@ export default function EcosystemSection() {
     </section>
   );
 }
-

@@ -5,8 +5,13 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sectorId = searchParams.get("sectorId");
 
+  const featured = searchParams.get("featured");
+
   const companies = await prisma.company.findMany({
-    where: { ...(sectorId ? { sectorId } : {}) },
+    where: {
+      ...(sectorId ? { sectorId } : {}),
+      ...(featured === "true" ? { isFeatured: true, isActive: true } : {}),
+    },
     include: { sector: true },
     orderBy: [{ order: "asc" }, { createdAt: "asc" }],
   });
@@ -20,6 +25,7 @@ export async function GET(req: NextRequest) {
     website: c.website,
     order: c.order,
     isActive: c.isActive,
+    isFeatured: c.isFeatured,
     sectorId: c.sectorId,
     sectorName: c.sector?.name ?? "",
     createdAt: c.createdAt,
