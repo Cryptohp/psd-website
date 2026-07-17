@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
@@ -149,9 +150,17 @@ const sectors: Sector[] = [
 ];
 
 
-/* ─── Component ──────────────────────────────────────── */
-export default function SectorsPage() {
-  const [active, setActive] = useState<Sector>(sectors[0]);
+/* ─── Inner component (needs useSearchParams inside Suspense) ── */
+function SectorsPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const getInitialSector = () => {
+    const tab = searchParams.get("tab");
+    return sectors.find(s => s.slug === tab) ?? sectors[0];
+  };
+
+  const [active, setActive] = useState<Sector>(getInitialSector);
   const [sectorList, setSectorList] = useState<Sector[]>(sectors);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -196,6 +205,7 @@ export default function SectorsPage() {
   const handleSectorChange = (sector: Sector) => {
     setActive(sector);
     setMobileMenuOpen(false);
+    router.replace(`/linh-vuc-hoat-dong?tab=${sector.slug}`, { scroll: false });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -462,6 +472,8 @@ export default function SectorsPage() {
                         {entity.slug ? (
                           <Link
                             href={`/linh-vuc-hoat-dong/${entity.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             style={{
                               display: "inline-flex", alignItems: "center", gap: 8,
                               fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
@@ -490,5 +502,14 @@ export default function SectorsPage() {
 
       </div>
     </div>
+  );
+}
+
+/* ─── Component ──────────────────────────────────────── */
+export default function SectorsPage() {
+  return (
+    <Suspense fallback={null}>
+      <SectorsPageInner />
+    </Suspense>
   );
 }
