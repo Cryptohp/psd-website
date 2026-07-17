@@ -126,9 +126,7 @@ function MilestoneItem({ m, i }: { m: typeof milestones[0]; i: number }) {
           <h3 style={{
             fontSize: "clamp(16px, 1.6vw, 20px)", fontWeight: 700,
             color: hovered ? "#fff" : "#1a1a1a",
-            textTransform: "uppercase" as const,
-            letterSpacing: "0.03em", lineHeight: 1.2, margin: 0, marginBottom: 14,
-            overflow: "hidden", textOverflow: "ellipsis",
+            lineHeight: 1.3, margin: 0, marginBottom: 14,
             transition: "color 0.3s",
           }}>
             {m.title}
