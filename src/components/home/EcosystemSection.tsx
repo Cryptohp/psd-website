@@ -44,7 +44,8 @@ export default function EcosystemSection() {
       .catch(() => {});
   }, []);
 
-  const looped = companies.length > 0 ? [...companies, ...companies] : [];
+  const REPEAT = companies.length > 0 ? Math.max(6, Math.ceil(12 / companies.length)) : 0;
+  const looped = companies.length > 0 ? Array.from({ length: REPEAT }, () => companies).flat() : [];
   const SET_WIDTH = companies.length * CARD_STEP;
 
   useEffect(() => {
