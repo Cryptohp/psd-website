@@ -33,8 +33,9 @@ export default function ProjectsPage() {
       fetch("/api/du-an").then(r => r.json()),
     ]).then(([sectorData, projectData]: [Sector[], Project[]]) => {
       if (Array.isArray(sectorData)) {
-        setSectors(sectorData);
-        if (sectorData.length > 0) setActiveSector(sectorData[0].name);
+        const filtered = sectorData.filter(s => s.name !== "Trách nhiệm xã hội");
+        setSectors(filtered);
+        if (filtered.length > 0) setActiveSector(filtered[0].name);
       }
       if (Array.isArray(projectData)) setProjects(projectData);
     }).catch(() => {});
