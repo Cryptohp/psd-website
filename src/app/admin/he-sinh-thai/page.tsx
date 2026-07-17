@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Plus, Pencil, Trash2, Loader2, Eye, EyeOff,
-  ChevronRight, Building2, Layers,
+  ChevronRight, Building2, Layers, Star,
 } from "lucide-react";
 
 type Company = {
@@ -14,6 +14,7 @@ type Company = {
   logo: string | null;
   order: number;
   isActive: boolean;
+  isFeatured: boolean;
   sectorId: string | null;
   sectorName: string;
 };
@@ -33,6 +34,7 @@ export default function HeSinhThaiPage() {
   const [activeSectorId, setActiveSectorId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [featuringId, setFeaturingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/sectors")
@@ -61,6 +63,22 @@ export default function HeSinhThaiPage() {
       })));
     }
     setTogglingId(null);
+  }
+
+  async function toggleFeatured(id: string, current: boolean) {
+    setFeaturingId(id);
+    const res = await fetch(`/api/cong-ty/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isFeatured: !current }),
+    });
+    if (res.ok) {
+      setSectors(prev => prev.map(s => ({
+        ...s,
+        companies: s.companies.map(c => c.id === id ? { ...c, isFeatured: !current } : c),
+      })));
+    }
+    setFeaturingId(null);
   }
 
   async function deleteCompany(id: string) {
@@ -200,6 +218,7 @@ export default function HeSinhThaiPage() {
                         <th className="text-left px-5 py-3 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Tên công ty</th>
                         <th className="text-left px-5 py-3 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Website</th>
                         <th className="text-left px-5 py-3 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Hiển thị</th>
+                        <th className="text-left px-5 py-3 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide">Nổi bật</th>
                         <th className="px-5 py-3 text-xs font-semibold text-[#6e6e74] uppercase tracking-wide text-right">Hành động</th>
                       </tr>
                     </thead>
@@ -237,6 +256,23 @@ export default function HeSinhThaiPage() {
                                 : c.isActive ? <Eye size={11} /> : <EyeOff size={11} />
                               }
                               {c.isActive ? "Hiện" : "Ẩn"}
+                            </button>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <button
+                              onClick={() => toggleFeatured(c.id, c.isFeatured)}
+                              disabled={featuringId === c.id}
+                              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors disabled:opacity-50 ${
+                                c.isFeatured
+                                  ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+                                  : "bg-gray-100 text-gray-400 hover:bg-gray-200"
+                              }`}
+                            >
+                              {featuringId === c.id
+                                ? <Loader2 size={11} className="animate-spin" />
+                                : <Star size={11} className={c.isFeatured ? "fill-yellow-500" : ""} />
+                              }
+                              {c.isFeatured ? "Nổi bật" : "Thường"}
                             </button>
                           </td>
                           <td className="px-5 py-3.5">
