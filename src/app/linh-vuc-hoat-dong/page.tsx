@@ -50,7 +50,6 @@ const sectors: Sector[] = [
     desc: "Mảng sản xuất là nơi PSD Group tạo ra giá trị thực, hữu hình - trải rộng từ chế biến thực phẩm - công nghiệp (sorbitol, tinh bột, cồn), năng lượng sinh khối (dăm gỗ, viên nén) đến thép và dầu thực vật.",
     entities: [
       { name: "Công ty TNHH Sản xuất và Đầu tư Thương mại Tiên Phong", slug: "cong-ty-tnhh-san-xuat-va-dau-tu-thuong-mai-tien-phong-cmriy2-2" },
-      { name: "Công ty TNHH DPC Group Việt Nam", slug: "cong-ty-tnhh-dpc-group-viet-nam-cmriy2-3" },
       { name: "Công ty TNHH Công thương Nam Anh", slug: "cong-ty-tnhh-cong-thuong-nam-anh-cmriy2-4" },
       { name: "Công ty TNHH Đầu tư và Thương mại Việt An Hà Nội (SOFAVI)", slug: "cong-ty-tnhh-dau-tu-va-thuong-mai-viet-an-ha-noi-cong-ty-co--cmriy2-5" },
     ],
