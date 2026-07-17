@@ -50,7 +50,6 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Mảng sản xuất là nơi PSD Group tạo ra giá trị thực, hữu hình - trải rộng từ chế biến thực phẩm - công nghiệp (sorbitol, tinh bột, cồn), năng lượng sinh khối (dăm gỗ, viên nén) đến thép và dầu thực vật.",
     entities: [
-      { name: "Công ty CP PSD STEEL", slug: "cong-ty-cp-psd-steel-cmriy2-1" },
       { name: "Công ty TNHH Sản xuất và Đầu tư Thương mại Tiên Phong", slug: "cong-ty-tnhh-san-xuat-va-dau-tu-thuong-mai-tien-phong-cmriy2-2" },
       { name: "Công ty TNHH DPC Group Việt Nam", slug: "cong-ty-tnhh-dpc-group-viet-nam-cmriy2-3" },
       { name: "Công ty TNHH Công thương Nam Anh", slug: "cong-ty-tnhh-cong-thuong-nam-anh-cmriy2-4" },
@@ -67,6 +66,7 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "PSD Group phát triển lĩnh vực khoáng sản theo định hướng bền vững, tuân thủ pháp luật, cân bằng giữa giá trị kinh tế với bảo vệ môi trường, lợi ích cộng đồng địa phương và khu vực quốc tế tại Campuchia.",
     entities: [
+      { name: "Công ty CP PSD STEEL", slug: "cong-ty-cp-psd-steel-cmriy2-1" },
       { name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long (Cốc Chặng)", slug: "cong-ty-cp-xay-dung-cau-duong-ha-tang-va-khoang-san-thang-lo-cmriy2-1" },
       { name: "Công ty CP Cao Lanh Như Xuân", slug: "cong-ty-cp-cao-lanh-nhu-xuan-cmriy2-2" },
       { name: "Công ty TNHH Khoáng sản PSG Bắc Việt", slug: "cong-ty-tnhh-khoang-san-psg-bac-viet-cmriy2-3" },
