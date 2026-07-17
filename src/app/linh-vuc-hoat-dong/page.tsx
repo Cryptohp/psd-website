@@ -103,20 +103,6 @@ const sectors: Sector[] = [
     ],
   },
   {
-    slug: "du-lich-dich-vu-sinh-thai",
-    label: "Du lịch & Sinh thái",
-    tabLabel: "Du lịch",
-    heroImage: "/linh-vuc-du-lich.png",
-    detailImage: "/02-linh-vuc-hoat-dong-du-lich-sinh-thai.png",
-    heroText: "explore: vietnam",
-    year: "2026",
-    desc: "PSD Group phát triển du lịch gắn với di sản và văn hóa Việt, cùng các mô hình nghỉ dưỡng và không gian sinh thái bền vững.",
-    entities: [
-      { name: "Công ty CP Du lịch Long Việt", slug: "cong-ty-cp-du-lich-long-viet-cmrmwm-1" },
-      { name: "Công ty TNHH Tâm Linh Bách Việt", slug: "cong-ty-tnhh-tam-linh-bach-viet-cmrmwm-2" },
-    ],
-  },
-  {
     slug: "dau-tu-dich-vu",
     label: "Đầu tư & Dịch vụ",
     tabLabel: "Đầu tư",

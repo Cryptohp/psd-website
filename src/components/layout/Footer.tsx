@@ -13,8 +13,7 @@ const footerLinks = {
     { label: "Bất động sản & Hạ tầng", href: "/linh-vuc-hoat-dong/bat-dong-san-ha-tang" },
     { label: "Sản xuất & Công nghiệp", href: "/linh-vuc-hoat-dong/san-xuat-cong-nghiep" },
     { label: "Logistics & Cảng biển", href: "/linh-vuc-hoat-dong/logistics-cang-bien" },
-    { label: "Du lịch & Sinh thái", href: "/linh-vuc-hoat-dong/du-lich-dich-vu-sinh-thai" },
-    { label: "Phát triển bền vững", href: "/phung-su-xa-hoi" },
+{ label: "Phát triển bền vững", href: "/phung-su-xa-hoi" },
   ],
   "Khám phá": [
     { label: "Lĩnh vực hoạt động", href: "/linh-vuc-hoat-dong" },
