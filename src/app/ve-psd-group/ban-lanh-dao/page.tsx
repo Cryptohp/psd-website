@@ -49,7 +49,7 @@ const boardMembers = [
     role: "Thành viên HĐQT",
     name: "Ông Nguyễn Văn Dũng",
     image: "/Ban-lanh-dao/nguyen-van-dung.jpg",
-    edu: ["Tiểu sử đang được cập nhật"],
+    edu: ["Nhiều năm kinh nghiệm trong lĩnh vực đầu tư và quản trị doanh nghiệp với tầm nhìn chiến lược và tinh thần đổi mới."],
   },
 ];
 
