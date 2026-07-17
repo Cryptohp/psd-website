@@ -102,6 +102,17 @@ const sectors: Sector[] = [
     ],
   },
   {
+    slug: "du-lich-dich-vu-sinh-thai",
+    label: "Du lịch & Sinh thái",
+    tabLabel: "Du lịch",
+    heroImage: "/linh-vuc-du-lich.png",
+    detailImage: "/02-linh-vuc-hoat-dong-du-lich-sinh-thai.png",
+    heroText: "explore: vietnam",
+    year: "2026",
+    desc: "PSD Group phát triển du lịch gắn với di sản và văn hóa Việt, cùng các mô hình nghỉ dưỡng và không gian sinh thái bền vững.",
+    entities: [],
+  },
+  {
     slug: "dau-tu-dich-vu",
     label: "Đầu tư & Dịch vụ",
     tabLabel: "Đầu tư",
