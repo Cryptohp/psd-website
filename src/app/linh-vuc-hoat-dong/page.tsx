@@ -33,10 +33,10 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Phát triển bất động sản và hạ tầng gắn với giá trị dài hạn, tiếp cận như một tài sản chiến lược tạo nền tảng cho cộng đồng và hệ sinh thái.",
     entities: [
-      { name: "Công ty TNHH Đầu tư và Phát triển Bất động sản PSD", url: "psdgroup.vn", logo: "RE", desc: "" },
-      { name: "Công ty CP Tập đoàn Đầu tư Golden Palace", url: "psdgroup.vn", logo: "GP", desc: "" },
-      { name: "Công ty CP Phát triển Hạ tầng và Giáo dục PSD", url: "psdgroup.vn", logo: "HG", desc: "" },
-      { name: "Công ty CP Đầu tư PSD Lai Châu", url: "psdgroup.vn", logo: "LC", desc: "" },
+      { name: "Công ty TNHH Đầu tư và Phát triển Bất động sản PSD", slug: "cong-ty-tnhh-dau-tu-va-phat-trien-bat-dong-san-psd-cmriy2-1" },
+      { name: "Công ty CP Tập đoàn Đầu tư Golden Palace", slug: "cong-ty-cp-tap-doan-dau-tu-golden-palace-cmriy2-2" },
+      { name: "Công ty CP Phát triển Hạ tầng và Giáo dục PSD", slug: "cong-ty-cp-phat-trien-ha-tang-va-giao-duc-psd-cmriy2-3" },
+      { name: "Công ty CP Đầu tư PSD Lai Châu", slug: "cong-ty-cp-dau-tu-psd-lai-chau-cmriy2-4" },
     ],
   },
   {
@@ -49,11 +49,11 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Mảng sản xuất là nơi PSD Group tạo ra giá trị thực, hữu hình - trải rộng từ chế biến thực phẩm - công nghiệp (sorbitol, tinh bột, cồn), năng lượng sinh khối (dăm gỗ, viên nén) đến thép và dầu thực vật.",
     entities: [
-      { name: "Công ty CP PSD STEEL", url: "psdgroup.vn", logo: "ST", desc: "" },
-      { name: "Công ty TNHH Sản xuất và Đầu tư Thương mại Tiên Phong", url: "psdgroup.vn", logo: "TP", desc: "" },
-      { name: "Công ty TNHH DPC Group Việt Nam", url: "psdgroup.vn", logo: "DC", desc: "" },
-      { name: "Công ty TNHH Công thương Nam Anh", url: "psdgroup.vn", logo: "NA", desc: "" },
-      { name: "Công ty TNHH Đầu tư và Thương mại Việt An Hà Nội (Công ty cổ phần Sorbitol Pháp - Việt)", url: "psdgroup.vn", logo: "VA", desc: "" },
+      { name: "Công ty CP PSD STEEL", slug: "cong-ty-cp-psd-steel-cmriy2-1" },
+      { name: "Công ty TNHH Sản xuất và Đầu tư Thương mại Tiên Phong", slug: "cong-ty-tnhh-san-xuat-va-dau-tu-thuong-mai-tien-phong-cmriy2-2" },
+      { name: "Công ty TNHH DPC Group Việt Nam", slug: "cong-ty-tnhh-dpc-group-viet-nam-cmriy2-3" },
+      { name: "Công ty TNHH Công thương Nam Anh", slug: "cong-ty-tnhh-cong-thuong-nam-anh-cmriy2-4" },
+      { name: "Công ty TNHH Đầu tư và Thương mại Việt An Hà Nội (SOFAVI)", slug: "cong-ty-tnhh-dau-tu-va-thuong-mai-viet-an-ha-noi-cong-ty-co--cmriy2-5" },
     ],
   },
   {
@@ -66,12 +66,12 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "PSD Group phát triển lĩnh vực khoáng sản theo định hướng bền vững, tuân thủ pháp luật, cân bằng giữa giá trị kinh tế với bảo vệ môi trường, lợi ích cộng đồng địa phương và khu vực quốc tế tại Campuchia.",
     entities: [
-      { name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long (Cốc Chặng)" },
-      { name: "Công ty CP Cao Lanh Như Xuân" },
-      { name: "Công ty TNHH Khoáng sản PSG Bắc Việt" },
-      { name: "Công ty CP Đầu tư Xây dựng và Khoáng sản PSD" },
-      { name: "Công ty TNHH Việt Thanh – Stone" },
-      { name: "Công ty TNHH Đầu tư PHGC Angkor" },
+      { name: "Công ty CP Xây dựng cầu đường hạ tầng và khoáng sản Thăng Long (Cốc Chặng)", slug: "cong-ty-cp-xay-dung-cau-duong-ha-tang-va-khoang-san-thang-lo-cmriy2-1" },
+      { name: "Công ty CP Cao Lanh Như Xuân", slug: "cong-ty-cp-cao-lanh-nhu-xuan-cmriy2-2" },
+      { name: "Công ty TNHH Khoáng sản PSG Bắc Việt", slug: "cong-ty-tnhh-khoang-san-psg-bac-viet-cmriy2-3" },
+      { name: "Công ty CP Đầu tư Xây dựng và Khoáng sản PSD", slug: "cong-ty-cp-dau-tu-xay-dung-va-khoang-san-psd-cmriy2-4" },
+      { name: "Công ty TNHH Việt Thanh – Stone", slug: "cong-ty-tnhh-viet-thanh-stone-cmriy2-5" },
+      { name: "Công ty TNHH Đầu tư PHGC Angkor", slug: "cong-ty-tnhh-dau-tu-phgc-angkor-cmriy2-6" },
     ],
   },
   {
@@ -84,7 +84,7 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Logistics là mạch máu kết nối toàn hệ sinh thái, mở rộng tới hạ tầng cảng biển và trung tâm logistics quy mô lớn.",
     entities: [
-      { name: "Công ty CP Đầu tư Thương mại và Dịch vụ Tấn Sang Logistics" },
+      { name: "Công ty CP Đầu tư Thương mại và Dịch vụ Tấn Sang Logistics", slug: "cong-ty-cp-dau-tu-thuong-mai-va-dich-vu-tan-sang-logistics-cmriy2-1" },
     ],
   },
   {
@@ -97,8 +97,8 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Trụ cột gắn với an ninh lương thực và phát triển nông nghiệp – thủy sản bền vững, khép kín từ nuôi trồng đến chế biến.",
     entities: [
-      { name: "Công ty CP Đầu tư và Phát triển Nông nghiệp PSD" },
-      { name: "Công ty CP Thủy sản PSD" },
+      { name: "Công ty CP Đầu tư và Phát triển Nông nghiệp PSD", slug: "cong-ty-cp-dau-tu-va-phat-trien-nong-nghiep-psd-cmriy2-1" },
+      { name: "Công ty CP Thủy sản PSD", slug: "cong-ty-cp-thuy-san-psd-cmriy2-2" },
     ],
   },
   {
@@ -111,8 +111,8 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "PSD Group phát triển du lịch gắn với di sản và văn hóa Việt, cùng các mô hình nghỉ dưỡng và không gian sinh thái bền vững.",
     entities: [
-      { name: "Công ty CP Du lịch Long Việt" },
-      { name: "Công ty TNHH Tâm Linh Bách Việt" },
+      { name: "Công ty CP Du lịch Long Việt", slug: "cong-ty-cp-du-lich-long-viet-cmrmwm-1" },
+      { name: "Công ty TNHH Tâm Linh Bách Việt", slug: "cong-ty-tnhh-tam-linh-bach-viet-cmrmwm-2" },
     ],
   },
   {
@@ -125,12 +125,12 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Đầu tư - M&A, thương mại - xuất nhập khẩu và các dịch vụ chuyên nghiệp hỗ trợ toàn hệ sinh thái. Đây cũng là nơi PSD Group thực hiện năng lực mua bán – sáp nhập, tìm kiếm và tái cấu trúc những doanh nghiệp có nền tảng tốt (như SOFAVI) để đưa vào quỹ đạo phát triển chung.",
     entities: [
-      { name: "Công ty TNHH Quản lý và Đầu tư PSD Holdings" },
-      { name: "Công ty CP Đầu tư Thương mại và Xuất nhập khẩu PSD" },
-      { name: "Công ty TNHH XNK Homey" },
-      { name: "Công ty TNHH Đầu tư và Thương mại Thanh Thái" },
-      { name: "Công ty Luật TNHH PSD" },
-      { name: "Công ty TNHH Dịch vụ và Thiết bị Ostech Việt Nam" },
+      { name: "Công ty TNHH Quản lý và Đầu tư PSD Holdings", slug: "cong-ty-tnhh-quan-ly-va-dau-tu-psd-holdings-cmriy2-1" },
+      { name: "Công ty CP Đầu tư Thương mại và Xuất nhập khẩu PSD", slug: "cong-ty-cp-dau-tu-thuong-mai-va-xuat-nhap-khau-psd-cmriy2-2" },
+      { name: "Công ty TNHH XNK Homey", slug: "cong-ty-tnhh-xnk-homey-cmriy2-3" },
+      { name: "Công ty TNHH Đầu tư và Thương mại Thanh Thái", slug: "cong-ty-tnhh-dau-tu-va-thuong-mai-thanh-thai-cmriy2-4" },
+      { name: "Công ty Luật TNHH PSD", slug: "cong-ty-luat-tnhh-psd-cmriy2-5" },
+      { name: "Công ty TNHH Dịch vụ và Thiết bị Ostech Việt Nam", slug: "cong-ty-tnhh-dich-vu-va-thiet-bi-ostech-viet-nam-cmriy2-6" },
     ],
   },
   {
@@ -143,7 +143,7 @@ const sectors: Sector[] = [
     year: "2026",
     desc: "Viện Nghiên cứu và Ứng dụng Phòng chống ma túy PSD (Viện PSD) hiện thân cho trách nhiệm cộng đồng. Viện hoạt động theo định hướng nghiên cứu khoa học và ứng dụng thực tiễn nhằm phòng, chống ma túy, hỗ trợ người sau cai nghiện tái hòa nhập cộng đồng và lan tỏa những giá trị nhân văn tới xã hội.",
     entities: [
-      { name: "Viện Nghiên cứu và Ứng dụng Phòng chống ma túy PSD (Viện PSD)" },
+      { name: "Viện Nghiên cứu và Ứng dụng Phòng chống ma túy PSD (Viện PSD)", slug: "vien-nghien-cuu-va-ung-dung-phong-chong-ma-tuy-psd-vien-psd-cmriy2-1" },
     ],
   },
 ];
@@ -160,14 +160,12 @@ export default function SectorsPage() {
     fetch("/api/cong-ty")
       .then(r => r.json())
       .then((dbCompanies: Array<{ id: string; name: string; slug: string; logo: string | null; shortDesc: string | null }>) => {
+        const bySlug = Object.fromEntries(dbCompanies.map(c => [c.slug, c]));
         setSectorList(prev => prev.map(s => ({
           ...s,
           entities: s.entities.map(e => {
-            const match = dbCompanies.find(c =>
-              c.name.toLowerCase().includes(e.name.toLowerCase().slice(0, 20)) ||
-              e.name.toLowerCase().includes(c.name.toLowerCase().slice(0, 20))
-            );
-            return match ? { ...e, id: match.id, slug: match.slug, coverImage: match.logo ?? undefined, shortDesc: match.shortDesc ?? undefined } : e;
+            const match = e.slug ? bySlug[e.slug] : undefined;
+            return match ? { ...e, id: match.id, coverImage: match.logo ?? undefined, shortDesc: match.shortDesc ?? undefined } : e;
           }),
         })));
       })
