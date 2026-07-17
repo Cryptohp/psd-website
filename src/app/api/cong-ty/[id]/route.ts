@@ -22,6 +22,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         ...(body.website !== undefined ? { website: body.website } : {}),
         ...(body.order !== undefined ? { order: Number(body.order) } : {}),
         ...(body.isActive !== undefined ? { isActive: body.isActive } : {}),
+        ...(body.isFeatured !== undefined ? { isFeatured: body.isFeatured } : {}),
         ...(body.seoTitle !== undefined ? { seoTitle: body.seoTitle } : {}),
         ...(body.seoDesc !== undefined ? { seoDesc: body.seoDesc } : {}),
         ...(body.images !== undefined ? { images: body.images } : {}),
