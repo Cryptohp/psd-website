@@ -142,7 +142,7 @@ function CompanyCard({ company }: { company: Company }) {
         )}
         <div className="mt-4 pt-4 border-t border-[#f4f4f5]">
           <Link
-            href={`/he-sinh-thai/${company.slug}`}
+            href={`/linh-vuc-hoat-dong/${company.slug}`}
             className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#e82127] hover:gap-2.5 transition-all duration-200"
           >
             Xem chi tiết

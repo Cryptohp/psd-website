@@ -17,7 +17,7 @@ const footerLinks = {
     { label: "Phát triển bền vững", href: "/phung-su-xa-hoi" },
   ],
   "Khám phá": [
-    { label: "Hệ sinh thái", href: "/he-sinh-thai" },
+    { label: "Lĩnh vực hoạt động", href: "/linh-vuc-hoat-dong" },
     { label: "Dự án tiêu biểu", href: "/du-an" },
     { label: "Tin tức", href: "/tin-tuc" },
     { label: "Tuyển dụng", href: "/tuyen-dung" },

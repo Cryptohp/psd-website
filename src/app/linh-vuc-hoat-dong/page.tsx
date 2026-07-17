@@ -463,7 +463,7 @@ export default function SectorsPage() {
                       <div style={{ marginTop: "auto", borderTop: "1px solid #f0f0f0", paddingTop: 14 }}>
                         {entity.slug ? (
                           <Link
-                            href={`/he-sinh-thai/${entity.slug}`}
+                            href={`/linh-vuc-hoat-dong/${entity.slug}`}
                             style={{
                               display: "inline-flex", alignItems: "center", gap: 8,
                               fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
