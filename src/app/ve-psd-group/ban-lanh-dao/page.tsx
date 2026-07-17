@@ -113,22 +113,31 @@ const executives = [
   {
     role: "Phó Tổng Giám đốc",
     name: "Ông Nguyễn Văn Hưởng",
-    image: "",
-    edu: ["Tiểu sử đang được cập nhật"],
+    image: "/nguyen-van-huong.png",
+    edu: [
+      "Cử nhân kinh tế, kiểm toán – Thạc sỹ kinh tế – Đại học Quốc gia Hà Nội",
+      "Kinh nghiệm 20 năm về tài chính, doanh nghiệp và đầu tư xây dựng",
+    ],
     scope: "Ban Phát triển và XD Dự Án; Dự án Yên Mỹ; Dự án Đông Phú; Dự án 03 Cụm Công nghiệp DPI",
   },
   {
     role: "Phó Tổng Giám đốc",
     name: "Ông Khương Trung Thủy",
-    image: "",
-    edu: ["Tiểu sử đang được cập nhật"],
+    image: "/khuong-trung-thuy.png",
+    edu: [
+      "Tiến sĩ chuyên ngành Hóa học và Hóa lý Vật liệu – Đại học Montpellier 2, Cộng hòa Pháp",
+      "Hơn 25 năm kinh nghiệm trong ngành hóa chất, từ nghiên cứu khoa học đến quản lý điều hành tại nhiều doanh nghiệp và tập đoàn hàng đầu trong lĩnh vực hóa chất, năng lượng và đầu tư",
+    ],
     scope: "Phụ trách kỹ thuật sản xuất các nhà máy Sofavi, tinh bột sắn, cồn",
   },
   {
     role: "Phó Tổng Giám đốc",
     name: "Ông Cao Đức Anh",
-    image: "",
-    edu: ["Tiểu sử đang được cập nhật"],
+    image: "/cao-duc-anh.jpg",
+    edu: [
+      "Cử nhân Kinh tế – Ngành Ngân hàng – Tài chính – Đại học Kinh tế Quốc dân; Thạc sĩ Quản trị Kinh doanh (MBA) – Học viện Ngân hàng",
+      "Hơn 18 năm kinh nghiệm trong lĩnh vực tài chính – ngân hàng và quản trị doanh nghiệp; am hiểu quản trị tài chính, quản trị rủi ro, tín dụng, ngân sách, dòng tiền và chiến lược phát triển doanh nghiệp",
+    ],
     scope: "Ban Tài chính; Ban Kế toán; Văn phòng Tập đoàn; Ban M&A; Ban Pháp chế",
   },
 ];
