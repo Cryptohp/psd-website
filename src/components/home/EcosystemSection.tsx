@@ -192,7 +192,7 @@ export default function EcosystemSection() {
                     }}
                     className="eco-card group"
                   >
-                    <Link href={`/linh-vuc-hoat-dong/${company.slug}`} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full relative overflow-hidden block">
+                    <Link href={`/linh-vuc-hoat-dong/${company.slug}`} className="flex flex-col h-full relative overflow-hidden block">
 
                       {/* Red top accent */}
                       <div className="h-[3px] bg-[#e82127] w-full relative z-10" />
