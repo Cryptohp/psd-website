@@ -28,6 +28,7 @@ export default function EcosystemSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px" });
   const scrollRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const isPaused = useRef(false);
   const touchStartX = useRef(0);
   const touchScrollLeft = useRef(0);
@@ -52,12 +53,16 @@ export default function EcosystemSection() {
     const el = scrollRef.current;
     if (!el || companies.length === 0) return;
 
+    const inner = innerRef.current;
+    const padLeft = inner ? parseFloat(getComputedStyle(inner).paddingLeft) || 0 : 0;
+    el.scrollLeft = padLeft;
+
     let lastTime = 0;
     const tick = (time: number) => {
       if (!isPaused.current && lastTime) {
         const delta = Math.min(time - lastTime, 50);
         el.scrollLeft += PX_PER_SEC * delta / 1000;
-        if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
+        if (el.scrollLeft >= padLeft + SET_WIDTH) el.scrollLeft = padLeft;
       }
       lastTime = time;
       animRef.current = requestAnimationFrame(tick);
@@ -180,6 +185,7 @@ export default function EcosystemSection() {
               style={{ overflowX: "scroll", overflowY: "hidden", scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" as never, touchAction: "pan-x" }}
             >
               <div
+                ref={innerRef}
                 className="eco-scroll-inner flex items-stretch"
                 style={{ width: "max-content", gap: GAP, paddingLeft: PANEL_W, paddingTop: 12, paddingBottom: 12 }}
               >
