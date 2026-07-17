@@ -29,30 +29,30 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
   return (
     <div className="pt-[72px]">
       {/* Hero */}
-      <div className="relative h-[400px] lg:h-[500px] bg-[#0f0f12] overflow-hidden">
+      <div className="relative bg-[#0f0f12] overflow-hidden" style={{ height: "clamp(320px, 55vw, 680px)" }}>
         {company.logo && (
           <Image
             src={company.logo}
             alt={company.name}
             fill
             unoptimized
-            style={{ objectFit: "cover", opacity: 0.45 }}
+            style={{ objectFit: "cover", opacity: 1 }}
             priority
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-[#0f0f12]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0">
           <div className="container-psd pb-10">
             <div className="flex flex-wrap items-center gap-3 mb-4">
               {company.sector && (
-                <span className="flex items-center gap-1 text-[13px] text-white/60">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-[13px] text-white/90">
                   <Tag size={12} />{company.sector.name}
                 </span>
               )}
             </div>
-            <h1 className="text-[28px] lg:text-[40px] font-bold text-white leading-snug">{company.name}</h1>
+            <h1 className="text-[28px] lg:text-[44px] font-bold text-white leading-snug drop-shadow-lg">{company.name}</h1>
             {company.shortDesc && (
-              <p className="mt-3 text-[15px] text-white/70 max-w-2xl leading-relaxed">{company.shortDesc}</p>
+              <p className="mt-3 text-[15px] text-white/80 max-w-2xl leading-relaxed drop-shadow">{company.shortDesc}</p>
             )}
           </div>
         </div>
