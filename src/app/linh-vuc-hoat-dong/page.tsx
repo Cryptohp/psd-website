@@ -150,19 +150,35 @@ function SectorsPageInner() {
   const [sectorList, setSectorList] = useState<Sector[]>(sectors);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Fetch company data from DB and merge into sectors
+  // Fetch all companies + sectors from DB and build entities dynamically
   useEffect(() => {
-    fetch("/api/cong-ty")
-      .then(r => r.json())
-      .then((dbCompanies: Array<{ id: string; name: string; slug: string; logo: string | null; shortDesc: string | null }>) => {
-        const bySlug = Object.fromEntries(dbCompanies.map(c => [c.slug, c]));
-        setSectorList(prev => prev.map(s => ({
-          ...s,
-          entities: s.entities.map(e => {
-            const match = e.slug ? bySlug[e.slug] : undefined;
-            return match ? { ...e, id: match.id, coverImage: match.logo ?? undefined, shortDesc: match.shortDesc ?? undefined } : e;
-          }),
-        })));
+    Promise.all([
+      fetch("/api/cong-ty").then(r => r.json()),
+      fetch("/api/sectors").then(r => r.json()),
+    ])
+      .then(([dbCompanies, dbSectors]: [
+        Array<{ id: string; name: string; slug: string; logo: string | null; shortDesc: string | null; sectorId: string; order: number; isActive: boolean }>,
+        Array<{ id: string; slug: string }>
+      ]) => {
+        const sectorIdBySlug = Object.fromEntries(dbSectors.map(s => [s.slug, s.id]));
+        const activeCompanies = dbCompanies.filter(c => c.isActive);
+        setSectorList(prev => prev.map(s => {
+          const dbSectorId = sectorIdBySlug[s.slug];
+          if (!dbSectorId) return s;
+          const sectorCompanies = activeCompanies
+            .filter(c => c.sectorId === dbSectorId)
+            .sort((a, b) => a.order - b.order);
+          return {
+            ...s,
+            entities: sectorCompanies.map(c => ({
+              name: c.name,
+              slug: c.slug,
+              id: c.id,
+              coverImage: c.logo ?? undefined,
+              shortDesc: c.shortDesc ?? undefined,
+            })),
+          };
+        }));
       })
       .catch(() => {});
   }, []);
