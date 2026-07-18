@@ -23,8 +23,8 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const SPEED_DESKTOP = 42; // px/s
-const SPEED_MOBILE = 10;  // px/s
+const SPEED_DESKTOP = 0.7; // px/frame (matches SectorsSection)
+const SPEED_MOBILE = 0.3;  // px/frame (matches SectorsSection mobile)
 
 export default function EcosystemSection({ initialCompanies }: { initialCompanies: Company[] }) {
   const ref = useRef(null);
@@ -47,14 +47,11 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
 
     const speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
     let animId: number;
-    let lastTime: number | null = null;
-    const tick = (time: number) => {
-      if (lastTime !== null && !isPaused.current) {
-        const dt = Math.min(time - lastTime, 50);
-        el.scrollLeft += speed * dt / 1000;
+    const tick = () => {
+      if (!isPaused.current) {
+        el.scrollLeft += speed;
         if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
       }
-      lastTime = time;
       animId = requestAnimationFrame(tick);
     };
 
