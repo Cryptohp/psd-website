@@ -14,28 +14,28 @@ const coreValues = [
     label: "Tập đoàn đa ngành",
     quote: "Tập đoàn đa ngành vững mạnh",
     body: "Quy mô bền vững, năng lực toàn diện và tầm nhìn dài hạn. PSD Group xây dựng nội lực từ chiều sâu quản trị đến sức mạnh tài chính, đủ sức kiến tạo và triển khai những dự án có tầm vóc.",
-    img: "/vepsd-tap-doan-da-nganh.png",
+    img: "/vepsd-tap-doan-da-nganh.webp",
   },
   {
     key: "2",
     label: "Văn hóa Việt",
     quote: "Gìn giữ bản sắc, lan tỏa giá trị Việt",
     body: "Chúng tôi xem văn hóa là gốc rễ của mọi sự phát triển bền vững, và đặt giá trị truyền thống làm nền tảng cho mọi quyết định chiến lược.",
-    img: "/vepsd-van-hoa-viet.png",
+    img: "/vepsd-van-hoa-viet.webp",
   },
   {
     key: "3",
     label: "Phụng sự quốc gia",
     quote: "Đồng hành cùng cộng đồng và sự phát triển đất nước",
     body: "PSD Group cam kết chuyển hóa thành quả kinh tế thành những giá trị thực chất cho xã hội, đồng hành cùng các mục tiêu phát triển bền vững của đất nước.",
-    img: "/vepsd-phung-su-quoc-gia.png",
+    img: "/vepsd-phung-su-quoc-gia.webp",
   },
   {
     key: "4",
     label: "Đầu tư đa lĩnh vực",
     quote: "Phát triển cộng hưởng, tạo sức bật cho toàn hệ sinh thái",
     body: "Phát triển các lĩnh vực kinh tế chiến lược một cách cộng hưởng, tạo nguồn lực dài hạn và sức bật cho toàn hệ sinh thái PSD Group.",
-    img: "/vepsd-dau-tu-da-linh-vuc.png",
+    img: "/vepsd-dau-tu-da-linh-vuc.webp",
   },
 ];
 
@@ -211,7 +211,7 @@ export default function VisionPage() {
 
       <div className="vin-page-hero relative w-full" style={{ height: "520px", background: "#111" }}>
         <Image
-          src="/hero-vepsd-tam-nhin-su-menh.png"
+          src="/hero-vepsd-tam-nhin-su-menh.webp"
           alt="Tầm nhìn & Sứ mệnh PSD Group"
           fill className="object-cover opacity-60" priority unoptimized
         />
@@ -242,7 +242,7 @@ export default function VisionPage() {
         <div className="mission-grid" style={{ display: "grid", gridTemplateColumns: "55% 1fr", background: "#fff" }}>
           <div style={{ position: "relative", minHeight: 480 }}>
             <Image
-              src="/vepsd-tam-nhin-su-menh.png"
+              src="/vepsd-tam-nhin-su-menh.webp"
               alt="Sứ mệnh PSD Group"
               fill className="object-cover" unoptimized
             />

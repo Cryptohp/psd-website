@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center mb-6">
-              <img src="/logo-horizontal.png" alt="PSD Group" style={{ height: 42, width: "auto", objectFit: "contain" }} />
+              <img src="/logo-horizontal.webp" alt="PSD Group" style={{ height: 42, width: "auto", objectFit: "contain" }} />
             </Link>
 
             <p className="text-[14px] text-[#6e6e74] leading-relaxed mb-6 w-full lg:max-w-[300px]">

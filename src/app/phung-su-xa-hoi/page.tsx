@@ -35,7 +35,7 @@ export default async function PhungSuPage() {
       <div style={{ position: "relative", overflow: "hidden", background: "#0d0d10", paddingLeft: SIDE_PAD, paddingRight: SIDE_PAD, paddingTop: "clamp(56px, 6vw, 96px)", paddingBottom: "clamp(56px, 6vw, 96px)" }}>
 
         <Image
-          src="/van-hoa-le-hoi.png"
+          src="/van-hoa-le-hoi.webp"
           alt=""
           fill
           priority
@@ -80,7 +80,7 @@ export default async function PhungSuPage() {
           <div className="ptbv-drum">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/trong-dong.png"
+              src="/trong-dong.webp"
               alt="Trống đồng Việt Nam"
               className="ptbv-drum-inner"
               style={{ animation: "slow-spin 30s linear infinite", objectFit: "contain", filter: "drop-shadow(0 0 40px rgba(232,33,39,0.35))" }}

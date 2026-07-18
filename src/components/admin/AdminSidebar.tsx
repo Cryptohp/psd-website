@@ -40,7 +40,7 @@ export default function AdminSidebar() {
     <aside className="w-60 bg-[#111114] flex flex-col flex-shrink-0 min-h-screen">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-        <Image src="/logo-psd.png" alt="PSD Group" width={100} height={40} style={{ objectFit: "contain" }} unoptimized />
+        <Image src="/logo-psd.webp" alt="PSD Group" width={100} height={40} style={{ objectFit: "contain" }} unoptimized />
       </div>
 
       {/* Nav */}

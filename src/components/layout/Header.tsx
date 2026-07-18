@@ -99,8 +99,8 @@ export default function Header() {
 
           {/* Logo center */}
           <Link href="/" onClick={close} style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center" }}>
-            <img src="/logo-full.jpg" alt="PSD Group" className="md:hidden" style={{ height: 57, width: "auto", objectFit: "contain", mixBlendMode: "multiply" }} />
-            <img src="/logo-horizontal.png" alt="PSD Group" className="hidden md:block" style={{ height: 42, width: "auto", objectFit: "contain" }} />
+            <img src="/logo-full.webp" alt="PSD Group" className="md:hidden" style={{ height: 57, width: "auto", objectFit: "contain", mixBlendMode: "multiply" }} />
+            <img src="/logo-horizontal.webp" alt="PSD Group" className="hidden md:block" style={{ height: 42, width: "auto", objectFit: "contain" }} />
           </Link>
 
           {/* Right: search + lang */}
@@ -159,7 +159,7 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" onClick={close} style={{ marginBottom: "clamp(16px, 3vh, 36px)", display: "inline-block" }}>
                   <img
-                    src="/logo-horizontal.png"
+                    src="/logo-horizontal.webp"
                     alt="PSD Group"
                     style={{ height: "clamp(18px, 3.5vh, 40px)", width: "auto", maxWidth: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }}
                   />

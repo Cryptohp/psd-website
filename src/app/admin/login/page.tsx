@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
-            <Image src="/logo-psd.png" alt="PSD Group" width={120} height={60} style={{ objectFit: "contain" }} unoptimized />
+            <Image src="/logo-psd.webp" alt="PSD Group" width={120} height={60} style={{ objectFit: "contain" }} unoptimized />
           </div>
           <h1 className="text-2xl font-bold text-[#111114]">PSD Admin</h1>
           <p className="text-[#6e6e74] text-sm mt-1">Quản trị nội dung website</p>

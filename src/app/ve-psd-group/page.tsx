@@ -31,12 +31,12 @@ const infoCards = [
 ];
 
 const partners = [
-  { img: "/partner-bidv.png", name: "BIDV", sub: "Ngân hàng", scale: 1 },
-  { img: "/partner-shb.png", name: "SHB", sub: "Ngân hàng", scale: 1 },
-  { img: "/partner-vina2.png", name: "Vina2", sub: "Xây dựng & Hạ tầng", scale: 1 },
-  { img: "/partner-stavian.png", name: "Stavian Group", sub: "Hóa chất", scale: 1 },
-  { img: "/partner-vinachem.png", name: "Vinachem", sub: "Tập đoàn Hóa chất VN", scale: 1.5 },
-  { img: "/partner-mst.png", name: "MST", sub: "Đối tác chiến lược", scale: 1 },
+  { img: "/partner-bidv.webp", name: "BIDV", sub: "Ngân hàng", scale: 1 },
+  { img: "/partner-shb.webp", name: "SHB", sub: "Ngân hàng", scale: 1 },
+  { img: "/partner-vina2.webp", name: "Vina2", sub: "Xây dựng & Hạ tầng", scale: 1 },
+  { img: "/partner-stavian.webp", name: "Stavian Group", sub: "Hóa chất", scale: 1 },
+  { img: "/partner-vinachem.webp", name: "Vinachem", sub: "Tập đoàn Hóa chất VN", scale: 1.5 },
+  { img: "/partner-mst.webp", name: "MST", sub: "Đối tác chiến lược", scale: 1 },
 ];
 
 const SIDE_PAD = "max(24px, calc((100vw - 1300px) / 2 + 60px))";
@@ -123,7 +123,7 @@ export default function AboutPage() {
       {/* Hero image — full bleed */}
       <div className="relative w-full">
         <Image
-          src="/hero-ve-psd.png"
+          src="/hero-ve-psd.webp"
           alt="PSD Group — Kiến tạo thịnh vượng"
           width={1920}
           height={1080}
@@ -132,7 +132,7 @@ export default function AboutPage() {
           unoptimized
         />
         <Image
-          src="/mobile-hero-ve-psd.png"
+          src="/mobile-hero-ve-psd.webp"
           alt="PSD Group — Kiến tạo thịnh vượng"
           width={800}
           height={1000}

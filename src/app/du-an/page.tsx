@@ -11,14 +11,14 @@ type Project = { id: string; title: string; slug: string; thumbnail: string | nu
 type Sector = { id: string; name: string; slug: string };
 
 const SECTOR_HERO: Record<string, string> = {
-  "Bất động sản & Hạ tầng": "/linh-vuc-bat-dong-san.png",
-  "Sản xuất & Công nghiệp": "/linh-vuc-san-xuat-cong-nghiep.png",
-  "Khoáng sản": "/linh-vuc-khoang-san.png",
-  "Logistics & Cảng biển": "/linh-vuc-logistics.png",
-  "Nông nghiệp & Thủy sản": "/linh-vuc-nong-nghiep.png",
-  "Du lịch & Nghỉ dưỡng": "/linh-vuc-du-lich.png",
-  "Đầu tư & Dịch vụ": "/linh-vuc-dau-tu-dich-vu.png",
-  "Trách nhiệm xã hội": "/linh-vuc-trach-nhiem-xa-hoi.png",
+  "Bất động sản & Hạ tầng": "/linh-vuc-bat-dong-san.webp",
+  "Sản xuất & Công nghiệp": "/linh-vuc-san-xuat-cong-nghiep.webp",
+  "Khoáng sản": "/linh-vuc-khoang-san.webp",
+  "Logistics & Cảng biển": "/linh-vuc-logistics.webp",
+  "Nông nghiệp & Thủy sản": "/linh-vuc-nong-nghiep.webp",
+  "Du lịch & Nghỉ dưỡng": "/linh-vuc-du-lich.webp",
+  "Đầu tư & Dịch vụ": "/linh-vuc-dau-tu-dich-vu.webp",
+  "Trách nhiệm xã hội": "/linh-vuc-trach-nhiem-xa-hoi.webp",
 };
 
 export default function ProjectsPage() {
@@ -42,7 +42,7 @@ export default function ProjectsPage() {
   }, []);
 
   const filtered = activeSector ? projects.filter(p => p.sector === activeSector) : projects;
-  const heroImage = SECTOR_HERO[activeSector] ?? "/linh-vuc-bat-dong-san.png";
+  const heroImage = SECTOR_HERO[activeSector] ?? "/linh-vuc-bat-dong-san.webp";
 
   return (
     <div className="relative min-h-screen bg-white">

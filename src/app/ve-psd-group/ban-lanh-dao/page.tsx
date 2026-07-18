@@ -413,9 +413,9 @@ export default function LeadersPage() {
       {/* Hero */}
       <div style={{ paddingTop: 68, position: "relative" }}>
         {/* Mobile hero */}
-        <img src="/mobile-hero-ban-lanh-dao.png" alt="Ban lãnh đạo PSD Group" className="w-full h-auto block md:hidden" style={{ objectFit: "cover", width: "100%" }} />
+        <img src="/mobile-hero-ban-lanh-dao.webp" alt="Ban lãnh đạo PSD Group" className="w-full h-auto block md:hidden" style={{ objectFit: "cover", width: "100%" }} />
         {/* Desktop hero */}
-        <img src="/hero-ban-lanh-dao.png" alt="Ban lãnh đạo PSD Group" className="w-full h-auto hidden md:block" style={{ maxHeight: 520, objectFit: "cover", width: "100%" }} />
+        <img src="/hero-ban-lanh-dao.webp" alt="Ban lãnh đạo PSD Group" className="w-full h-auto hidden md:block" style={{ maxHeight: 520, objectFit: "cover", width: "100%" }} />
         <div style={{
           position: "absolute", inset: 0,
           background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.1) 100%)",

@@ -222,7 +222,7 @@ export default function TimelinePage() {
       {/* Hero */}
       <div className="vin-page-hero relative w-full" style={{ height: "520px", background: "#111" }}>
         <Image
-          src="/hero-hanh-trinh-phat-trien.png"
+          src="/hero-hanh-trinh-phat-trien.webp"
           alt="Hành trình phát triển PSD Group"
           fill className="object-cover opacity-50" priority unoptimized
         />

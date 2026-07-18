@@ -13,11 +13,11 @@ export default function IntroSection() {
 
       {/* Decorative background — trống đồng desktop: far left */}
       <div className="hidden md:block absolute top-1/2 -translate-y-1/2 w-[950px] h-[950px] opacity-[0.3] pointer-events-none select-none" style={{ left: -120 }}>
-        <img src="/trong-dong-gold.png" alt="" className="w-full h-full object-contain" />
+        <img src="/trong-dong-gold.webp" alt="" className="w-full h-full object-contain" />
       </div>
       {/* Decorative background — trống đồng mobile: behind top content */}
       <div className="md:hidden absolute top-[60px] left-1/2 -translate-x-1/2 w-[475px] h-[475px] opacity-[0.25] pointer-events-none select-none">
-        <img src="/trong-dong-gold.png" alt="" className="w-full h-full object-contain" />
+        <img src="/trong-dong-gold.webp" alt="" className="w-full h-full object-contain" />
       </div>
 
       <div className="container-psd relative z-10">
@@ -123,7 +123,7 @@ export default function IntroSection() {
               {/* Bản đồ */}
               <div className="relative z-10">
                 <img
-                  src="/ban-do-vn-muc-tieu-qg.png"
+                  src="/ban-do-vn-muc-tieu-qg.webp"
                   alt="Bản đồ Việt Nam"
                   className="h-auto"
                   style={{ width: "clamp(240px, 64vw, 480px)" }}

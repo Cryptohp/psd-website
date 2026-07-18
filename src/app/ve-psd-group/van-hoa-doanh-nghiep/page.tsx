@@ -233,7 +233,7 @@ export default function CorporateCulturePage() {
             style={{ position: "relative" as const, minHeight: 520 }}
           >
             <Image
-              src="/van-hoa-doanh-nghiep-moi-truong-lam-viec.png"
+              src="/van-hoa-doanh-nghiep-moi-truong-lam-viec.webp"
               alt="Môi trường làm việc PSD Group"
               fill className="object-cover" unoptimized
             />
