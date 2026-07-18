@@ -212,8 +212,6 @@ export default function SectorsSection() {
             {/* Scroll container */}
             <div
               ref={scrollRef}
-              onMouseEnter={() => { isPaused.current = true; }}
-              onMouseLeave={() => { isPaused.current = false; }}
               onTouchStart={(e) => {
                 isPaused.current = true;
                 touchStartX.current = e.touches[0].clientX;
