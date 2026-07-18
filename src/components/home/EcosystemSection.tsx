@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 
 const VP = { once: true, amount: 0 };
@@ -19,13 +19,14 @@ type Company = {
 };
 
 const CARD_W = 305;
+
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
 const SPEED_DESKTOP = 42; // px/s
 const SPEED_MOBILE = 10;  // px/s
 
-export default function EcosystemSection() {
+export default function EcosystemSection({ initialCompanies }: { initialCompanies: Company[] }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "0px" });
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -34,16 +35,7 @@ export default function EcosystemSection() {
   const touchScrollLeft = useRef(0);
   const animRef = useRef<number>(0);
 
-  const [companies, setCompanies] = useState<Company[]>([]);
-
-  useEffect(() => {
-    fetch("/api/cong-ty?featured=true")
-      .then(r => r.json())
-      .then((data: Company[]) => {
-        if (Array.isArray(data)) setCompanies(data);
-      })
-      .catch(() => {});
-  }, []);
+  const companies = initialCompanies;
 
   const REPEAT = companies.length > 0 ? Math.max(6, Math.ceil(12 / companies.length)) : 0;
   const looped = companies.length > 0 ? Array.from({ length: REPEAT }, () => companies).flat() : [];
