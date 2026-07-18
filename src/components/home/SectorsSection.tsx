@@ -70,7 +70,7 @@ const CARD_STEP = CARD_W + GAP;
 const SET_WIDTH = sectors.length * CARD_STEP; // chiều rộng 1 set gốc
 const PANEL_W = 260;
 const SPEED_DESKTOP = 40; // px/s
-const SPEED_MOBILE = 8;   // px/s
+const SPEED_MOBILE = 5;   // px/s
 
 export default function SectorsSection() {
   const ref = useRef(null);
@@ -86,7 +86,10 @@ export default function SectorsSection() {
     if (!el) return;
     let animId: number;
 
-    const speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
+    let speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
+    const onResize = () => { speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP; };
+    window.addEventListener("resize", onResize);
+
     let lastTime: number | null = null;
     const tick = (time: number) => {
       if (lastTime !== null && !isPaused.current) {
@@ -110,6 +113,7 @@ export default function SectorsSection() {
     return () => {
       cancelAnimationFrame(animId);
       el.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 

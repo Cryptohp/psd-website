@@ -23,7 +23,7 @@ const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
 const SPEED_DESKTOP = 40; // px/s
-const SPEED_MOBILE = 8;   // px/s
+const SPEED_MOBILE = 5;   // px/s
 
 export default function EcosystemSection({ initialCompanies }: { initialCompanies: Company[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,11 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
     const el = scrollRef.current;
     if (!el || companies.length === 0) return;
 
-    const speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
+    const mq = window.matchMedia("(max-width: 767px)");
+    let speed = mq.matches ? SPEED_MOBILE : SPEED_DESKTOP;
+    const onResize = () => { speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP; };
+    window.addEventListener("resize", onResize);
+
     let animId: number;
     let lastTime: number | null = null;
     const tick = (time: number) => {
@@ -65,6 +69,7 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
     return () => {
       cancelAnimationFrame(animId);
       el.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
