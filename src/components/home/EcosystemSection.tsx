@@ -23,7 +23,7 @@ const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
 const SPEED_DESKTOP = 42; // px/s
-const SPEED_MOBILE = 20;  // px/s
+const SPEED_MOBILE = 10;  // px/s
 
 export default function EcosystemSection() {
   const ref = useRef(null);
