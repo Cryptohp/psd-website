@@ -22,8 +22,8 @@ const CARD_W = 305;
 const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const PANEL_W = 260;
-const SPEED_DESKTOP = 0.7;
-const SPEED_MOBILE = 0.3;
+const SPEED_DESKTOP = 42; // px/s
+const SPEED_MOBILE = 20;  // px/s
 
 export default function EcosystemSection() {
   const ref = useRef(null);
@@ -55,11 +55,14 @@ export default function EcosystemSection() {
 
     const speed = window.innerWidth < 768 ? SPEED_MOBILE : SPEED_DESKTOP;
     let animId: number;
-    const tick = () => {
-      if (!isPaused.current) {
-        el.scrollLeft += speed;
+    let lastTime: number | null = null;
+    const tick = (time: number) => {
+      if (lastTime !== null && !isPaused.current) {
+        const dt = Math.min(time - lastTime, 50);
+        el.scrollLeft += speed * dt / 1000;
         if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
       }
+      lastTime = time;
       animId = requestAnimationFrame(tick);
     };
 
