@@ -182,7 +182,7 @@ export default function Header() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: "auto" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                     <Phone size={10} color="rgba(255,255,255,0.55)" style={{ flexShrink: 0 }} />
-                    <span style={{ fontSize: "clamp(8px, 1.8vw, 11px)", color: "rgba(255,255,255,0.75)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>09782 741 534</span>
+                    <span style={{ fontSize: "clamp(8px, 1.8vw, 11px)", color: "rgba(255,255,255,0.75)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>0782 741 534</span>
                   </div>
                   <div className="hidden md:flex" style={{ alignItems: "flex-start", gap: 7 }}>
                     <Mail size={11} color="rgba(255,255,255,0.55)" style={{ marginTop: 1, flexShrink: 0 }} />

@@ -74,7 +74,7 @@ export default function CtaSection() {
               className="flex items-center gap-2 hover:text-white transition-colors text-[14px]"
             >
               <Phone size={16} />
-              09782 741 534
+              0782 741 534
             </a>
             <span className="w-1 h-1 rounded-full bg-white/30" />
             <a
