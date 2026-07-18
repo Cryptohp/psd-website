@@ -69,8 +69,8 @@ const GAP = 10;
 const CARD_STEP = CARD_W + GAP;
 const SET_WIDTH = sectors.length * CARD_STEP; // chiều rộng 1 set gốc
 const PANEL_W = 260;
-const SPEED_DESKTOP = 0.7; // px/frame
-const SPEED_MOBILE = 0.3;  // px/frame
+const SPEED_DESKTOP = 40; // px/s
+const SPEED_MOBILE = 8;   // px/s
 
 export default function SectorsSection() {
   const ref = useRef(null);
@@ -87,12 +87,15 @@ export default function SectorsSection() {
     let animId: number;
 
     const speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
-    const tick = () => {
-      if (!isPaused.current) {
-        el.scrollLeft += speed;
+    let lastTime: number | null = null;
+    const tick = (time: number) => {
+      if (lastTime !== null && !isPaused.current) {
+        const dt = Math.min(time - lastTime, 50);
+        el.scrollLeft += speed * dt / 1000;
         if (el.scrollLeft >= SET_WIDTH) el.scrollLeft -= SET_WIDTH;
         setScrolled(el.scrollLeft > 10);
       }
+      lastTime = time;
       animId = requestAnimationFrame(tick);
     };
 
