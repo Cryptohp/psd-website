@@ -45,7 +45,7 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
     const el = scrollRef.current;
     if (!el || companies.length === 0) return;
 
-    const speed = window.innerWidth < 768 ? SPEED_MOBILE : SPEED_DESKTOP;
+    const speed = window.matchMedia("(max-width: 767px)").matches ? SPEED_MOBILE : SPEED_DESKTOP;
     let animId: number;
     let lastTime: number | null = null;
     const tick = (time: number) => {
