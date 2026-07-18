@@ -33,7 +33,6 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
   const isPaused = useRef(false);
   const touchStartX = useRef(0);
   const touchScrollLeft = useRef(0);
-  const animRef = useRef<number>(0);
 
   const companies = initialCompanies;
 
