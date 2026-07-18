@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 import { useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 
@@ -27,8 +26,6 @@ const SPEED_DESKTOP = 0.7; // px/frame (matches SectorsSection)
 const SPEED_MOBILE = 0.3;  // px/frame (matches SectorsSection mobile)
 
 export default function EcosystemSection({ initialCompanies }: { initialCompanies: Company[] }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "0px" });
   const scrollRef = useRef<HTMLDivElement>(null);
   const isPaused = useRef(false);
   const touchStartX = useRef(0);
@@ -66,7 +63,7 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
       cancelAnimationFrame(animId);
       el.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [companies, SET_WIDTH]);
+  }, []);
 
   const pause = (ms = 1500) => {
     isPaused.current = true;
@@ -84,7 +81,7 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
   }, []);
 
   return (
-    <section className="bg-[#f8f8f8] py-[30px]" ref={ref}>
+    <section className="bg-[#f8f8f8] py-[30px]">
       <style>{`
         @media (max-width: 767px) {
           .eco-layout { flex-direction: column !important; }
