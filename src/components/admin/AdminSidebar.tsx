@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Network,
   HeartHandshake,
+  CalendarDays,
 } from "lucide-react";
 
 const nav = [
@@ -25,6 +26,7 @@ const nav = [
   { href: "/admin/he-sinh-thai", label: "Hệ sinh thái", icon: Network },
   { href: "/admin/phung-su", label: "Phụng sự xã hội", icon: HeartHandshake },
   { href: "/admin/lanh-dao", label: "Ban lãnh đạo", icon: Users },
+  { href: "/admin/su-kien", label: "Sự kiện & Thư mời", icon: CalendarDays },
   { href: "/admin/lien-he", label: "Liên hệ & Leads", icon: MessageSquare },
   { href: "/admin/cai-dat", label: "Cài đặt", icon: Settings },
 ];
