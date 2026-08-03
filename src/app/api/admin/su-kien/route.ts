@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { name, slug, eventCode, description, startTime, checkInTime, rsvpDeadline,
     locationName, locationAddress, mapUrl, dressCode, hotline,
-    coverImage, mobileCoverImage, status } = body;
+    coverImage, mobileCoverImage, status, settings } = body;
 
   if (!name || !slug || !eventCode || !startTime) {
     return NextResponse.json({ error: "Thiếu thông tin bắt buộc" }, { status: 400 });
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       locationName, locationAddress, mapUrl, dressCode, hotline,
       coverImage, mobileCoverImage,
       status: status ?? "DRAFT",
+      settings: settings ?? null,
     },
   });
   return NextResponse.json(event, { status: 201 });

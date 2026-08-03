@@ -3,7 +3,137 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, GripVertical } from "lucide-react";
+
+type Question = {
+  id: string;
+  text: string;
+  type: "single" | "multiple";
+  required: boolean;
+  showFor: "ALL" | "ATTENDING" | "DECLINED";
+  options: string[];
+};
+
+function QuestionEditor({ questions, onChange }: { questions: Question[]; onChange: (qs: Question[]) => void }) {
+  function addQuestion() {
+    onChange([...questions, {
+      id: Date.now().toString(),
+      text: "",
+      type: "single",
+      required: true,
+      showFor: "ALL",
+      options: ["", ""],
+    }]);
+  }
+
+  function updateQ(id: string, patch: Partial<Question>) {
+    onChange(questions.map(q => q.id === id ? { ...q, ...patch } : q));
+  }
+
+  function removeQ(id: string) {
+    onChange(questions.filter(q => q.id !== id));
+  }
+
+  function addOption(qId: string) {
+    updateQ(qId, { options: [...(questions.find(q => q.id === qId)?.options ?? []), ""] });
+  }
+
+  function updateOption(qId: string, idx: number, val: string) {
+    const q = questions.find(q => q.id === qId);
+    if (!q) return;
+    const opts = [...q.options];
+    opts[idx] = val;
+    updateQ(qId, { options: opts });
+  }
+
+  function removeOption(qId: string, idx: number) {
+    const q = questions.find(q => q.id === qId);
+    if (!q || q.options.length <= 2) return;
+    updateQ(qId, { options: q.options.filter((_, i) => i !== idx) });
+  }
+
+  const cls = "border border-[#ddd] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#e82127] transition-colors";
+
+  return (
+    <div className="space-y-4">
+      {questions.map((q, qi) => (
+        <div key={q.id} className="bg-[#fafafa] border border-[#eee] rounded-xl p-4 space-y-3">
+          <div className="flex items-start gap-2">
+            <GripVertical size={16} className="text-[#ccc] mt-2.5 flex-shrink-0" />
+            <div className="flex-1 space-y-3">
+              {/* Question text */}
+              <input
+                value={q.text}
+                onChange={e => updateQ(q.id, { text: e.target.value })}
+                placeholder={`Câu hỏi ${qi + 1}`}
+                className={cls + " w-full font-medium"}
+              />
+
+              {/* Settings row */}
+              <div className="flex flex-wrap gap-2">
+                <select value={q.type} onChange={e => updateQ(q.id, { type: e.target.value as "single" | "multiple" })}
+                  className={cls + " text-xs"}>
+                  <option value="single">Chọn 1 đáp án</option>
+                  <option value="multiple">Chọn nhiều đáp án</option>
+                </select>
+                <select value={q.showFor} onChange={e => updateQ(q.id, { showFor: e.target.value as Question["showFor"] })}
+                  className={cls + " text-xs"}>
+                  <option value="ALL">Tất cả khách</option>
+                  <option value="ATTENDING">Chỉ khách tham dự</option>
+                  <option value="DECLINED">Chỉ khách từ chối</option>
+                </select>
+                <label className="flex items-center gap-1.5 text-xs text-[#555] cursor-pointer select-none">
+                  <input type="checkbox" checked={q.required}
+                    onChange={e => updateQ(q.id, { required: e.target.checked })}
+                    className="rounded" />
+                  Bắt buộc
+                </label>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-2">
+                {q.options.map((opt, oi) => (
+                  <div key={oi} className="flex gap-2 items-center">
+                    <span className="text-[#ccc] text-xs w-4 flex-shrink-0">{oi + 1}.</span>
+                    <input
+                      value={opt}
+                      onChange={e => updateOption(q.id, oi, e.target.value)}
+                      placeholder={`Lựa chọn ${oi + 1}`}
+                      className={cls + " flex-1"}
+                    />
+                    <button type="button" onClick={() => removeOption(q.id, oi)}
+                      className="text-[#ccc] hover:text-red-400 transition-colors flex-shrink-0"
+                      title="Xóa lựa chọn"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => addOption(q.id)}
+                  className="flex items-center gap-1 text-xs text-[#e82127] hover:text-[#c91c21] font-medium mt-1"
+                >
+                  <Plus size={13} /> Thêm lựa chọn
+                </button>
+              </div>
+            </div>
+            <button type="button" onClick={() => removeQ(q.id)}
+              className="text-[#ccc] hover:text-red-400 transition-colors flex-shrink-0 mt-1"
+              title="Xóa câu hỏi"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <button type="button" onClick={addQuestion}
+        className="flex items-center gap-2 text-sm font-medium text-[#e82127] hover:text-[#c91c21] border-2 border-dashed border-[#e82127]/30 hover:border-[#e82127]/60 rounded-xl px-4 py-3 w-full justify-center transition-colors"
+      >
+        <Plus size={16} /> Thêm câu hỏi
+      </button>
+    </div>
+  );
+}
 
 export default function CreateEventPage() {
   const router = useRouter();
@@ -27,6 +157,7 @@ export default function CreateEventPage() {
     status: "DRAFT",
   });
 
+  const [questions, setQuestions] = useState<Question[]>([]);
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
   async function submit(e: React.FormEvent) {
@@ -37,7 +168,10 @@ export default function CreateEventPage() {
       const res = await fetch("/api/admin/su-kien", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          settings: questions.length > 0 ? { questions } : null,
+        }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error ?? "Lỗi tạo sự kiện"); return; }
@@ -89,6 +223,11 @@ export default function CreateEventPage() {
           </div>
           <Field label="Ảnh bìa desktop (URL)" value={form.coverImage} onChange={v => set("coverImage", v)} />
           <Field label="Ảnh bìa mobile (URL)" value={form.mobileCoverImage} onChange={v => set("mobileCoverImage", v)} />
+        </Section>
+
+        <Section title="Câu hỏi thu thập phản hồi">
+          <p className="text-xs text-[#888] -mt-2">Khách mời sẽ trả lời các câu hỏi này khi xác nhận tham dự.</p>
+          <QuestionEditor questions={questions} onChange={setQuestions} />
         </Section>
 
         <Section title="Trạng thái">

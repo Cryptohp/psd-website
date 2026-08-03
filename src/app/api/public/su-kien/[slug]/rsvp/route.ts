@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const body = await req.json();
-  const { guestToken, fullName, phone, attendanceStatus, companionCount, attendParty, specialRequest, note } = body;
+  const { guestToken, fullName, phone, attendanceStatus, companionCount, attendParty, specialRequest, note, answers } = body;
 
   if (!guestToken || !attendanceStatus) {
     return NextResponse.json({ error: "Thiếu thông tin bắt buộc" }, { status: 400 });
@@ -33,6 +33,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       attendParty: attendParty ?? false,
       specialRequest: specialRequest ?? null,
       note: note ?? null,
+      answers: answers ?? null,
       ipAddress: ip,
     },
     update: {
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       attendParty: attendParty ?? false,
       specialRequest: specialRequest ?? null,
       note: note ?? null,
+      answers: answers ?? null,
       confirmedAt: new Date(),
       updatedAt: new Date(),
     },

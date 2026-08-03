@@ -9,7 +9,7 @@ type Guest = {
   id: string; guestCode: string; fullName: string; title: string | null;
   position: string | null; organization: string | null; phone: string | null;
   publicToken: string;
-  rsvp: { attendanceStatus: string; companionCount: number } | null;
+  rsvp: { attendanceStatus: string; companionCount: number; answers: Record<string, string | string[]> | null } | null;
   checkIn: { checkInStatus: string } | null;
 };
 type EventMeta = { id: string; name: string; slug: string; status: string };
@@ -158,6 +158,7 @@ export default function GuestListPage() {
                   <th className="text-left px-4 py-3 text-xs font-semibold text-[#888] uppercase">Họ tên</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-[#888] uppercase hidden sm:table-cell">Đơn vị</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-[#888] uppercase">RSVP</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-[#888] uppercase hidden lg:table-cell">Phản hồi</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-[#888] uppercase hidden md:table-cell">Check-in</th>
                   <th className="px-4 py-3"></th>
                 </tr>
@@ -179,6 +180,25 @@ export default function GuestListPage() {
                         </span>
                       ) : (
                         <span className="text-xs text-[#bbb]">Chưa phản hồi</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 hidden lg:table-cell">
+                      {g.rsvp?.answers && Object.keys(g.rsvp.answers).length > 0 ? (
+                        <div className="group relative">
+                          <span className="text-xs text-[#c9793c] font-medium cursor-pointer underline decoration-dotted">
+                            {Object.keys(g.rsvp.answers).length} câu
+                          </span>
+                          <div className="absolute left-0 top-6 z-20 hidden group-hover:block bg-[#1a1a2e] text-white text-xs rounded-xl p-3 w-64 shadow-xl space-y-2">
+                            {Object.entries(g.rsvp.answers).map(([k, v]) => (
+                              <div key={k}>
+                                <p className="text-white/50 text-[10px] mb-0.5">Câu hỏi #{k}</p>
+                                <p>{Array.isArray(v) ? v.join(", ") : v}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-[#ccc]">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">

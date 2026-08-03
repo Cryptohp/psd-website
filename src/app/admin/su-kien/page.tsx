@@ -15,7 +15,11 @@ export default function AdminEventList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/su-kien").then(r => r.json()).then(setEvents).finally(() => setLoading(false));
+    fetch("/api/admin/su-kien")
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .then(setEvents)
+      .catch(err => console.error("Failed to load events:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   const statusLabel: Record<string, string> = { DRAFT: "Nháp", PUBLISHED: "Đã xuất bản", CLOSED: "Đóng", COMPLETED: "Hoàn thành" };

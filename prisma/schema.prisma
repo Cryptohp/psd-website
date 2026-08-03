@@ -333,6 +333,7 @@ model Rsvp {
   attendParty      Boolean          @default(false)
   specialRequest   String?
   note             String?          @db.Text
+  answers          Json?
   confirmedAt      DateTime         @default(now())
   ipAddress        String?
   updatedAt        DateTime         @updatedAt
