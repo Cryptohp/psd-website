@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, GripVertical, Save, ExternalLink, Users } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, GripVertical, Save, ExternalLink, Users, Upload, X, ImageIcon } from "lucide-react";
 
 /* ─── Types ─────────────────────────────────────────────────────────────────── */
 type PartnerLogo = { id: string; name: string; logo: string };
@@ -12,6 +12,81 @@ type Question = {
   id: string; text: string; type: "single" | "multiple";
   required: boolean; showFor: "ALL" | "ATTENDING" | "DECLINED"; options: string[];
 };
+
+/* ─── Image upload field ────────────────────────────────────────────────────── */
+function ImageUploadField({ label, value, onChange, hint }: {
+  label: string; value: string; onChange: (url: string) => void; hint?: string;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState("");
+
+  async function handleFile(file: File) {
+    setErr(""); setUploading(true);
+    const fd = new FormData(); fd.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    const data = await res.json();
+    setUploading(false);
+    if (!res.ok) { setErr(data.error ?? "Upload thất bại"); return; }
+    onChange(data.url);
+  }
+
+  function onInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]; if (file) handleFile(file); e.target.value = "";
+  }
+
+  function onDrop(e: React.DragEvent) {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0]; if (file) handleFile(file);
+  }
+
+  const inputCls = "w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#e82127] transition-colors";
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-[#333] mb-1">{label}</label>
+      {hint && <p className="text-xs text-[#888] mb-2">{hint}</p>}
+
+      {value ? (
+        <div className="relative rounded-xl overflow-hidden border border-[#eee] group">
+          <img src={value} alt="preview" className="w-full h-40 object-cover" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+            <button type="button" onClick={() => fileRef.current?.click()}
+              className="bg-white text-[#333] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow">
+              <Upload size={12} /> Thay ảnh
+            </button>
+            <button type="button" onClick={() => onChange("")}
+              className="bg-white text-red-500 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow">
+              <X size={12} /> Xóa
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div
+          onDrop={onDrop} onDragOver={e => e.preventDefault()}
+          onClick={() => fileRef.current?.click()}
+          className="border-2 border-dashed border-[#ddd] hover:border-[#e82127]/50 rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer transition-colors bg-[#fafafa] hover:bg-[#fff8f8]"
+        >
+          <ImageIcon size={28} className="text-[#ccc]" />
+          <p className="text-sm font-medium text-[#888]">
+            {uploading ? "Đang tải lên..." : "Kéo thả hoặc click để chọn ảnh"}
+          </p>
+          <p className="text-xs text-[#bbb]">JPG, PNG, WEBP · Tối đa 5MB</p>
+        </div>
+      )}
+
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onInput} />
+
+      {/* URL fallback */}
+      <div className="mt-2 flex gap-2 items-center">
+        <input value={value} onChange={e => onChange(e.target.value)}
+          placeholder="hoặc dán URL ảnh..." className={inputCls + " flex-1 text-xs"} />
+      </div>
+
+      {err && <p className="text-xs text-red-500 mt-1">{err}</p>}
+    </div>
+  );
+}
 
 const HERO_THEMES = [
   { id: "dark-navy", label: "Navy tối", bg: "#0C1422", accent: "#C4913A" },
@@ -537,17 +612,12 @@ export default function EditEventPage() {
           </div>
 
           {/* Hero background image */}
-          <div>
-            <label className="block text-sm font-medium text-[#333] mb-1">Ảnh nền hero (URL)</label>
-            <p className="text-xs text-[#888] mb-2">Nếu có ảnh nền, màu nền ở trên sẽ bị ẩn. Để trống để dùng màu đặc.</p>
-            <input value={heroBgImage} onChange={e => setHeroBgImage(e.target.value)}
-              placeholder="https://... (ảnh nền toàn màn hình hero)"
-              className="w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#e82127] transition-colors" />
-            {heroBgImage && (
-              <img src={heroBgImage} alt="bg preview" className="mt-2 w-full h-28 object-cover rounded-xl border border-[#eee]"
-                onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
-            )}
-          </div>
+          <ImageUploadField
+            label="Ảnh nền hero"
+            value={heroBgImage}
+            onChange={setHeroBgImage}
+            hint="Nếu có ảnh, màu nền ở trên sẽ bị ẩn. Để trống để dùng màu đặc."
+          />
 
           {/* Font pickers */}
           {(() => {
@@ -646,13 +716,11 @@ export default function EditEventPage() {
             );
           })()}
 
-          <div className="grid grid-cols-1 gap-4">
-            <Field label="Ảnh bìa body (URL — hiển thị phần thông tin bên dưới)" value={form.coverImage} onChange={v => set("coverImage", v)} placeholder="https://..." />
-            {form.coverImage && (
-              <img src={form.coverImage} alt="cover preview" className="w-full h-32 object-cover rounded-xl border border-[#eee]"
-                onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
-            )}
-          </div>
+          <ImageUploadField
+            label="Ảnh bìa (hiển thị phần thông tin bên dưới)"
+            value={form.coverImage}
+            onChange={v => set("coverImage", v)}
+          />
           <div className="grid grid-cols-2 gap-4">
             <Field label="Trang phục" value={form.dressCode} onChange={v => set("dressCode", v)} />
             <Field label="Hotline BTC" value={form.hotline} onChange={v => set("hotline", v)} />
