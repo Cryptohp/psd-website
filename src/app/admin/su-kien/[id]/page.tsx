@@ -414,8 +414,8 @@ export default function EditEventPage() {
 
   const [heroTheme, setHeroTheme] = useState("dark-navy");
   const [heroBgImage, setHeroBgImage] = useState("");
-  const [heroGuestFont, setHeroGuestFont] = useState("georgia");
-  const [heroTitleFont, setHeroTitleFont] = useState("system");
+  const [heroGuestFont, setHeroGuestFont] = useState("be-vietnam");
+  const [heroTitleFont, setHeroTitleFont] = useState("be-vietnam");
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [investorName, setInvestorName] = useState("");
   const [investorLogo, setInvestorLogo] = useState("");
@@ -622,14 +622,16 @@ export default function EditEventPage() {
           {/* Font pickers */}
           {(() => {
             const FONTS = [
+              { id: "be-vietnam", label: "Be Vietnam Pro ★", sample: "Nguyễn Văn A" },
               { id: "georgia", label: "Georgia", sample: "Nguyễn Văn A" },
-              { id: "playfair", label: "Playfair", sample: "Nguyễn Văn A" },
+              { id: "playfair", label: "Playfair Display", sample: "Nguyễn Văn A" },
               { id: "times", label: "Times New Roman", sample: "Nguyễn Văn A" },
               { id: "garamond", label: "Garamond", sample: "Nguyễn Văn A" },
               { id: "system", label: "Sans-serif", sample: "Nguyễn Văn A" },
               { id: "arial", label: "Arial", sample: "Nguyễn Văn A" },
             ];
             const FONT_CSS: Record<string, string> = {
+              "be-vietnam": "var(--font-be-vietnam),'Be Vietnam Pro',sans-serif",
               georgia: "Georgia,'Times New Roman',serif",
               playfair: "'Playfair Display',Georgia,serif",
               times: "'Times New Roman',Times,serif",
@@ -676,6 +678,7 @@ export default function EditEventPage() {
           {/* Live preview strip */}
           {(() => {
             const FONT_CSS: Record<string, string> = {
+              "be-vietnam": "var(--font-be-vietnam),'Be Vietnam Pro',sans-serif",
               georgia: "Georgia,'Times New Roman',serif",
               playfair: "'Playfair Display',Georgia,serif",
               times: "'Times New Roman',Times,serif",

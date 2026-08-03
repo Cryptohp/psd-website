@@ -320,6 +320,7 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
     "dark-wine": "#1A0A0E", "dark-slate": "#111318", "dark-earth": "#120D08",
   };
   const FONT_MAP: Record<string, string> = {
+    "be-vietnam": "var(--font-be-vietnam), 'Be Vietnam Pro', sans-serif",
     "georgia": "Georgia, 'Times New Roman', serif",
     "playfair": "'Playfair Display', Georgia, serif",
     "times": "'Times New Roman', Times, serif",
@@ -329,8 +330,8 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
   };
   const heroBg = THEME_BG[event.settings?.heroTheme ?? "dark-navy"] ?? "#0C1422";
   const heroBgImage = event.settings?.heroBgImage;
-  const guestFont = FONT_MAP[event.settings?.heroGuestFont ?? "georgia"] ?? FONT_MAP.georgia;
-  const titleFont = FONT_MAP[event.settings?.heroTitleFont ?? "system"] ?? FONT_MAP.system;
+  const guestFont = FONT_MAP[event.settings?.heroGuestFont ?? "be-vietnam"] ?? FONT_MAP["be-vietnam"];
+  const titleFont = FONT_MAP[event.settings?.heroTitleFont ?? "be-vietnam"] ?? FONT_MAP["be-vietnam"];
 
   return (
     <div className="min-h-screen bg-[#f4f2ee]">
