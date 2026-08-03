@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, GripVertical } from "lucide-react";
 
+type PartnerLogo = { id: string; name: string; logo: string };
+
 type Question = {
   id: string;
   text: string;
@@ -13,6 +15,120 @@ type Question = {
   showFor: "ALL" | "ATTENDING" | "DECLINED";
   options: string[];
 };
+
+function LogoEditor({
+  investorName, investorLogo, partners,
+  onInvestorName, onInvestorLogo, onPartners,
+}: {
+  investorName: string; investorLogo: string;
+  partners: PartnerLogo[];
+  onInvestorName: (v: string) => void;
+  onInvestorLogo: (v: string) => void;
+  onPartners: (p: PartnerLogo[]) => void;
+}) {
+  const cls = "w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#e82127] transition-colors";
+
+  function addPartner() {
+    onPartners([...partners, { id: Date.now().toString(), name: "", logo: "" }]);
+  }
+  function updatePartner(id: string, key: "name" | "logo", val: string) {
+    onPartners(partners.map(p => p.id === id ? { ...p, [key]: val } : p));
+  }
+  function removePartner(id: string) {
+    onPartners(partners.filter(p => p.id !== id));
+  }
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <p className="text-xs font-semibold text-[#555] uppercase tracking-wider mb-3">Chủ đầu tư</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-medium text-[#666] mb-1">Tên đơn vị</label>
+            <input value={investorName} onChange={e => onInvestorName(e.target.value)} className={cls} placeholder="PSD Group" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#666] mb-1">URL logo</label>
+            <input value={investorLogo} onChange={e => onInvestorLogo(e.target.value)} className={cls} placeholder="https://..." />
+          </div>
+        </div>
+        {investorLogo && (
+          <div className="mt-2 flex items-center gap-2">
+            <img src={investorLogo} alt="preview" className="h-8 object-contain border border-[#eee] rounded p-1 bg-white" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+            <span className="text-xs text-[#888]">Xem trước logo</span>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold text-[#555] uppercase tracking-wider">Đối tác / Đồng hành</p>
+          <button type="button" onClick={addPartner}
+            className="flex items-center gap-1 text-xs text-[#e82127] font-medium hover:text-[#c91c21]"
+          >
+            <Plus size={13} /> Thêm đối tác
+          </button>
+        </div>
+        <div className="space-y-3">
+          {partners.map((p, i) => (
+            <div key={p.id} className="flex gap-2 items-start bg-[#fafafa] border border-[#eee] rounded-xl p-3">
+              <span className="text-[#ccc] text-xs mt-3 w-4 flex-shrink-0">{i + 1}</span>
+              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input value={p.name} onChange={e => updatePartner(p.id, "name", e.target.value)}
+                  placeholder="Tên đối tác" className={cls} />
+                <input value={p.logo} onChange={e => updatePartner(p.id, "logo", e.target.value)}
+                  placeholder="URL logo" className={cls} />
+              </div>
+              {p.logo && (
+                <img src={p.logo} alt="" className="h-8 w-8 object-contain border border-[#eee] rounded bg-white flex-shrink-0 mt-1" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+              )}
+              <button type="button" onClick={() => removePartner(p.id)} className="text-[#ccc] hover:text-red-400 flex-shrink-0 mt-2">
+                <Trash2 size={15} />
+              </button>
+            </div>
+          ))}
+          {partners.length === 0 && (
+            <p className="text-xs text-[#bbb] text-center py-3">Chưa có đối tác. Bấm &quot;Thêm đối tác&quot; để thêm.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectImagesEditor({ images, onChange }: { images: string[]; onChange: (imgs: string[]) => void }) {
+  const cls = "w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#e82127] transition-colors";
+
+  function addImage() { onChange([...images, ""]); }
+  function updateImage(idx: number, val: string) {
+    const next = [...images]; next[idx] = val; onChange(next);
+  }
+  function removeImage(idx: number) { onChange(images.filter((_, i) => i !== idx)); }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-[#888] -mt-2">Ảnh phối cảnh hiển thị dưới dạng gallery ngang trên trang thư mời.</p>
+      {images.map((url, i) => (
+        <div key={i} className="flex gap-2 items-center">
+          <span className="text-[#ccc] text-xs w-5 flex-shrink-0">{i + 1}.</span>
+          <input value={url} onChange={e => updateImage(i, e.target.value)}
+            placeholder="https://... (URL ảnh phối cảnh)" className={cls + " flex-1"} />
+          {url && (
+            <img src={url} alt="" className="h-9 w-14 object-cover border border-[#eee] rounded flex-shrink-0" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+          )}
+          <button type="button" onClick={() => removeImage(i)} className="text-[#ccc] hover:text-red-400 flex-shrink-0">
+            <Trash2 size={15} />
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={addImage}
+        className="flex items-center gap-2 text-sm font-medium text-[#e82127] hover:text-[#c91c21] border-2 border-dashed border-[#e82127]/30 hover:border-[#e82127]/60 rounded-xl px-4 py-3 w-full justify-center transition-colors"
+      >
+        <Plus size={16} /> Thêm ảnh phối cảnh
+      </button>
+    </div>
+  );
+}
 
 function QuestionEditor({ questions, onChange }: { questions: Question[]; onChange: (qs: Question[]) => void }) {
   function addQuestion() {
@@ -158,6 +274,10 @@ export default function CreateEventPage() {
   });
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [investorName, setInvestorName] = useState("PSD Group");
+  const [investorLogo, setInvestorLogo] = useState("");
+  const [partners, setPartners] = useState<PartnerLogo[]>([]);
+  const [projectImages, setProjectImages] = useState<string[]>([]);
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
   async function submit(e: React.FormEvent) {
@@ -170,7 +290,17 @@ export default function CreateEventPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          settings: questions.length > 0 ? { questions } : null,
+          settings: {
+            questions: questions.length > 0 ? questions : undefined,
+            investorName: investorName || undefined,
+            investorLogo: investorLogo || undefined,
+            partnerLogos: partners.filter(p => p.name || p.logo).length > 0
+              ? partners.filter(p => p.name || p.logo)
+              : undefined,
+            projectImages: projectImages.filter(Boolean).length > 0
+              ? projectImages.filter(Boolean)
+              : undefined,
+          },
         }),
       });
       const data = await res.json();
@@ -223,6 +353,17 @@ export default function CreateEventPage() {
           </div>
           <Field label="Ảnh bìa desktop (URL)" value={form.coverImage} onChange={v => set("coverImage", v)} />
           <Field label="Ảnh bìa mobile (URL)" value={form.mobileCoverImage} onChange={v => set("mobileCoverImage", v)} />
+        </Section>
+
+        <Section title="Logo chủ đầu tư & đối tác">
+          <LogoEditor
+            investorName={investorName} investorLogo={investorLogo} partners={partners}
+            onInvestorName={setInvestorName} onInvestorLogo={setInvestorLogo} onPartners={setPartners}
+          />
+        </Section>
+
+        <Section title="Ảnh phối cảnh dự án">
+          <ProjectImagesEditor images={projectImages} onChange={setProjectImages} />
         </Section>
 
         <Section title="Câu hỏi thu thập phản hồi">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MapPin, Phone, Calendar, CheckCircle, XCircle, Users, Shirt, ChevronDown } from "lucide-react";
 
 type Schedule = { id: string; startTime: string; endTime: string | null; title: string; description: string | null; sortOrder: number };
+type PartnerLogo = { id?: string; name: string; logo: string };
 type Question = {
   id: string;
   text: string;
@@ -19,7 +20,13 @@ type EventData = {
   locationName: string | null; locationAddress: string | null; mapUrl: string | null;
   dressCode: string | null; hotline: string | null;
   coverImage: string | null; mobileCoverImage: string | null;
-  settings: { questions?: Question[] } | null;
+  settings: {
+    questions?: Question[];
+    investorName?: string;
+    investorLogo?: string;
+    partnerLogos?: PartnerLogo[];
+    projectImages?: string[];
+  } | null;
   schedules: Schedule[];
 };
 type GuestData = {
@@ -384,6 +391,85 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
       </div>
 
       {/* ── BODY ── */}
+      {/* ── LOGO STRIP ── */}
+      {(event.settings?.investorLogo || event.settings?.investorName || (event.settings?.partnerLogos?.length ?? 0) > 0) && (
+        <div className="bg-[#0C1422]">
+          <div className="mx-auto max-w-lg px-6 py-6 space-y-5">
+            {/* Investor */}
+            {(event.settings?.investorLogo || event.settings?.investorName) && (
+              <div>
+                <p className="text-[9px] text-[#C4913A]/50 uppercase tracking-[0.28em] font-medium text-center mb-3">Đơn vị chủ đầu tư</p>
+                <div className="flex items-center justify-center">
+                  <div className="flex items-center gap-3 border border-[#C4913A]/20 px-5 py-3 bg-white/[0.04]">
+                    {event.settings.investorLogo && (
+                      <img src={event.settings.investorLogo} alt={event.settings.investorName ?? "Chủ đầu tư"}
+                        className="h-8 object-contain brightness-0 invert opacity-80"
+                        onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
+                      />
+                    )}
+                    {event.settings.investorName && (
+                      <span className="text-[#F5EFE2] font-medium text-sm tracking-wide">{event.settings.investorName}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Partners */}
+            {(event.settings?.partnerLogos?.length ?? 0) > 0 && (
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px flex-1 bg-[#C4913A]/15" />
+                  <p className="text-[9px] text-[#C4913A]/50 uppercase tracking-[0.28em] font-medium">Đơn vị đồng hành</p>
+                  <div className="h-px flex-1 bg-[#C4913A]/15" />
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  {event.settings!.partnerLogos!.map((p, i) => (
+                    <div key={i} className="flex flex-col items-center gap-2 border border-[#C4913A]/15 px-4 py-3 bg-white/[0.03] min-w-[80px]">
+                      {p.logo ? (
+                        <img src={p.logo} alt={p.name}
+                          className="h-7 object-contain brightness-0 invert opacity-60"
+                          onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        />
+                      ) : (
+                        <div className="h-7 flex items-center">
+                          <span className="text-[#C4913A]/50 text-xs font-medium">{p.name.charAt(0)}</span>
+                        </div>
+                      )}
+                      <span className="text-[9px] text-[#F5EFE2]/40 tracking-wide text-center leading-tight">{p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="h-px bg-[#C4913A]/20 mx-0" />
+        </div>
+      )}
+
+      {/* ── PROJECT IMAGES ── */}
+      {(event.settings?.projectImages?.length ?? 0) > 0 && (
+        <div className="bg-[#F4F2EE]">
+          <div className="flex items-baseline justify-between px-4 pt-5 pb-2">
+            <p className="text-[9px] text-[#9A7230] uppercase tracking-[0.28em] font-medium">Phối cảnh dự án</p>
+            <span className="text-[11px] text-[#B09870]">{event.settings!.projectImages!.length} hình ảnh</span>
+          </div>
+          <div className="flex gap-3 px-4 pb-4 overflow-x-auto" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
+            {event.settings!.projectImages!.map((src, i) => (
+              <div key={i} className="flex-shrink-0 rounded-sm overflow-hidden border border-[#E2D4B4]"
+                style={{ width: i === 0 ? 260 : 200, height: i === 0 ? 165 : 130, scrollSnapAlign: "start" }}
+              >
+                <Image src={src} alt={`Phối cảnh ${i + 1}`} width={260} height={165}
+                  className="w-full h-full object-cover"
+                  unoptimized
+                  onError={e => { (e.target as HTMLImageElement).style.opacity = "0"; }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="max-w-lg mx-auto px-4 py-10 space-y-5">
 
         {/* Invitation card */}
