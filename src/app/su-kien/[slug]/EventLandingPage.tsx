@@ -413,7 +413,35 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
         </div>
       </div>
 
+      {/* ── COVER IMAGE SCREEN ── */}
+      {event.coverImage && (
+        <div id="cover-screen" className="relative w-full overflow-hidden flex flex-col items-center justify-end"
+          style={{ minHeight: "600px" }}
+        >
+          <Image src={event.coverImage} alt={event.name} fill className="object-cover" unoptimized priority={false} />
+          {/* dark gradient at bottom for button readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="relative z-10 w-full flex flex-col items-center pb-16 px-6">
+            {/* gold ornament */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#c9a84c]/60" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-[#c9a84c]/70" />
+              <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#c9a84c]/60" />
+            </div>
+            <a href="#body-content"
+              className="flex items-center gap-3 px-8 py-4 border border-[#c9a84c]/60 text-[#F5EFE2] text-sm font-semibold tracking-[0.15em] uppercase hover:bg-[#c9a84c]/10 transition-colors"
+              style={{ backdropFilter: "blur(4px)", background: "rgba(0,0,0,0.35)" }}
+            >
+              <span>Thư mời tham dự</span>
+              <span className="text-[#c9a84c]">→</span>
+            </a>
+            <p className="text-white/30 text-[10px] mt-3 uppercase tracking-[0.2em]">Nhấn để xem thông tin</p>
+          </div>
+        </div>
+      )}
+
       {/* ── BODY ── */}
+      <div id="body-content" />
       {/* ── LOGO STRIP ── */}
       {(event.settings?.investorLogo || event.settings?.investorName || (event.settings?.partnerLogos?.length ?? 0) > 0) && (
         <div style={{ background: heroBg }}>
