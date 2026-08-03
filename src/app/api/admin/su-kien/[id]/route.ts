@@ -43,12 +43,13 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     await prisma.eventSchedule.deleteMany({ where: { eventId: id } });
     if (schedules.length > 0) {
       await prisma.eventSchedule.createMany({
-        data: schedules.map((s: { startTime: string; endTime?: string; title: string; description?: string }, i: number) => ({
+        data: schedules.map((s: { startTime: string; endTime?: string; title: string; description?: string; itemType?: string }, i: number) => ({
           eventId: id,
           startTime: s.startTime,
           endTime: s.endTime || null,
           title: s.title,
           description: s.description || null,
+          itemType: s.itemType || "general",
           sortOrder: i,
         })),
       });

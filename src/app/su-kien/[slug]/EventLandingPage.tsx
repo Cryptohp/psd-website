@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { MapPin, Phone, Calendar, CheckCircle, XCircle, Users, Shirt, ChevronDown } from "lucide-react";
 
-type Schedule = { id: string; startTime: string; endTime: string | null; title: string; description: string | null; sortOrder: number };
+type Schedule = { id: string; startTime: string; endTime: string | null; title: string; description: string | null; itemType: string | null; sortOrder: number };
 type PartnerLogo = { id?: string; name: string; logo: string };
 type Question = {
   id: string;
@@ -576,31 +576,66 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
         </div>
 
         {/* Schedule / Timeline */}
-        {event.schedules.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-[#e8e4dc] p-6">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#c9793c] mb-5">Chương trình</h3>
-            <div className="relative pl-5">
-              {/* vertical line */}
-              <div className="absolute left-0 top-2 bottom-2 w-[1.5px] bg-gradient-to-b from-[#c9a84c] via-[#c9a84c]/30 to-transparent" />
+        {event.schedules.length > 0 && (() => {
+          const TYPE_META: Record<string, { emoji: string; color: string; bg: string }> = {
+            general:   { emoji: "📋", color: "#C4913A", bg: "#FDF6EC" },
+            ceremony:  { emoji: "🏛️", color: "#B8382B", bg: "#FEF2F2" },
+            speech:    { emoji: "🎤", color: "#1D5FA8", bg: "#EFF6FF" },
+            meal:      { emoji: "🍽️", color: "#2E7D52", bg: "#F0FDF4" },
+            break:     { emoji: "☕", color: "#6B7280", bg: "#F9FAFB" },
+            photo:     { emoji: "📸", color: "#7C3AED", bg: "#F5F3FF" },
+            music:     { emoji: "🎵", color: "#BE185D", bg: "#FDF2F8" },
+            transport: { emoji: "🚌", color: "#C2610C", bg: "#FFF7ED" },
+          };
+          return (
+            <div className="bg-white rounded-2xl shadow-sm border border-[#e8e4dc] p-6">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#c9793c] mb-5">Chương trình</h3>
+              <div className="relative pl-4">
+                {/* vertical line */}
+                <div className="absolute left-[11px] top-3 bottom-3 w-[1.5px]"
+                  style={{ background: "linear-gradient(to bottom, #c9a84c, #c9a84c44, transparent)" }} />
 
-              <div className="space-y-5">
-                {event.schedules.map((s, i) => (
-                  <div key={s.id} className="relative">
-                    {/* dot */}
-                    <div className={`absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 ${
-                      i === 0 ? "bg-[#c9a84c] border-[#c9a84c]" : "bg-white border-[#c9a84c]/50"
-                    }`} />
-                    <p className="text-[11px] font-bold text-[#c9793c] mb-0.5 tracking-wider">
-                      {s.startTime}{s.endTime ? ` — ${s.endTime}` : ""}
-                    </p>
-                    <p className="text-sm font-bold text-[#1a1a2e] leading-snug">{s.title}</p>
-                    {s.description && <p className="text-xs text-[#888] mt-0.5 leading-relaxed">{s.description}</p>}
-                  </div>
-                ))}
+                <div className="space-y-3">
+                  {event.schedules.map((s, i) => {
+                    const meta = TYPE_META[s.itemType ?? "general"] ?? TYPE_META.general;
+                    const isFirst = i === 0;
+                    return (
+                      <div key={s.id} className="relative flex gap-3">
+                        {/* icon dot */}
+                        <div className="flex-shrink-0 w-[22px] h-[22px] rounded-full flex items-center justify-center mt-0.5 text-[11px] z-10 border-2"
+                          style={{
+                            background: isFirst ? meta.color : meta.bg,
+                            borderColor: meta.color,
+                          }}
+                        >
+                          {isFirst ? (
+                            <span style={{ filter: "brightness(10)" }}>{meta.emoji}</span>
+                          ) : (
+                            <span>{meta.emoji}</span>
+                          )}
+                        </div>
+
+                        {/* content card */}
+                        <div className="flex-1 min-w-0 rounded-xl border px-3 py-2.5 mb-0.5"
+                          style={{ borderColor: meta.color + "30", background: meta.bg }}>
+                          <div className="flex items-center justify-between gap-2 mb-0.5">
+                            <p className="text-[11px] font-bold tracking-wider" style={{ color: meta.color }}>
+                              {s.startTime}{s.endTime ? ` — ${s.endTime}` : ""}
+                            </p>
+                          </div>
+                          <p className="text-sm font-bold text-[#1a1a2e] leading-snug">{s.title}</p>
+                          {s.description && (
+                            <p className="text-xs text-[#777] mt-1 leading-relaxed">{s.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Description */}
         {event.description && (

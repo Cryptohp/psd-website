@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, GripVertical, Save, ExternalLink, Users } from "lucide-react";
 
 /* ─── Types ─────────────────────────────────────────────────────────────────── */
 type PartnerLogo = { id: string; name: string; logo: string };
-type ScheduleItem = { id: string; startTime: string; endTime: string; title: string; description: string };
+type ScheduleItem = { id: string; startTime: string; endTime: string; title: string; description: string; itemType: string };
 type Question = {
   id: string; text: string; type: "single" | "multiple";
   required: boolean; showFor: "ALL" | "ATTENDING" | "DECLINED"; options: string[];
@@ -21,51 +21,119 @@ const HERO_THEMES = [
   { id: "dark-earth", label: "Nâu đất", bg: "#120D08", accent: "#C4A06A" },
 ];
 
+/* ─── Schedule item types ────────────────────────────────────────────────────── */
+const ITEM_TYPES = [
+  { id: "general",   label: "Chung",      emoji: "📋", color: "#C4913A", bg: "#FDF6EC" },
+  { id: "ceremony",  label: "Nghi lễ",    emoji: "🏛️", color: "#B8382B", bg: "#FEF2F2" },
+  { id: "speech",    label: "Phát biểu",  emoji: "🎤", color: "#1D5FA8", bg: "#EFF6FF" },
+  { id: "meal",      label: "Tiệc / Ăn",  emoji: "🍽️", color: "#2E7D52", bg: "#F0FDF4" },
+  { id: "break",     label: "Nghỉ giải lao", emoji: "☕", color: "#6B7280", bg: "#F9FAFB" },
+  { id: "photo",     label: "Chụp ảnh",   emoji: "📸", color: "#7C3AED", bg: "#F5F3FF" },
+  { id: "music",     label: "Văn nghệ",   emoji: "🎵", color: "#BE185D", bg: "#FDF2F8" },
+  { id: "transport", label: "Di chuyển",  emoji: "🚌", color: "#C2610C", bg: "#FFF7ED" },
+] as const;
+
 /* ─── Sub-editors ───────────────────────────────────────────────────────────── */
 function ScheduleEditor({ items, onChange }: { items: ScheduleItem[]; onChange: (s: ScheduleItem[]) => void }) {
   const cls = "border border-[#ddd] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#e82127] transition-colors";
+  const dragId = useRef<string | null>(null);
+  const dragOverId = useRef<string | null>(null);
 
   function add() {
-    onChange([...items, { id: Date.now().toString(), startTime: "", endTime: "", title: "", description: "" }]);
+    onChange([...items, { id: Date.now().toString(), startTime: "", endTime: "", title: "", description: "", itemType: "general" }]);
   }
   function update(id: string, key: keyof ScheduleItem, val: string) {
     onChange(items.map(s => s.id === id ? { ...s, [key]: val } : s));
   }
   function remove(id: string) { onChange(items.filter(s => s.id !== id)); }
 
+  function handleDragStart(id: string) { dragId.current = id; }
+  function handleDragOver(e: React.DragEvent, id: string) {
+    e.preventDefault();
+    dragOverId.current = id;
+  }
+  function handleDrop() {
+    if (!dragId.current || !dragOverId.current || dragId.current === dragOverId.current) return;
+    const from = items.findIndex(s => s.id === dragId.current);
+    const to   = items.findIndex(s => s.id === dragOverId.current);
+    const next = [...items];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+    dragId.current = null;
+    dragOverId.current = null;
+  }
+
   return (
-    <div className="space-y-3">
-      {items.map((s, i) => (
-        <div key={s.id} className="bg-[#fafafa] border border-[#eee] rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <GripVertical size={15} className="text-[#ccc] flex-shrink-0" />
-            <span className="text-xs font-semibold text-[#888] flex-1">Mục {i + 1}</span>
-            <button type="button" onClick={() => remove(s.id)} className="text-[#ccc] hover:text-red-400">
-              <Trash2 size={14} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <div>
-              <label className="block text-[10px] font-medium text-[#888] mb-1 uppercase tracking-wider">Giờ bắt đầu</label>
-              <input value={s.startTime} onChange={e => update(s.id, "startTime", e.target.value)}
-                placeholder="08:00" className={cls + " w-full"} />
+    <div className="space-y-2">
+      {items.map((s, i) => {
+        const typeInfo = ITEM_TYPES.find(t => t.id === s.itemType) ?? ITEM_TYPES[0];
+        return (
+          <div key={s.id}
+            draggable
+            onDragStart={() => handleDragStart(s.id)}
+            onDragOver={e => handleDragOver(e, s.id)}
+            onDrop={handleDrop}
+            className="bg-white border border-[#eee] rounded-xl overflow-hidden transition-shadow hover:shadow-sm"
+            style={{ borderLeft: `3px solid ${typeInfo.color}` }}
+          >
+            {/* Header row */}
+            <div className="flex items-center gap-2 px-3 pt-3 pb-2">
+              <GripVertical size={15} className="text-[#ccc] flex-shrink-0 cursor-grab active:cursor-grabbing" />
+              <span className="text-base leading-none select-none">{typeInfo.emoji}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider flex-1"
+                style={{ color: typeInfo.color }}>
+                {typeInfo.label}
+              </span>
+              <span className="text-[10px] text-[#bbb]">#{i + 1}</span>
+              <button type="button" onClick={() => remove(s.id)} className="text-[#ccc] hover:text-red-400 ml-1">
+                <Trash2 size={13} />
+              </button>
             </div>
-            <div>
-              <label className="block text-[10px] font-medium text-[#888] mb-1 uppercase tracking-wider">Giờ kết thúc</label>
-              <input value={s.endTime} onChange={e => update(s.id, "endTime", e.target.value)}
-                placeholder="08:30 (tùy chọn)" className={cls + " w-full"} />
+
+            {/* Type selector */}
+            <div className="px-3 pb-2">
+              <div className="flex flex-wrap gap-1">
+                {ITEM_TYPES.map(t => (
+                  <button key={t.id} type="button" onClick={() => update(s.id, "itemType", t.id)}
+                    title={t.label}
+                    className={`text-xs px-2 py-1 rounded-lg border transition-all ${
+                      s.itemType === t.id
+                        ? "border-transparent font-semibold"
+                        : "border-[#eee] text-[#999] hover:border-[#ddd]"
+                    }`}
+                    style={s.itemType === t.id ? { background: t.bg, color: t.color, borderColor: t.color + "40" } : {}}
+                  >
+                    {t.emoji} {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Fields */}
+            <div className="px-3 pb-3 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[10px] font-medium text-[#999] mb-1 uppercase tracking-wider">Giờ bắt đầu</label>
+                  <input value={s.startTime} onChange={e => update(s.id, "startTime", e.target.value)}
+                    placeholder="08:00" className={cls + " w-full"} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-[#999] mb-1 uppercase tracking-wider">Giờ kết thúc</label>
+                  <input value={s.endTime} onChange={e => update(s.id, "endTime", e.target.value)}
+                    placeholder="08:30" className={cls + " w-full"} />
+                </div>
+              </div>
+              <input value={s.title} onChange={e => update(s.id, "title", e.target.value)}
+                placeholder="Tên hoạt động *" className={cls + " w-full font-medium"} />
+              <input value={s.description} onChange={e => update(s.id, "description", e.target.value)}
+                placeholder="Mô tả chi tiết (tùy chọn)" className={cls + " w-full text-[#666]"} />
             </div>
           </div>
-          <div className="space-y-2">
-            <input value={s.title} onChange={e => update(s.id, "title", e.target.value)}
-              placeholder="Tên hoạt động *" className={cls + " w-full font-medium"} />
-            <input value={s.description} onChange={e => update(s.id, "description", e.target.value)}
-              placeholder="Mô tả chi tiết (tùy chọn)" className={cls + " w-full"} />
-          </div>
-        </div>
-      ))}
+        );
+      })}
       <button type="button" onClick={add}
-        className="flex items-center gap-2 text-sm font-medium text-[#e82127] hover:text-[#c91c21] border-2 border-dashed border-[#e82127]/30 hover:border-[#e82127]/60 rounded-xl px-4 py-3 w-full justify-center transition-colors"
+        className="flex items-center gap-2 text-sm font-medium text-[#e82127] hover:text-[#c91c21] border-2 border-dashed border-[#e82127]/30 hover:border-[#e82127]/60 rounded-xl px-4 py-3 w-full justify-center transition-colors mt-1"
       >
         <Plus size={16} /> Thêm mục chương trình
       </button>
@@ -324,12 +392,13 @@ export default function EditEventPage() {
           options: q.options ?? [],
         })));
 
-        setSchedules((ev.schedules ?? []).map((s: { id: string; startTime: string; endTime: string | null; title: string; description: string | null }) => ({
+        setSchedules((ev.schedules ?? []).map((s: { id: string; startTime: string; endTime: string | null; title: string; description: string | null; itemType: string | null }) => ({
           id: s.id,
           startTime: s.startTime ?? "",
           endTime: s.endTime ?? "",
           title: s.title ?? "",
           description: s.description ?? "",
+          itemType: s.itemType ?? "general",
         })));
       })
       .catch(() => setError("Không tải được dữ liệu sự kiện"))
@@ -362,7 +431,8 @@ export default function EditEventPage() {
           },
           schedules: schedules.filter(s => s.title).map((s, i) => ({
             startTime: s.startTime, endTime: s.endTime || undefined,
-            title: s.title, description: s.description || undefined, sortOrder: i,
+            title: s.title, description: s.description || undefined,
+            itemType: s.itemType || "general", sortOrder: i,
           })),
         }),
       });
