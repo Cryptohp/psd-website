@@ -12,5 +12,6 @@ export default async function GuestInvitePage({ params }: { params: Promise<{ sl
     },
   });
   if (!guest || guest.event.status === "DRAFT") notFound();
-  return <EventLandingPage event={guest.event} guest={guest} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <EventLandingPage event={guest.event as any} guest={guest} />;
 }

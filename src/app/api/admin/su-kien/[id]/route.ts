@@ -19,9 +19,11 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
   const body = await req.json();
-  const { name, slug, eventCode, description, startTime, checkInTime, rsvpDeadline,
+  const {
+    name, slug, eventCode, description, startTime, checkInTime, rsvpDeadline,
     locationName, locationAddress, mapUrl, dressCode, hotline,
-    coverImage, mobileCoverImage, status } = body;
+    coverImage, mobileCoverImage, status, settings, schedules,
+  } = body;
 
   const event = await prisma.event.update({
     where: { id },
@@ -32,8 +34,27 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       rsvpDeadline: rsvpDeadline ? new Date(rsvpDeadline) : null,
       locationName, locationAddress, mapUrl, dressCode, hotline,
       coverImage, mobileCoverImage, status,
+      settings: settings ?? null,
     },
   });
+
+  // Replace schedules: delete all then recreate
+  if (Array.isArray(schedules)) {
+    await prisma.eventSchedule.deleteMany({ where: { eventId: id } });
+    if (schedules.length > 0) {
+      await prisma.eventSchedule.createMany({
+        data: schedules.map((s: { startTime: string; endTime?: string; title: string; description?: string }, i: number) => ({
+          eventId: id,
+          startTime: s.startTime,
+          endTime: s.endTime || null,
+          title: s.title,
+          description: s.description || null,
+          sortOrder: i,
+        })),
+      });
+    }
+  }
+
   return NextResponse.json(event);
 }
 

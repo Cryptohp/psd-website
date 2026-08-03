@@ -20,5 +20,6 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
     include: { schedules: { orderBy: { sortOrder: "asc" } } },
   });
   if (!event) notFound();
-  return <EventLandingPage event={event} guest={null} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <EventLandingPage event={event as any} guest={null} />;
 }

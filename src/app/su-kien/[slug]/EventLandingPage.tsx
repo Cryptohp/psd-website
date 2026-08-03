@@ -21,6 +21,7 @@ type EventData = {
   dressCode: string | null; hotline: string | null;
   coverImage: string | null; mobileCoverImage: string | null;
   settings: {
+    heroTheme?: string;
     questions?: Question[];
     investorName?: string;
     investorLogo?: string;
@@ -311,6 +312,15 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
     }
   }
 
+  const THEME_BG: Record<string, string> = {
+    "dark-navy": "#0C1422",
+    "dark-forest": "#0A1A12",
+    "dark-wine": "#1A0A0E",
+    "dark-slate": "#111318",
+    "dark-earth": "#120D08",
+  };
+  const heroBg = THEME_BG[event.settings?.heroTheme ?? "dark-navy"] ?? "#0C1422";
+
   return (
     <div className="min-h-screen bg-[#f4f2ee]">
 
@@ -320,7 +330,7 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
         {event.coverImage ? (
           <Image src={event.coverImage} alt={event.name} fill className="object-cover scale-105" priority unoptimized />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d1a] via-[#1a0a0f] to-[#0d0d1a]" />
+          <div className="absolute inset-0" style={{ background: heroBg }} />
         )}
 
         {/* Overlays */}
@@ -393,7 +403,7 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
       {/* ── BODY ── */}
       {/* ── LOGO STRIP ── */}
       {(event.settings?.investorLogo || event.settings?.investorName || (event.settings?.partnerLogos?.length ?? 0) > 0) && (
-        <div className="bg-[#0C1422]">
+        <div style={{ background: heroBg }}>
           <div className="mx-auto max-w-lg px-6 py-6 space-y-5">
             {/* Investor */}
             {(event.settings?.investorLogo || event.settings?.investorName) && (
