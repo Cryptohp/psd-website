@@ -270,6 +270,9 @@ export default function EditEventPage() {
   });
 
   const [heroTheme, setHeroTheme] = useState("dark-navy");
+  const [heroBgImage, setHeroBgImage] = useState("");
+  const [heroGuestFont, setHeroGuestFont] = useState("georgia");
+  const [heroTitleFont, setHeroTitleFont] = useState("system");
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [investorName, setInvestorName] = useState("");
   const [investorLogo, setInvestorLogo] = useState("");
@@ -307,6 +310,9 @@ export default function EditEventPage() {
 
         const s = ev.settings ?? {};
         setHeroTheme(s.heroTheme ?? "dark-navy");
+        setHeroBgImage(s.heroBgImage ?? "");
+        setHeroGuestFont(s.heroGuestFont ?? "georgia");
+        setHeroTitleFont(s.heroTitleFont ?? "system");
         setInvestorName(s.investorName ?? "");
         setInvestorLogo(s.investorLogo ?? "");
         setPartners((s.partnerLogos ?? []).map((p: { name: string; logo: string }, i: number) => ({
@@ -343,6 +349,9 @@ export default function EditEventPage() {
           ...form,
           settings: {
             heroTheme,
+            heroBgImage: heroBgImage || undefined,
+            heroGuestFont: heroGuestFont || undefined,
+            heroTitleFont: heroTitleFont || undefined,
             investorName: investorName || undefined,
             investorLogo: investorLogo || undefined,
             partnerLogos: partners.filter(p => p.name || p.logo).length > 0
@@ -457,30 +466,118 @@ export default function EditEventPage() {
             </div>
           </div>
 
-          {/* Live preview strip */}
-          <div className="rounded-xl overflow-hidden border border-[#f0f0f0]" style={{ background: currentTheme.bg }}>
-            <div className="h-1 w-full" style={{ background: currentTheme.accent, opacity: 0.5 }} />
-            <div className="px-6 py-5 text-center">
-              <div className="inline-flex items-center gap-2 mb-3">
-                <div className="h-px w-8" style={{ background: currentTheme.accent, opacity: 0.5 }} />
-                <span className="text-[9px] uppercase tracking-[0.3em]" style={{ color: currentTheme.accent, opacity: 0.7 }}>Trân trọng kính mời</span>
-                <div className="h-px w-8" style={{ background: currentTheme.accent, opacity: 0.5 }} />
-              </div>
-              <p className="text-base font-semibold mb-1" style={{ color: "#F5EFE2", fontFamily: "Georgia, serif" }}>Nguyễn Văn Minh</p>
-              <div className="flex items-center gap-2 justify-center my-2">
-                <div className="h-px w-10" style={{ background: currentTheme.accent, opacity: 0.4 }} />
-                <div className="w-1.5 h-1.5 rotate-45" style={{ background: currentTheme.accent, opacity: 0.7 }} />
-                <div className="h-px w-10" style={{ background: currentTheme.accent, opacity: 0.4 }} />
-              </div>
-              <p className="text-xs uppercase tracking-widest font-bold" style={{ color: "#F5EFE2", opacity: 0.8 }}>
-                {form.name || "Tên sự kiện"}
-              </p>
-            </div>
-            <div className="h-1 w-full" style={{ background: currentTheme.accent, opacity: 0.3 }} />
+          {/* Hero background image */}
+          <div>
+            <label className="block text-sm font-medium text-[#333] mb-1">Ảnh nền hero (URL)</label>
+            <p className="text-xs text-[#888] mb-2">Nếu có ảnh nền, màu nền ở trên sẽ bị ẩn. Để trống để dùng màu đặc.</p>
+            <input value={heroBgImage} onChange={e => setHeroBgImage(e.target.value)}
+              placeholder="https://... (ảnh nền toàn màn hình hero)"
+              className="w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#e82127] transition-colors" />
+            {heroBgImage && (
+              <img src={heroBgImage} alt="bg preview" className="mt-2 w-full h-28 object-cover rounded-xl border border-[#eee]"
+                onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+            )}
           </div>
 
+          {/* Font pickers */}
+          {(() => {
+            const FONTS = [
+              { id: "georgia", label: "Georgia", sample: "Nguyễn Văn A" },
+              { id: "playfair", label: "Playfair", sample: "Nguyễn Văn A" },
+              { id: "times", label: "Times New Roman", sample: "Nguyễn Văn A" },
+              { id: "garamond", label: "Garamond", sample: "Nguyễn Văn A" },
+              { id: "system", label: "Sans-serif", sample: "Nguyễn Văn A" },
+              { id: "arial", label: "Arial", sample: "Nguyễn Văn A" },
+            ];
+            const FONT_CSS: Record<string, string> = {
+              georgia: "Georgia,'Times New Roman',serif",
+              playfair: "'Playfair Display',Georgia,serif",
+              times: "'Times New Roman',Times,serif",
+              garamond: "Garamond,'Times New Roman',serif",
+              system: "system-ui,sans-serif",
+              arial: "Arial,Helvetica,sans-serif",
+            };
+            return (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#333] mb-2">Font tên khách mời</label>
+                  <div className="space-y-1.5">
+                    {FONTS.map(f => (
+                      <button key={f.id} type="button" onClick={() => setHeroGuestFont(f.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border-2 transition-all text-left ${
+                          heroGuestFont === f.id ? "border-[#e82127] bg-red-50" : "border-[#f0f0f0] hover:border-[#ddd]"
+                        }`}
+                      >
+                        <span className="text-xs text-[#888] w-20 flex-shrink-0">{f.label}</span>
+                        <span className="text-sm text-[#222]" style={{ fontFamily: FONT_CSS[f.id] }}>{f.sample}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#333] mb-2">Font tên sự kiện</label>
+                  <div className="space-y-1.5">
+                    {FONTS.map(f => (
+                      <button key={f.id} type="button" onClick={() => setHeroTitleFont(f.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border-2 transition-all text-left ${
+                          heroTitleFont === f.id ? "border-[#e82127] bg-red-50" : "border-[#f0f0f0] hover:border-[#ddd]"
+                        }`}
+                      >
+                        <span className="text-xs text-[#888] w-20 flex-shrink-0">{f.label}</span>
+                        <span className="text-xs text-[#222] uppercase tracking-widest" style={{ fontFamily: FONT_CSS[f.id] }}>LỄ KHỞI CÔNG</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Live preview strip */}
+          {(() => {
+            const FONT_CSS: Record<string, string> = {
+              georgia: "Georgia,'Times New Roman',serif",
+              playfair: "'Playfair Display',Georgia,serif",
+              times: "'Times New Roman',Times,serif",
+              garamond: "Garamond,'Times New Roman',serif",
+              system: "system-ui,sans-serif",
+              arial: "Arial,Helvetica,sans-serif",
+            };
+            return (
+              <div className="rounded-xl overflow-hidden border border-[#f0f0f0] relative"
+                style={{ background: heroBgImage ? undefined : currentTheme.bg }}
+              >
+                {heroBgImage && (
+                  <img src={heroBgImage} alt="" className="absolute inset-0 w-full h-full object-cover"
+                    onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                )}
+                {heroBgImage && <div className="absolute inset-0 bg-black/60" />}
+                <div className="relative z-10">
+                  <div className="h-1 w-full" style={{ background: currentTheme.accent, opacity: 0.5 }} />
+                  <div className="px-6 py-5 text-center">
+                    <div className="inline-flex items-center gap-2 mb-3">
+                      <div className="h-px w-8" style={{ background: currentTheme.accent, opacity: 0.5 }} />
+                      <span className="text-[9px] uppercase tracking-[0.3em]" style={{ color: currentTheme.accent, opacity: 0.7 }}>Trân trọng kính mời</span>
+                      <div className="h-px w-8" style={{ background: currentTheme.accent, opacity: 0.5 }} />
+                    </div>
+                    <p className="text-base font-semibold mb-1" style={{ color: "#F5EFE2", fontFamily: FONT_CSS[heroGuestFont] }}>Nguyễn Văn Minh</p>
+                    <div className="flex items-center gap-2 justify-center my-2">
+                      <div className="h-px w-10" style={{ background: currentTheme.accent, opacity: 0.4 }} />
+                      <div className="w-1.5 h-1.5 rotate-45" style={{ background: currentTheme.accent, opacity: 0.7 }} />
+                      <div className="h-px w-10" style={{ background: currentTheme.accent, opacity: 0.4 }} />
+                    </div>
+                    <p className="text-xs uppercase tracking-widest font-bold" style={{ color: "#F5EFE2", opacity: 0.8, fontFamily: FONT_CSS[heroTitleFont] }}>
+                      {form.name || "Tên sự kiện"}
+                    </p>
+                  </div>
+                  <div className="h-1 w-full" style={{ background: currentTheme.accent, opacity: 0.3 }} />
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="grid grid-cols-1 gap-4">
-            <Field label="Ảnh bìa (URL — hiển thị sau hero)" value={form.coverImage} onChange={v => set("coverImage", v)} placeholder="https://..." />
+            <Field label="Ảnh bìa body (URL — hiển thị phần thông tin bên dưới)" value={form.coverImage} onChange={v => set("coverImage", v)} placeholder="https://..." />
             {form.coverImage && (
               <img src={form.coverImage} alt="cover preview" className="w-full h-32 object-cover rounded-xl border border-[#eee]"
                 onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />

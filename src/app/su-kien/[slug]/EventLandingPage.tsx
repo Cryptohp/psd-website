@@ -22,6 +22,9 @@ type EventData = {
   coverImage: string | null; mobileCoverImage: string | null;
   settings: {
     heroTheme?: string;
+    heroBgImage?: string;
+    heroGuestFont?: string;
+    heroTitleFont?: string;
     questions?: Question[];
     investorName?: string;
     investorLogo?: string;
@@ -313,13 +316,21 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
   }
 
   const THEME_BG: Record<string, string> = {
-    "dark-navy": "#0C1422",
-    "dark-forest": "#0A1A12",
-    "dark-wine": "#1A0A0E",
-    "dark-slate": "#111318",
-    "dark-earth": "#120D08",
+    "dark-navy": "#0C1422", "dark-forest": "#0A1A12",
+    "dark-wine": "#1A0A0E", "dark-slate": "#111318", "dark-earth": "#120D08",
+  };
+  const FONT_MAP: Record<string, string> = {
+    "georgia": "Georgia, 'Times New Roman', serif",
+    "playfair": "'Playfair Display', Georgia, serif",
+    "times": "'Times New Roman', Times, serif",
+    "garamond": "Garamond, 'Times New Roman', serif",
+    "system": "system-ui, sans-serif",
+    "arial": "Arial, Helvetica, sans-serif",
   };
   const heroBg = THEME_BG[event.settings?.heroTheme ?? "dark-navy"] ?? "#0C1422";
+  const heroBgImage = event.settings?.heroBgImage;
+  const guestFont = FONT_MAP[event.settings?.heroGuestFont ?? "georgia"] ?? FONT_MAP.georgia;
+  const titleFont = FONT_MAP[event.settings?.heroTitleFont ?? "system"] ?? FONT_MAP.system;
 
   return (
     <div className="min-h-screen bg-[#f4f2ee]">
@@ -327,7 +338,9 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
       {/* ── HERO ── */}
       <div className="relative w-full overflow-hidden" style={{ minHeight: "100svh" }}>
         {/* Background */}
-        {event.coverImage ? (
+        {heroBgImage ? (
+          <Image src={heroBgImage} alt={event.name} fill className="object-cover scale-105" priority unoptimized />
+        ) : event.coverImage ? (
           <Image src={event.coverImage} alt={event.name} fill className="object-cover scale-105" priority unoptimized />
         ) : (
           <div className="absolute inset-0" style={{ background: heroBg }} />
@@ -356,7 +369,7 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
           {/* Guest name */}
           {guestName && (
             <div className="mb-6">
-              <h2 className="text-white text-2xl font-semibold tracking-wide">{guestName}</h2>
+              <h2 className="text-white text-2xl font-semibold tracking-wide" style={{ fontFamily: guestFont }}>{guestName}</h2>
               {guest?.position && <p className="text-white/60 text-sm mt-1">{guest.position}</p>}
               {guest?.organization && <p className="text-white/50 text-sm">{guest.organization}</p>}
             </div>
@@ -364,7 +377,7 @@ export default function EventLandingPage({ event, guest }: { event: EventData; g
 
           {/* Event title */}
           <h1 className="text-white font-bold leading-[1.2] mb-3 uppercase"
-            style={{ fontSize: "clamp(22px, 5.5vw, 36px)", letterSpacing: "0.04em", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
+            style={{ fontSize: "clamp(22px, 5.5vw, 36px)", letterSpacing: "0.04em", textShadow: "0 2px 20px rgba(0,0,0,0.5)", fontFamily: titleFont }}
           >
             {event.name}
           </h1>
