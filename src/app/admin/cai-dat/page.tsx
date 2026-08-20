@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Save } from "lucide-react";
+import { Save, Eye, EyeOff } from "lucide-react";
 
 export default function AdminSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   async function handleSave() {
     setSaving(true);
@@ -87,19 +89,39 @@ export default function AdminSettingsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Mật khẩu mới</label>
-          <input
-            type="password"
-            placeholder="Để trống nếu không đổi"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
-          />
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"}
+              placeholder="Để trống nếu không đổi"
+              className="w-full px-4 py-3 pr-11 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPw((v) => !v)}
+              aria-label={showPw ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6e6e74] hover:text-[#111114]"
+            >
+              {showPw ? <EyeOff size={17} /> : <Eye size={17} />}
+            </button>
+          </div>
         </div>
         <div>
           <label className="block text-sm font-medium text-[#111114] mb-1.5">Xác nhận mật khẩu</label>
-          <input
-            type="password"
-            placeholder="Nhập lại mật khẩu mới"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
-          />
+          <div className="relative">
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder="Nhập lại mật khẩu mới"
+              className="w-full px-4 py-3 pr-11 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm((v) => !v)}
+              aria-label={showConfirm ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6e6e74] hover:text-[#111114]"
+            >
+              {showConfirm ? <EyeOff size={17} /> : <Eye size={17} />}
+            </button>
+          </div>
         </div>
       </div>
     </div>
