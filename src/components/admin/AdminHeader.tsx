@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { Bell, LogOut, User } from "lucide-react";
+import { ROLE_LABELS, type Role } from "@/lib/permissions";
 
-export default function AdminHeader() {
+export default function AdminHeader({ email, role }: { email: string; role: Role }) {
   const router = useRouter();
 
   async function handleLogout() {
@@ -15,7 +16,10 @@ export default function AdminHeader() {
   return (
     <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-6 flex-shrink-0">
       <div className="text-sm text-[#6e6e74]">
-        Xin chào, <span className="font-semibold text-[#111114]">Admin</span>
+        Xin chào, <span className="font-semibold text-[#111114]">{email}</span>
+        <span className="ml-2 inline-flex items-center rounded-full bg-[#e82127]/10 text-[#e82127] text-xs font-semibold px-2 py-0.5">
+          {ROLE_LABELS[role]}
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <button className="w-9 h-9 rounded-xl hover:bg-gray-100 flex items-center justify-center text-[#6e6e74] transition-colors relative">

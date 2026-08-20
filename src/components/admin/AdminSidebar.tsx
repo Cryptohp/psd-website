@@ -16,7 +16,9 @@ import {
   Network,
   HeartHandshake,
   CalendarDays,
+  ShieldCheck,
 } from "lucide-react";
+import { canAccessPath, type Role } from "@/lib/permissions";
 
 const nav = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -29,10 +31,14 @@ const nav = [
   { href: "/admin/su-kien", label: "Sự kiện & Thư mời", icon: CalendarDays },
   { href: "/admin/lien-he", label: "Liên hệ & Leads", icon: MessageSquare },
   { href: "/admin/cai-dat", label: "Cài đặt", icon: Settings },
+  { href: "/admin/tai-khoan", label: "Quản lý tài khoản", icon: ShieldCheck },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ role }: { role: Role }) {
   const pathname = usePathname();
+
+  // Chỉ hiện các mục mà vai trò hiện tại được phép truy cập
+  const visibleNav = nav.filter((item) => canAccessPath(role, item.href));
 
   function isActive(href: string, exact?: boolean) {
     return exact ? pathname === href : pathname.startsWith(href);
@@ -47,7 +53,7 @@ export default function AdminSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {nav.map(({ href, label, icon: Icon, exact }) => {
+        {visibleNav.map(({ href, label, icon: Icon, exact }) => {
           const active = isActive(href, exact);
           return (
             <Link

@@ -1,5 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import type { Role } from "@/lib/permissions";
 
 const SECRET = new TextEncoder().encode(
   process.env.NEXTAUTH_SECRET || "psd-admin-secret-fallback"
@@ -7,7 +8,9 @@ const SECRET = new TextEncoder().encode(
 
 const COOKIE_NAME = "psd_admin_token";
 
-export async function signAdminToken(payload: { email: string }) {
+export type AdminSession = { email: string; role: Role };
+
+export async function signAdminToken(payload: AdminSession) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -15,16 +18,17 @@ export async function signAdminToken(payload: { email: string }) {
     .sign(SECRET);
 }
 
-export async function verifyAdminToken(token: string) {
+export async function verifyAdminToken(token: string): Promise<AdminSession | null> {
   try {
     const { payload } = await jwtVerify(token, SECRET);
-    return payload as { email: string };
+    if (!payload.email || !payload.role) return null;
+    return { email: payload.email as string, role: payload.role as Role };
   } catch {
     return null;
   }
 }
 
-export async function getAdminSession() {
+export async function getAdminSession(): Promise<AdminSession | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
