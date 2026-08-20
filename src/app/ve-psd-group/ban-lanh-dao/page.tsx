@@ -118,7 +118,7 @@ const executives = [
       "Cử nhân kinh tế, kiểm toán – Thạc sỹ kinh tế – Đại học Quốc gia Hà Nội",
       "Kinh nghiệm 20 năm về tài chính, doanh nghiệp và đầu tư xây dựng",
     ],
-    scope: "Ban Phát triển và XD Dự Án; Dự án Yên Mỹ; Dự án Đông Phú; Dự án 03 Cụm Công nghiệp DPI",
+    scope: "Ban Phát triển và XD Dự Án; Các dự án BĐS (Dự án Yên Mỹ, Dự án Ngọc Lâm, Dự án Vĩnh Thịnh...)",
   },
   {
     role: "Phó Tổng Giám đốc",
