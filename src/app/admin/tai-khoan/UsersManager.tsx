@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UserPlus, Trash2, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
+import { UserPlus, Trash2, ShieldCheck, AlertCircle, Loader2, Eye, EyeOff } from "lucide-react";
 import { ALL_ROLES, ROLE_LABELS, type Role } from "@/lib/permissions";
 
 type UserRow = {
@@ -27,6 +27,7 @@ export default function UsersManager({
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [role, setRole] = useState<Role>("EDITOR");
 
   async function addUser(e: React.FormEvent) {
@@ -125,10 +126,20 @@ export default function UsersManager({
             type="text" value={name} onChange={(e) => setName(e.target.value)}
             placeholder="Tên hiển thị (tuỳ chọn)" className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
           />
-          <input
-            type="text" required value={password} onChange={(e) => setPassword(e.target.value)}
-            placeholder="Mật khẩu" className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
-          />
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mật khẩu" className="w-full px-3 py-2.5 pr-10 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPw((v) => !v)}
+              aria-label={showPw ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6e6e74] hover:text-[#111114]"
+            >
+              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
           <select
             value={role} onChange={(e) => setRole(e.target.value as Role)}
             className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#e82127] bg-white"
