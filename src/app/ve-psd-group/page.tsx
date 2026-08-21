@@ -33,7 +33,7 @@ const infoCards = [
 const partners = [
   { img: "/partner-bidv.webp", name: "BIDV", sub: "Ngân hàng", scale: 1 },
   { img: "/partner-shb.webp", name: "SHB", sub: "Ngân hàng", scale: 1 },
-  { img: "/partner-vina2.webp", name: "Vina2", sub: "Xây dựng & Hạ tầng", scale: 1 },
+  { img: "/logo-vina2.png", name: "Vina2", sub: "Xây dựng & Hạ tầng", scale: 1 },
   { img: "/partner-stavian.webp", name: "Stavian Group", sub: "Hóa chất", scale: 1 },
   { img: "/partner-vinachem.webp", name: "Vinachem", sub: "Tập đoàn Hóa chất VN", scale: 1.5 },
   { img: "/partner-mst.webp", name: "MST", sub: "Đối tác chiến lược", scale: 1 },

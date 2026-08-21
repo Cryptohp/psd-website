@@ -11,7 +11,7 @@ const VP = { once: true, amount: 0 };
 const partners = [
   { name: "Công ty Cổ phần Đầu tư MST",            logo: "/partner-mst.webp" },
   { name: "Tập đoàn Hóa chất Việt Nam Vinachem",   logo: "/partner-vinachem.webp", logoHeight: 90 },
-  { name: "Công ty CP Đầu tư Xây dựng VINA2",      logo: "/partner-vina2.webp" },
+  { name: "Công ty CP Đầu tư Xây dựng VINA2",      logo: "/logo-vina2.png" },
   { name: "Ngân hàng SHB",                          logo: "/partner-shb.webp" },
   { name: "Ngân hàng BIDV",                         logo: "/partner-bidv.webp" },
   { name: "Tập đoàn Stavian",                       logo: "/partner-stavian.webp" },
