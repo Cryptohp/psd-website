@@ -44,7 +44,7 @@ export default function IntroSection() {
               style={{ fontSize: "clamp(22px, 2.2vw, 32px)" }}
             >
               Một tập đoàn lớn không chỉ tạo ra lợi nhuận, mà còn đồng hành cùng những{" "}
-              <em className="text-[#e82127] not-italic font-bold">mục tiêu Quốc Gia</em>.
+              <em className="text-[#e82127] not-italic font-bold">mục tiêu Quốc gia</em>.
             </blockquote>
 
             {/* Closing quote mark */}
