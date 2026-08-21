@@ -7,10 +7,10 @@ import { useState, useEffect } from "react";
 
 const slides = [
   {
-    desktop: "/home-hero-06.png",
+    desktop: "/Home-hero-09.png",
     mobile: "/mobile-hero-trang-chu-03.png",
-    desktopW: 1920,
-    desktopH: 1080,
+    desktopW: 1919,
+    desktopH: 820,
     mobileW: 750,
     mobileH: 1200,
   },
