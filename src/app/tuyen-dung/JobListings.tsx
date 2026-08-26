@@ -15,20 +15,7 @@ type Job = {
   deadline: string;
 };
 
-const jobs: Job[] = [
-  { slug: "giam-doc-du-an-bat-dong-san", title: "Giám đốc Dự án Bất động sản", sector: "Bất động sản & Hạ tầng", location: "Hà Nội", type: "Toàn thời gian", level: "Giám đốc", salary: "Thỏa thuận", deadline: "31/07/2026" },
-  { slug: "ke-toan-truong", title: "Kế toán trưởng", sector: "Tài chính", location: "Hà Nội", type: "Toàn thời gian", level: "Quản lý", salary: "Thỏa thuận", deadline: "31/07/2026" },
-  { slug: "truong-phong-marketing", title: "Trưởng phòng Marketing", sector: "Marketing & Truyền thông", location: "Hà Nội", type: "Toàn thời gian", level: "Quản lý", salary: "Thỏa thuận", deadline: "25/07/2026" },
-  { slug: "chuyen-vien-logistics", title: "Chuyên viên Logistics", sector: "Logistics & Cảng biển", location: "Hà Nội", type: "Toàn thời gian", level: "Chuyên viên", salary: "15 – 25 triệu", deadline: "20/07/2026" },
-  { slug: "lap-trinh-vien-fullstack", title: "Lập trình viên Fullstack", sector: "Công nghệ thông tin", location: "Hà Nội", type: "Toàn thời gian", level: "Chuyên viên", salary: "20 – 40 triệu", deadline: "15/07/2026" },
-  { slug: "chuyen-vien-truyen-thong", title: "Chuyên viên Truyền thông", sector: "Marketing & Truyền thông", location: "Hà Nội", type: "Toàn thời gian", level: "Chuyên viên", salary: "Thỏa thuận", deadline: "10/07/2026" },
-  { slug: "quan-ly-khai-thac-cang", title: "Quản lý Khai thác Cảng", sector: "Logistics & Cảng biển", location: "Hải Phòng", type: "Toàn thời gian", level: "Quản lý", salary: "Thỏa thuận", deadline: "05/08/2026" },
-  { slug: "chuyen-vien-kinh-doanh-khoang-san", title: "Chuyên viên Kinh doanh Khoáng sản", sector: "Khoáng sản", location: "Hà Nội", type: "Toàn thời gian", level: "Chuyên viên", salary: "Thỏa thuận", deadline: "31/07/2026" },
-  { slug: "truong-phong-nhan-su", title: "Trưởng phòng Nhân sự", sector: "Nhân sự", location: "Hà Nội", type: "Toàn thời gian", level: "Quản lý", salary: "Thỏa thuận", deadline: "31/07/2026" },
-  { slug: "thuc-tap-sinh-marketing", title: "Thực tập sinh Marketing", sector: "Marketing & Truyền thông", location: "Hà Nội", type: "Thực tập", level: "Thực tập sinh", salary: "3 – 5 triệu", deadline: "31/07/2026" },
-  { slug: "chuyen-vien-xuat-nhap-khau", title: "Chuyên viên Xuất nhập khẩu", sector: "Logistics & Cảng biển", location: "Hà Nội", type: "Toàn thời gian", level: "Chuyên viên", salary: "12 – 20 triệu", deadline: "20/07/2026" },
-  { slug: "giam-sat-san-xuat", title: "Giám sát Sản xuất", sector: "Sản xuất & Công nghiệp", location: "Hưng Yên", type: "Toàn thời gian", level: "Chuyên viên", salary: "Thỏa thuận", deadline: "15/08/2026" },
-];
+const jobs: Job[] = [];
 
 const sectors = ["Tất cả lĩnh vực", "Bất động sản & Hạ tầng", "Sản xuất & Công nghiệp", "Khoáng sản", "Logistics & Cảng biển", "Marketing & Truyền thông", "Tài chính", "Công nghệ thông tin", "Nhân sự"];
 const locations = ["Tất cả địa điểm", "Hà Nội", "Hải Phòng", "Hưng Yên", "Hà Nội / HCM"];
@@ -183,7 +170,9 @@ export default function JobListings() {
             <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
               {filtered.length === 0 ? (
                 <div style={{ background: "#fff", border: "1px solid #e8e8e8", borderRadius: 4, padding: "40px 24px", textAlign: "center" as const, color: "#aaa", fontSize: 14 }}>
-                  Không tìm thấy vị trí phù hợp. Vui lòng thay đổi bộ lọc.
+                  {jobs.length === 0
+                    ? "Hiện chưa có vị trí tuyển dụng nào. Vui lòng quay lại sau."
+                    : "Không tìm thấy vị trí phù hợp. Vui lòng thay đổi bộ lọc."}
                 </div>
               ) : filtered.map((job) => (
                 <div key={job.slug} style={{ background: "#fff", border: "1px solid #e8e8e8", borderRadius: 4, overflow: "hidden" }}>
