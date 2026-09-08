@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
 const VP = { once: true, amount: 0 };
@@ -32,6 +32,7 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
   const touchScrollLeft = useRef(0);
 
   const companies = initialCompanies;
+  const [failedLogos, setFailedLogos] = useState<Set<string>>(new Set());
 
   const REPEAT = companies.length > 0 ? Math.max(6, Math.ceil(12 / companies.length)) : 0;
   const looped = companies.length > 0 ? Array.from({ length: REPEAT }, () => companies).flat() : [];
@@ -194,12 +195,13 @@ export default function EcosystemSection({ initialCompanies }: { initialCompanie
 
                       {/* Image */}
                       <div className="relative h-[200px] overflow-hidden bg-[#f0f0f0] flex-shrink-0">
-                        {company.logo ? (
+                        {company.logo && !failedLogos.has(company.logo) ? (
                           <Image
                             src={company.logo}
                             alt={company.name}
                             fill
                             unoptimized
+                            onError={() => setFailedLogos((prev) => new Set(prev).add(company.logo!))}
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                             sizes="305px"
                           />
