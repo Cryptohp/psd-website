@@ -13,6 +13,7 @@ import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Extension } from "@tiptap/core";
 import { useState, useCallback, useRef, forwardRef, useImperativeHandle } from "react";
+import { uploadImage } from "@/lib/clientUpload";
 import {
   Bold, Italic, UnderlineIcon, Strikethrough, AlignLeft, AlignCenter,
   AlignRight, AlignJustify, Link2, Image as ImageIcon, List, ListOrdered,
@@ -199,6 +200,8 @@ const RichEditor = forwardRef<RichEditorHandle, Props>(function RichEditor(
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [showImageInput, setShowImageInput] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [imgUploading, setImgUploading] = useState(false);
+  const [imgError, setImgError] = useState("");
   const [fontColor, setFontColor] = useState("#111114");
   const colorInputRef = useRef<HTMLInputElement>(null);
 
@@ -446,29 +449,35 @@ const RichEditor = forwardRef<RichEditorHandle, Props>(function RichEditor(
             Chèn ảnh
           </button>
           <span className="text-xs text-green-400">hoặc</span>
-          <label className="text-xs font-semibold text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg cursor-pointer">
-            Tải lên
+          <label className={`text-xs font-semibold text-white px-3 py-1.5 rounded-lg ${imgUploading ? "bg-green-400 cursor-wait" : "bg-green-500 hover:bg-green-600 cursor-pointer"}`}>
+            {imgUploading ? "Đang tải..." : "Tải lên"}
             <input
               type="file"
               accept="image/*"
               className="hidden"
+              disabled={imgUploading}
               onChange={async (e) => {
                 const file = e.target.files?.[0];
+                e.target.value = "";
                 if (!file) return;
-                const formData = new FormData();
-                formData.append("file", file);
+                setImgError("");
+                setImgUploading(true);
                 try {
-                  const res = await fetch("/api/upload", { method: "POST", body: formData });
-                  const data = await res.json();
-                  if (data.url) {
-                    editor.chain().focus().setImage({ src: data.url }).run();
-                    setShowImageInput(false);
-                  }
-                } catch {}
+                  const url = await uploadImage(file);
+                  editor.chain().focus().setImage({ src: url }).run();
+                  setShowImageInput(false);
+                } catch (err) {
+                  setImgError(err instanceof Error ? err.message : "Tải ảnh thất bại");
+                } finally {
+                  setImgUploading(false);
+                }
               }}
             />
           </label>
         </div>
+      )}
+      {showImageInput && imgError && (
+        <div className="px-4 py-2 bg-red-50 border-b border-red-100 text-xs text-red-600">{imgError}</div>
       )}
 
       {/* Editor content */}

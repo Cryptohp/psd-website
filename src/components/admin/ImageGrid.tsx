@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Upload, X, Loader2, GripVertical, ImagePlus } from "lucide-react";
+import { uploadImage } from "@/lib/clientUpload";
 
 interface Props {
   value: string[];
@@ -21,12 +22,7 @@ export default function ImageGrid({ value, onChange, onInsert }: Props) {
     const uploaded: string[] = [];
     try {
       for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Upload thất bại");
-        uploaded.push(data.url);
+        uploaded.push(await uploadImage(file));
       }
       onChange([...value, ...uploaded]);
     } catch (e: unknown) {

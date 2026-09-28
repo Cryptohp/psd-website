@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Upload, X, Loader2 } from "lucide-react";
+import { uploadImage } from "@/lib/clientUpload";
 
 interface Props {
   value: string;
@@ -16,13 +17,9 @@ export default function ImageUploader({ value, onChange }: Props) {
   async function handleFile(file: File) {
     setError("");
     setUploading(true);
-    const fd = new FormData();
-    fd.append("file", file);
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload thất bại");
-      onChange(data.url);
+      const url = await uploadImage(file);
+      onChange(url);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Upload thất bại");
     } finally {

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Trash2, GripVertical, Save, ExternalLink, Users, Upload, X, ImageIcon } from "lucide-react";
+import { uploadImage } from "@/lib/clientUpload";
 
 /* ─── Types ─────────────────────────────────────────────────────────────────── */
 type PartnerLogo = { id: string; name: string; logo: string };
@@ -23,12 +24,14 @@ function ImageUploadField({ label, value, onChange, hint }: {
 
   async function handleFile(file: File) {
     setErr(""); setUploading(true);
-    const fd = new FormData(); fd.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    const data = await res.json();
-    setUploading(false);
-    if (!res.ok) { setErr(data.error ?? "Upload thất bại"); return; }
-    onChange(data.url);
+    try {
+      const url = await uploadImage(file);
+      onChange(url);
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : "Upload thất bại");
+    } finally {
+      setUploading(false);
+    }
   }
 
   function onInput(e: React.ChangeEvent<HTMLInputElement>) {
