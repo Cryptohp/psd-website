@@ -142,7 +142,7 @@ const executives = [
       "2005 – 2008: Chuyên ngành Kế toán, Khoa Kế toán Doanh nghiệp, Học viện Tài chính",
       "Hơn 20 năm kinh nghiệm trong lĩnh vực Dự án và Bất động sản",
     ],
-    scope: "",
+    scope: "Quản lý các Dự án Tây Bắc",
   },
 ];
 
