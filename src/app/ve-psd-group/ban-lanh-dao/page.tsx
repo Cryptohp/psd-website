@@ -133,6 +133,17 @@ const executives = [
     ],
     scope: "Ban Tài chính; Ban Kế toán; Văn phòng Tập đoàn; Ban M&A; Ban Pháp chế",
   },
+  {
+    role: "Phó Tổng Giám đốc",
+    name: "Ông Nguyễn Thái Hà",
+    image: "/Ban-lanh-dao/nguyen-thai-ha.webp",
+    edu: [
+      "1997 – 2001: Cử nhân Kinh tế, chuyên ngành Kế hoạch, Khoa Kế hoạch Phát triển, Trường Đại học Kinh tế Quốc dân",
+      "2005 – 2008: Chuyên ngành Kế toán, Khoa Kế toán Doanh nghiệp, Học viện Tài chính",
+      "Hơn 20 năm kinh nghiệm trong lĩnh vực Dự án và Bất động sản",
+    ],
+    scope: "",
+  },
 ];
 
 // ── COMPONENTS ────────────────────────────────────────────────────────────────
