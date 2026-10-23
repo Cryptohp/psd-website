@@ -62,13 +62,6 @@ const executives = [
     scope: "",
   },
   {
-    role: "Phó TGĐ Thường trực",
-    name: "Ông Hà Trọng Điệp",
-    image: "/Ban-lanh-dao/ha-trong-diep.webp",
-    edu: ["Thạc sĩ Quản trị kinh doanh Quốc tế – Griggs University (Hoa Kỳ)", "Cử nhân Đại học Thương Mại – Quản trị kinh doanh", "Hơn 20 năm kinh nghiệm tài chính, đầu tư, quản lý điều hành"],
-    scope: "Công tác đối ngoại; Ban Mua; Ban Quản lý Vốn và Đầu tư; Nhóm các công ty theo lĩnh vực dự án; Nhóm công ty Thương Mại",
-  },
-  {
     role: "PCT HĐQT kiêm PTGĐ",
     name: "Bà Nguyễn Thị Lan Phương",
     image: "/Ban-lanh-dao/nguyen-thi-lan-phuong.webp",
