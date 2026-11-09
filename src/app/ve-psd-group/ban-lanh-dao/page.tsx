@@ -209,7 +209,6 @@ function FounderCard({ person, i, inView }: { person: typeof founders[0]; i: num
 type ModalPerson = { role: string; name: string; image?: string; edu: string[]; scope?: string };
 
 function BioModal({ person, onClose }: { person: ModalPerson; onClose: () => void }) {
-  const scopeItems = person.scope ? person.scope.split(";").map(s => s.trim()).filter(Boolean) : [];
   return (
     <div
       className="fixed inset-0 z-[999] flex items-center justify-center p-4"
@@ -252,19 +251,6 @@ function BioModal({ person, onClose }: { person: ModalPerson; onClose: () => voi
               </li>
             ))}
           </ul>
-
-          {scopeItems.length > 0 && (
-            <>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#e82127] mb-3 border-t border-[#f0f0f0] pt-4">Mảng quản lý chính</div>
-              <ul className="space-y-2">
-                {scopeItems.map((s, i) => (
-                  <li key={i} className="flex gap-2 text-[13px] text-[#555] leading-relaxed">
-                    <span className="text-[#e82127] flex-shrink-0 mt-0.5">◆</span>{s}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
         </div>
       </div>
     </div>
