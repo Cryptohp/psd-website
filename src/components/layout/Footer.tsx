@@ -11,13 +11,10 @@ const footerLinks = {
   ],
   "Lĩnh vực": [
     { label: "Bất động sản & Hạ tầng", href: "/linh-vuc-hoat-dong?tab=bat-dong-san-ha-tang" },
-    { label: "Sản xuất & Công nghiệp", href: "/linh-vuc-hoat-dong?tab=san-xuat-cong-nghiep" },
+    { label: "Thương mại", href: "/linh-vuc-hoat-dong?tab=thuong-mai" },
     { label: "Khoáng sản", href: "/linh-vuc-hoat-dong?tab=khoang-san" },
-    { label: "Logistics & Cảng biển", href: "/linh-vuc-hoat-dong?tab=logistics-cang-bien" },
     { label: "Nông nghiệp & Thủy sản", href: "/linh-vuc-hoat-dong?tab=nong-nghiep-thuy-san" },
     { label: "Du lịch & Sinh thái", href: "/linh-vuc-hoat-dong?tab=du-lich-dich-vu-sinh-thai" },
-    { label: "Đầu tư & Dịch vụ", href: "/linh-vuc-hoat-dong?tab=dau-tu-dich-vu" },
-    { label: "Trách nhiệm xã hội", href: "/linh-vuc-hoat-dong?tab=trach-nhiem-xa-hoi" },
   ],
   "Khám phá": [
     { label: "Lĩnh vực hoạt động", href: "/linh-vuc-hoat-dong" },

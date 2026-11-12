@@ -17,16 +17,15 @@ type Job = {
 
 const jobs: Job[] = [];
 
-const sectors = ["Tất cả lĩnh vực", "Bất động sản & Hạ tầng", "Sản xuất & Công nghiệp", "Khoáng sản", "Logistics & Cảng biển", "Marketing & Truyền thông", "Tài chính", "Công nghệ thông tin", "Nhân sự"];
+const sectors = ["Tất cả lĩnh vực", "Bất động sản & Hạ tầng", "Thương mại", "Khoáng sản", "Marketing & Truyền thông", "Tài chính", "Công nghệ thông tin", "Nhân sự"];
 const locations = ["Tất cả địa điểm", "Hà Nội", "Hải Phòng", "Hưng Yên", "Hà Nội / HCM"];
 const levels = ["Tất cả cấp bậc", "Giám đốc", "Quản lý", "Chuyên viên", "Nhân viên", "Thực tập sinh"];
 const types = ["Tất cả loại hình", "Toàn thời gian", "Bán thời gian", "Thực tập"];
 
 const SECTOR_INITIALS: Record<string, string> = {
   "Bất động sản & Hạ tầng": "BĐS",
-  "Sản xuất & Công nghiệp": "SX",
+  "Thương mại": "TM",
   "Khoáng sản": "KS",
-  "Logistics & Cảng biển": "LOG",
   "Marketing & Truyền thông": "MKT",
   "Tài chính": "TC",
   "Công nghệ thông tin": "IT",

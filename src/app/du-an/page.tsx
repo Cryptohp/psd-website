@@ -8,11 +8,11 @@ import { ArrowRight } from "lucide-react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 type Project = { id: string; title: string; slug: string; thumbnail: string | null; sector: string; shortDesc: string | null };
-type Sector = { id: string; name: string; slug: string };
+type Sector = { id: string; name: string; slug: string; isActive?: boolean };
 
 const SECTOR_HERO: Record<string, string> = {
   "Bất động sản & Hạ tầng": "/linh-vuc-bat-dong-san.webp",
-  "Sản xuất & Công nghiệp": "/linh-vuc-san-xuat-cong-nghiep.webp",
+  "Thương mại": "/linh-vuc-san-xuat-cong-nghiep.webp",
   "Khoáng sản": "/linh-vuc-khoang-san.webp",
   "Logistics & Cảng biển": "/linh-vuc-logistics.webp",
   "Nông nghiệp & Thủy sản": "/linh-vuc-nong-nghiep.webp",
@@ -33,7 +33,7 @@ export default function ProjectsPage() {
       fetch("/api/du-an").then(r => r.json()),
     ]).then(([sectorData, projectData]: [Sector[], Project[]]) => {
       if (Array.isArray(sectorData)) {
-        const filtered = sectorData.filter(s => s.name !== "Trách nhiệm xã hội");
+        const filtered = sectorData.filter(s => s.isActive !== false);
         setSectors(filtered);
         if (filtered.length > 0) setActiveSector(filtered[0].name);
       }

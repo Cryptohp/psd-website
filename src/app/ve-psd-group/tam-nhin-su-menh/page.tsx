@@ -233,7 +233,7 @@ export default function VisionPage() {
         <div style={{ maxWidth: 820 }}>
           <QuoteBlock text="Trở thành tập đoàn kinh tế đa ngành hàng đầu Việt Nam — nơi sức mạnh kinh tế và chiều sâu văn hóa hội tụ để kiến tạo thịnh vượng bền vững cho đất nước." />
           <p style={{ marginTop: 32, fontSize: 16, color: "#555", lineHeight: 1.85 }}>
-            Bằng khát vọng tiên phong và chiến lược đầu tư bền vững, PSD Group định hướng phát triển theo 8 lĩnh vực trọng tâm: Bất động sản, Sản xuất & Công nghiệp, Khoáng sản, Logistics & Cảng biển, Nông nghiệp & Thủy sản, Du lịch & Dịch vụ sinh thái, Đầu tư & Tài chính, và Trách nhiệm Xã hội.
+            Bằng khát vọng tiên phong và chiến lược đầu tư bền vững, PSD Group định hướng phát triển theo 5 lĩnh vực trọng tâm: Bất động sản & Hạ tầng, Thương mại, Khoáng sản, Nông nghiệp & Thủy sản, và Du lịch & Dịch vụ sinh thái.
           </p>
         </div>
       </motion.div>

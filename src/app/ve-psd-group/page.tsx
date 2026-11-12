@@ -159,9 +159,9 @@ export default function AboutPage() {
           <p>
             PSD Group vận hành theo một vòng tuần hoàn giá trị: các lĩnh vực kinh tế tạo ra nguồn lực, nguồn lực được tái đầu tư cho văn hóa – xã hội, và chính chiều sâu văn hóa lại trở thành lợi thế cạnh tranh, định hướng dài hạn cho mọi hoạt động kinh doanh.
           </p>
-          <p>8 lĩnh vực hoạt động trọng tâm của Tập đoàn bao gồm:</p>
+          <p>5 lĩnh vực hoạt động trọng tâm của Tập đoàn bao gồm:</p>
           <p style={{ fontStyle: "normal", color: "#444" }}>
-            {["- Bất động sản & Hạ tầng","- Sản xuất & Công nghiệp","- Khoáng sản","- Logistics & Cảng biển","- Nông nghiệp & Thủy sản","- Du lịch & Dịch vụ sinh thái","- Đầu tư & Dịch vụ","- Trách nhiệm Xã hội"].map((item) => (
+            {["- Bất động sản & Hạ tầng","- Thương mại","- Khoáng sản","- Nông nghiệp & Thủy sản","- Du lịch & Dịch vụ sinh thái"].map((item) => (
               <span key={item} className="block">{item}</span>
             ))}
           </p>

@@ -14,50 +14,32 @@ const sectors = [
   {
     name: "Bất động sản\n& Hạ tầng",
     desc: "Phát triển bất động sản, hạ tầng, nhà ở xã hội và khu đô thị chiến lược.",
-    href: "/linh-vuc-hoat-dong/bat-dong-san-ha-tang",
+    href: "/linh-vuc-hoat-dong?tab=bat-dong-san-ha-tang",
     image: "/bds-hatang.webp",
   },
   {
-    name: "Sản xuất\n& Công nghiệp",
-    desc: "Nhà máy sorbitol, tinh bột, cồn, dầu thực vật, thép và năng lượng sinh khối.",
-    href: "/linh-vuc-hoat-dong/san-xuat-cong-nghiep",
+    name: "Thương mại",
+    desc: "Xuất nhập khẩu, phân phối hàng hóa, thép và nông sản chế biến.",
+    href: "/linh-vuc-hoat-dong?tab=thuong-mai",
     image: "/congnghiep-sanxuat.webp",
   },
   {
     name: "Khoáng sản",
     desc: "Phát triển tài nguyên theo định hướng bền vững, cân bằng kinh tế và môi trường.",
-    href: "/linh-vuc-hoat-dong/khoang-san",
+    href: "/linh-vuc-hoat-dong?tab=khoang-san",
     image: "/khoangsan.webp",
-  },
-  {
-    name: "Logistics",
-    desc: "Kết nối chuỗi cung ứng, hạ tầng cảng biển và trung tâm logistics quy mô lớn.",
-    href: "/linh-vuc-hoat-dong/logistics-cang-bien",
-    image: "/logistics.webp",
   },
   {
     name: "Nông nghiệp\n& Thủy sản",
     desc: "An ninh lương thực, nông nghiệp bền vững từ nuôi trồng đến chế biến.",
-    href: "/linh-vuc-hoat-dong/nong-nghiep-thuy-san",
+    href: "/linh-vuc-hoat-dong?tab=nong-nghiep-thuy-san",
     image: "/nongnghiep-thuysan.webp",
   },
   {
     name: "Du lịch\n& Sinh thái",
     desc: "Du lịch gắn với di sản văn hóa Việt, nghỉ dưỡng và không gian sinh thái.",
-    href: "/linh-vuc-hoat-dong/du-lich-dich-vu-sinh-thai",
+    href: "/linh-vuc-hoat-dong?tab=du-lich-dich-vu-sinh-thai",
     image: "/dulich-sinhthai.webp",
-  },
-  {
-    name: "Đầu tư\n& Dịch vụ",
-    desc: "M&A, thương mại xuất nhập khẩu, pháp lý và dịch vụ chuyên nghiệp.",
-    href: "/linh-vuc-hoat-dong/dau-tu-dich-vu",
-    image: "/dautu-dichvu.webp",
-  },
-  {
-    name: "Trách nhiệm\nXã hội",
-    desc: "Nghiên cứu khoa học, hỗ trợ tái hòa nhập và lan tỏa giá trị nhân văn.",
-    href: "/linh-vuc-hoat-dong/trach-nhiem-xa-hoi",
-    image: "/trachnhiemxahoi.webp",
   },
 ];
 

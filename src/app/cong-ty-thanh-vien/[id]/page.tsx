@@ -8,7 +8,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const sectorSlugMap: Record<string, string> = {
   "Bất động sản & Hạ tầng": "bat-dong-san-ha-tang",
-  "Sản xuất & Công nghiệp": "san-xuat-cong-nghiep",
+  "Thương mại": "thuong-mai",
   "Khoáng sản": "khoang-san",
   "Logistics & Cảng biển": "logistics-cang-bien",
   "Nông nghiệp & Thủy sản": "nong-nghiep-thuy-san",
